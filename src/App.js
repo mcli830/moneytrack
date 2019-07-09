@@ -2,7 +2,7 @@ import React from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 
-import Header from './components/Header';
+import AppHeader from './components/AppHeader';
 import ViewWrapper from './components/ViewWrapper';
 import Nav from './components/Nav';
 import './index.css';
