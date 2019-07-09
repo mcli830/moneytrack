@@ -26,7 +26,7 @@ class App extends React.Component {
     return (
       <div className="App">
         <CssBaseline />
-        <Header />
+        <AppHeader />
         <ViewWrapper view={this.state.view} />
         <Nav view={this.state.view} changeView={this.changeView} />
       </div>

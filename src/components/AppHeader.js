@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 const defaultTheme = createMuiTheme();
 
 const useStyles = makeStyles({
-  root: {
+  appHeader: {
     backgroundColor: defaultTheme.palette.primary.main,
     color: defaultTheme.palette.background.default,
     fontFamily: 'Lobster, serif',
@@ -15,11 +15,11 @@ const useStyles = makeStyles({
   }
 })
 
-export default function Header(props) {
+export default function AppHeader(props) {
   const classes = useStyles();
   return (
     <div className="Header">
-      <Typography variant="h4" className={classes.root}>
+      <Typography variant="h4" className={classes.appHeader}>
         MoneyTrack
       </Typography>
     </div>
