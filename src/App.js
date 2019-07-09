@@ -1,9 +1,10 @@
 import React from 'react';
-import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 
-import Nav from './components/Nav.js';
+import Header from './components/Header';
+import ViewWrapper from './components/ViewWrapper';
+import Nav from './components/Nav';
 import './index.css';
 
 class App extends React.Component {
@@ -25,11 +26,8 @@ class App extends React.Component {
     return (
       <div className="App">
         <CssBaseline />
-        <Container maxWidth="md">
-          <Typography variant="h3">
-            Hello World!
-          </Typography>
-        </Container>
+        <Header />
+        <ViewWrapper view={this.state.view} />
         <Nav view={this.state.view} changeView={this.changeView} />
       </div>
     );
