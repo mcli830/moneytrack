@@ -3,21 +3,47 @@
 
 type User @model {
   id: ID! @isUnique
-  name: String
-  dateOfBirth: DateTime
+  name: String,
+  alias: String! @isUnique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  transactions: [Transaction!]! @relation(name: "UserTransactions")
 
   # Uncomment below - you can declare relations between models like this
 
   # posts: [Post!]! @relation(name: "UserPosts")
 }
 
+type Transaction @model {
+  id: ID! @isUnique
+  date: DateTime!
+  amount: Int!
+  currency: Currency!
+  description: String!
+  memo: String
+  creator: User! @relation(name: "UserTransactions")
+  createdAt: DateTime!
+}
 
-# Uncomment the model below as well
-
-# type Post @model {
-#   id: ID! @isUnique
-#   title: String!
-#
-#   # Every relation also required a back-relation (to determine 1:1, 1:n or n:m)
-#   author: User! @relation(name: "UserPosts")
-# }
+enum Currency {
+  USD
+  EUR
+  JPY
+  GBP
+  AUD
+  CAD
+  CHF
+  CNH
+  SEK
+  NZD
+  MXN
+  SGD
+  HKD
+  NOK
+  KRW
+  TRY
+  RUB
+  INR
+  BRL
+  ZAR
+}
