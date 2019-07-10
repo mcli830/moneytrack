@@ -14,10 +14,16 @@ code {
 
 .App {
   height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-.Nav {
+/* .Nav {
   position: absolute;
   bottom: 0;
   width: 100%;
+} */
+
+.ViewWrapper {
+  flex: 1 1 auto;
 }

@@ -3,32 +3,47 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 import AppHeader from './components/AppHeader';
-import ViewWrapper from './components/ViewWrapper';
-import Nav from './components/Nav';
+import Login from './components/auth/Login';
+// import ViewWrapper from './components/ViewWrapper';
+import Account from './components/views/Account';
+import Transactions from './components/views/Transactions';
+import Friends from './components/views/Friends';
+import Timeline from './components/views/Timeline';
+import NavBottom from './components/NavBottom';
 import './index.css';
 
 class App extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      view: 'transactions'
+      user: null,
+      view: 'account'
     }
     this.changeView = this.changeView.bind(this);
   }
 
-  changeView(viewName){
-    this.setState({
-      view: viewName
-    });
+  changeView(view){
+    this.setState({ view })
   }
 
   render(){
     return (
       <div className="App">
         <CssBaseline />
-        <AppHeader />
-        <ViewWrapper view={this.state.view} />
-        <Nav view={this.state.view} changeView={this.changeView} />
+        <Router>
+          <AppHeader />
+          <div className="ViewWrapper">
+            <Route exact path='/' component={Login} />
+            <Route path='/account' component={Account} />
+            <Route path='/transactions' component={Transactions} />
+            <Route path='/friends' component={Friends} />
+            <Route path='/timeline' component={Timeline} />
+          </div>
+          <NavBottom
+            view={this.state.view}
+            changeView={this.changeView}
+          />
+        </Router>
       </div>
     );
   }
