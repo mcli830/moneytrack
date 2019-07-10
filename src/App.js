@@ -23,7 +23,12 @@ class App extends React.Component {
   }
 
   changeView(view){
-    this.setState({ view })
+    this.setState({ view });
+  }
+
+  _renderNavBottom(){
+    let navBottom = <NavBottom view={this.state.view} changeView={this.changeView} />;
+    return this.state.user ? navBottom : null;
   }
 
   render(){
@@ -31,7 +36,6 @@ class App extends React.Component {
       <div className="App">
         <CssBaseline />
         <Router>
-          <AppHeader />
           <div className="ViewWrapper">
             <Route exact path='/' component={Login} />
             <Route path='/account' component={Account} />
@@ -39,10 +43,7 @@ class App extends React.Component {
             <Route path='/friends' component={Friends} />
             <Route path='/timeline' component={Timeline} />
           </div>
-          <NavBottom
-            view={this.state.view}
-            changeView={this.changeView}
-          />
+          {this._renderNavBottom()}
         </Router>
       </div>
     );
