@@ -2,7 +2,6 @@ import React from 'react'
 import { Link, withRouter } from 'react-router-dom'
 import BottomNavigation from '@material-ui/core/BottomNavigation'
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
-import AccountIcon from '@material-ui/icons/AccountCircle'
 import ListIcon from '@material-ui/icons/List'
 import FriendsIcon from '@material-ui/icons/People'
 import TimelineIcon from '@material-ui/icons/Timeline'
@@ -15,13 +14,6 @@ function NavBottom(props) {
         value={route}
         showLabels
       >
-        <BottomNavigationAction
-          value="account"
-          label="Account"
-          icon={<AccountIcon />}
-          component={Link}
-          to="/account"
-        />
         <BottomNavigationAction
           value="transactions"
           label="Transactions"

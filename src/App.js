@@ -69,17 +69,23 @@ class App extends React.Component {
   }
 
   _renderDataWrapper = id => {
+    const styles = {
+      view: {
+        flex: '1 1 auto',
+        display: 'flex',
+        flexDirection: 'column'
+      }
+    }
     return (
       <DataWrapper covertState={this.covertState} variables={{ id }} >
         <Router>
           <UserHeader logout={this._logout} />
-          <div className="ViewWrapper">
+          <div style={styles.view}>
             <Switch>
-              <Route path='/account' component={Account} />
-              <Route path='/transactions' component={Transactions} />
-              <Route path='/friends' component={Friends} />
-              <Route path='/timeline' component={Timeline} />
-              <Route path='/' render={()=><Redirect to='/account' />} />
+              <Route path='/transactions' render={()=><Transactions user={this.state.user} />} />
+              <Route path='/friends' render={()=><Friends user={this.state.user} />} />
+              <Route path='/timeline' render={()=><Timeline user={this.state.user} />} />
+              <Route path='/' render={()=><Redirect to='/transactions' />} />
             </Switch>
           </div>
           <NavBottom />

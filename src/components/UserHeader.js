@@ -4,27 +4,33 @@ import { makeStyles } from '@material-ui/styles'
 import { createMuiTheme } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
+import AccountIcon from '@material-ui/icons/AccountCircle'
 
-const defaultTheme = createMuiTheme();
+const theme = createMuiTheme();
 
 const useStyles = makeStyles({
   root: {
-    backgroundColor: defaultTheme.palette.primary.main,
+    backgroundColor: theme.palette.primary.main,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2)
   },
   header: {
-    color: defaultTheme.palette.background.default,
-    fontFamily: 'Lobster, serif',
+    color: theme.palette.background.default,
+    fontFamily: 'Kaushan Script, sans-serif',
     padding: '0.5em 0',
     textAlign: 'center',
   },
   text: {
-    color: defaultTheme.palette.background.default,
+    color: theme.palette.background.default,
     padding: '0.5em 0',
     textAlign: 'center',
+  },
+  account: {
+    color: theme.palette.background.default
   }
 })
 
@@ -37,9 +43,7 @@ function UserHeader(props) {
   return props.history.location.pathname !== '/' && (
     <div className={classes.root}>
       <Button>
-        <Typography variant="button" className={classes.text}>
-          n/a
-        </Typography>
+        <AccountIcon className={classes.account} />
       </Button>
       <Typography variant="h4" className={classes.header}>
         {capitalize(props.history.location.pathname.slice(1))}

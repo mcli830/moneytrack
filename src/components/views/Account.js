@@ -1,12 +1,16 @@
-import React from 'react';
-import Typography from '@material-ui/core/Typography';
+import React from 'react'
+import AccountView from './AccountView'
 
-export default props => {
+export default (props) => {
+
+  console.log(props.user.transactions)
+  const totalSpent = props.user.transactions.reduce((sum, t) => sum + t.amount, 0);
+  console.log(totalSpent);
+
   return (
-    <div className="View--Account">
-      <Typography variant="h5">
-        Account
-      </Typography>
-    </div>
+    <AccountView
+      user={props.user}
+      totalSpent={totalSpent}
+    />
   )
 }
