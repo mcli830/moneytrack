@@ -35,7 +35,7 @@ function capitalize(str){
 function UserHeader(props) {
   const classes = useStyles();
   return props.history.location.pathname !== '/' && (
-    <div className="UserHeader" className={classes.root}>
+    <div className={classes.root}>
       <Button>
         <Typography variant="button" className={classes.text}>
           n/a

@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 import { Query, withApollo } from 'react-apollo'
 import CssBaseline from '@material-ui/core/CssBaseline'
 
+import DataWrapper from './components/DataWrapper'
 import Login from './components/auth/Login'
 import Account from './components/views/Account'
 import Transactions from './components/views/Transactions'
@@ -21,12 +22,9 @@ class App extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      user: {
-        isLoggedIn: false,
-        id: null
-      }
+      user: null
     }
-    // this._isLoggedIn = this._isLoggedIn.bind(this);
+    this.covertState = this.covertState.bind(this);
   }
 
   // auth
@@ -47,6 +45,11 @@ class App extends React.Component {
     window.location.href = '/';
   }
 
+  // state
+  covertState(obj){
+    Object.assign(this.state, obj);
+  }
+
   // render
   _rootRedirect = () => {
     return (
@@ -65,10 +68,9 @@ class App extends React.Component {
     );
   }
 
-  _renderRoutes = () => {
-    const isLoggedIn = this.state.user.isLoggedIn;
+  _renderDataWrapper = id => {
     return (
-      <React.Fragment>
+      <DataWrapper covertState={this.covertState} variables={{ id }} >
         <Router>
           <UserHeader logout={this._logout} />
           <div className="ViewWrapper">
@@ -82,8 +84,8 @@ class App extends React.Component {
           </div>
           <NavBottom />
         </Router>
-      </React.Fragment>
-    );
+      </DataWrapper>
+    )
   }
 
   render(){
@@ -95,9 +97,7 @@ class App extends React.Component {
             if (loading) return <Loader />;
             if (error) return <ErrorPage message={error.message} />
             if (data.loggedInUser && data.loggedInUser.id !== null){
-              this.state.user.id = data.loggedInUser.id;
-              this.state.user.isLoggedIn = true;
-              return this._renderRoutes();
+              return this._renderDataWrapper(data.loggedInUser.id);
             }
             return this._renderLogin();
           }}
