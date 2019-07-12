@@ -1,5 +1,14 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "My Graphcool Service"
+  "description": "My Graphcool Service",
+  "dependencies": {
+    "@types/bcryptjs": "^2.4.1",
+    "@types/validator": "^6.3.0",
+    "apollo-link": "^1.2.12",
+    "bcryptjs": "^2.4.3",
+    "graphcool-lib": "^0.0.3",
+    "graphql-request": "^1.4.0",
+    "validator": "^9.0.0"
+  }
 }

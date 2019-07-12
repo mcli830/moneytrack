@@ -19,11 +19,23 @@ types: ./types.graphql
 
 
 functions:
-  hello:
-    handler:
-      code: src/hello.js
+  signup:
     type: resolver
-    schema: src/hello.graphql
+    schema: src/auth/signup.graphql
+    handler:
+      code: src/auth/signup.js
+
+  authenticate:
+    type: resolver
+    schema: src/auth/authenticate.graphql
+    handler:
+      code: src/auth/authenticate.js
+
+  loggedInUser:
+    type: resolver
+    schema: src/auth/loggedInUser.graphql
+    handler:
+      code: src/auth/loggedInUser.js
 
 
 # Model/Relation permissions are used to limit the API access
@@ -40,4 +52,3 @@ permissions:
 # https://www.graph.cool/docs/reference/auth/authentication/authentication-tokens-eip7ahqu5o
 # rootTokens:
 #   - mytoken
-

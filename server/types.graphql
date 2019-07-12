@@ -3,8 +3,9 @@
 
 type User @model {
   id: ID! @isUnique
-  name: String,
-  alias: String! @isUnique
+  email: String @isUnique
+  name: String
+  password: String
   createdAt: DateTime!
   updatedAt: DateTime!
   transactions: [Transaction!]! @relation(name: "UserTransactions")
@@ -20,7 +21,7 @@ type Transaction @model {
   amount: Int!
   currency: Currency!
   description: String!
-  memo: String
+  memo: String!
   creator: User! @relation(name: "UserTransactions")
   createdAt: DateTime!
 }

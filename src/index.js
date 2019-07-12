@@ -1,41 +1,48 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import './index.css'
+import App from './App'
 
-import { ApolloProvider } from 'react-apollo';
-import { ApolloClient } from 'apollo-client';
-import { createHttpLink } from 'apollo-link-http';
-import { InMemoryCache } from 'apollo-cache-inmemory';
+import { ApolloProvider } from 'react-apollo'
+import { ApolloClient } from  'apollo-client'
+import { createHttpLink } from 'apollo-link-http'
+import { setContext } from 'apollo-link-context'
+import { InMemoryCache } from 'apollo-cache-inmemory'
 
 import 'typeface-roboto';
 import * as serviceWorker from './serviceWorker';
 
-import gql from 'graphql-tag';
+// import gql from 'graphql-tag';
 
 const httpLink = createHttpLink({
   uri: process.env.REACT_APP_GRAPHCOOL_URI
 });
 
-const client = new ApolloClient({
-  link: httpLink,
-  cache: new InMemoryCache()
-});
- 
-// client.query({
-//   query: gql`
-//     query getUsers {
-//       allUsers {
-//         id
-//         name
-//         alias
-//         transactions {
-//           description
-//         }
-//       }
+// const authLink = new ApolloLink((operation, forward) => {
+//   console.log(localStorage.getItem('graphcoolToken'))
+//   const token = localStorage.getItem('graphcoolToken');
+//   const authorizationHeader = token ? `Bearer ${token}` : null;
+//   operation.setContext({
+//     headers: {
+//       authorization: authorizationHeader
 //     }
-//   `
-// }).then(result => console.log(result));
+//   });
+// });
+
+const authLink = setContext((_, { headers }) => {
+  const token = localStorage.getItem('graphcoolToken');
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : '',
+    }
+  }
+});
+
+const client = new ApolloClient({
+  link: authLink.concat(httpLink),
+  cache: new InMemoryCache() //.restore(window.__APOLLO_STATE__)
+});
 
 ReactDOM.render(
   <ApolloProvider client={client}>
