@@ -1,8 +1,11 @@
 import React from 'react'
+import { graphql } from 'react-apollo'
 import TransactionsView from './TransactionsView'
 import currency from '../../data/currency'
 
-export default (props) => {
+import CREATE_TRANSACTION_MUTATION from '../../graphql/mutations/CreateTransaction'
+
+function Transactions(props) {
 
   function getDateString(date){
     return date.toDateString().replace(/\w+\s(\w+)(\s\w+)(\s\w+)/, '$1$2,$3');
@@ -26,9 +29,28 @@ export default (props) => {
     val.total = val.transactions[0].symbol + val.transactions.reduce((a,b)=>a+b.amount, 0);
   }
 
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const handleModalOpen = () => {
+    setModalOpen(true)
+  }
+  const handleModalClose = () => {
+    setModalOpen(false)
+  }
+
   return (
     <TransactionsView
       data={groups}
+      modal={{
+        open: modalOpen,
+        handleOpen: handleModalOpen,
+        handleClose: handleModalClose
+      }}
+      createTransaction={props.createTransactionMutation}
     />
   )
 }
+
+export default graphql(
+  CREATE_TRANSACTION_MUTATION,
+  { name: 'createTransactionMutation' }
+)(Transactions);
