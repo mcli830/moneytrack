@@ -53,12 +53,12 @@ const transactionStyles = makeStyles({
   }
 });
 
-function DatePartition(props){
+function DateGroup(props){
   const classes = partitionStyles();
   return (
     <div className={classes.datePartition}>
       <Typography variant='body2'>
-        {props.date.toDateString().replace(/^\w+\s/, '')}
+        {props.date}
       </Typography>
     </div>
   );
@@ -86,21 +86,20 @@ function Transaction(props){
 export default (props) => {
 
   function renderList(){
-    var date = null;
-    return props.transactions.map(data => {
-      const renderNext = [<Transaction data={data} key={data.id} />];
-      const transactionDate = new Date(data.date);
-      if (date === null || transactionDate > date ){
-        date = transactionDate;
-        renderNext.unshift(<DatePartition date={date} />);
-      }
-      return renderNext;
-    });
+    const output = [];
+    for (let group in props.data){
+      let transactions = props.data[group];
+      // push DateGroup component
+      output.push(<DateGroup date={transactions[0].dateString} key={transactions[0].group} />);
+      // push Transaction components array
+      output.push(transactions.map(t => <Transaction data={t} key={t.id} />));
+    }
+    return output;
   }
 
   return (
     <React.Fragment>
       {renderList()}
     </React.Fragment>
-  )
+  );
 }
