@@ -1,5 +1,8 @@
 import React from 'react'
 import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
+import Fab from '@material-ui/core/Fab'
+import Icon from '@material-ui/core/Icon'
 import { makeStyles } from '@material-ui/styles'
 import { createMuiTheme } from '@material-ui/core/styles'
 
@@ -10,6 +13,12 @@ const rootStyles = makeStyles({
     backgroundColor: theme.palette.background.default,
     color: theme.palette.text.primary,
     padding: theme.spacing(2)
+  },
+  fab: {
+    position: 'absolute',
+    bottom: theme.spacing(2),
+    left: '50%',
+    transform: 'translate(-50%, 0)'
   }
 });
 
@@ -88,13 +97,12 @@ function Transaction(props){
 }
 
 export default (props) => {
+  const classes = rootStyles();
 
   function renderList(){
     const output = [];
     for (let [group, data] of Object.entries(props.data)){
-      // push DateGroup component
       output.push(<DateGroup date={data.transactions[0].dateString} total={data.total} key={group} />);
-      // push Transaction components array
       output.push(data.transactions.map(t => <Transaction data={t} key={t.id} />));
     }
     return output;
@@ -103,6 +111,9 @@ export default (props) => {
   return (
     <React.Fragment>
       {renderList()}
+      <Fab className={classes.fab} color='primary'>
+        <Icon>add</Icon>
+      </Fab>
     </React.Fragment>
   );
 }

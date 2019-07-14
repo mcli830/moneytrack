@@ -2,6 +2,7 @@ import React from 'react'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
 import { Query, withApollo } from 'react-apollo'
 import CssBaseline from '@material-ui/core/CssBaseline'
+import Container from '@material-ui/core/Container'
 
 import DataWrapper from './components/DataWrapper'
 import Login from './components/auth/Login'
@@ -73,21 +74,23 @@ class App extends React.Component {
       view: {
         flex: '1 1 auto',
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        position: 'relative',
+        padding: 0
       }
     }
     return (
       <DataWrapper covertState={this.covertState} variables={{ id }} >
         <Router>
           <UserHeader logout={this._logout} />
-          <div style={styles.view}>
+          <Container style={styles.view} maxWidth='md'>
             <Switch>
               <Route path='/transactions' render={()=><Transactions user={this.state.user} />} />
               <Route path='/friends' render={()=><Friends user={this.state.user} />} />
               <Route path='/timeline' render={()=><Timeline user={this.state.user} />} />
               <Route path='/' render={()=><Redirect to='/transactions' />} />
             </Switch>
-          </div>
+          </Container>
           <NavBottom />
         </Router>
       </DataWrapper>

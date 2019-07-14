@@ -2,6 +2,7 @@ import React from 'react'
 import { withRouter } from 'react-router-dom'
 import { makeStyles } from '@material-ui/styles'
 import { createMuiTheme } from '@material-ui/core/styles'
+import Container from '@material-ui/core/Container'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import AccountIcon from '@material-ui/icons/AccountCircle'
@@ -11,12 +12,12 @@ const theme = createMuiTheme();
 const useStyles = makeStyles({
   root: {
     backgroundColor: theme.palette.primary.main,
+  },
+  container: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2)
+    alignItems: 'center'
   },
   header: {
     color: theme.palette.background.default,
@@ -42,17 +43,19 @@ function UserHeader(props) {
   const classes = useStyles();
   return props.history.location.pathname !== '/' && (
     <div className={classes.root}>
-      <Button>
-        <AccountIcon className={classes.account} />
-      </Button>
-      <Typography variant="h4" className={classes.header}>
-        {capitalize(props.history.location.pathname.slice(1))}
-      </Typography>
-      <Button onClick={()=>props.logout()}>
-        <Typography variant="button" className={classes.text}>
-          Logout
+      <Container maxWidth='md' className={classes.container}>
+        <Button>
+          <AccountIcon className={classes.account} />
+        </Button>
+        <Typography variant="h4" className={classes.header}>
+          {capitalize(props.history.location.pathname.slice(1))}
         </Typography>
-      </Button>
+        <Button onClick={()=>props.logout()}>
+          <Typography variant="button" className={classes.text}>
+            Logout
+          </Typography>
+        </Button>
+      </Container>
     </div>
   );
 }
