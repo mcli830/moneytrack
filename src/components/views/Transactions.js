@@ -16,9 +16,15 @@ export default (props) => {
     t.dateString = getDateString(t.date);
     t.group = t.date.getUTCDate();
     t.symbol = currency[t.currency];
-    if (!groups[t.group]) groups[t.group] = [t];
-    else groups[t.group].push(t);
+    if (!groups[t.group]) groups[t.group] = {
+      transactions: []
+    };
+    groups[t.group].transactions.push(t);
   });
+
+  for (let [key, val] of Object.entries(groups)){
+    val.total = val.transactions[0].symbol + val.transactions.reduce((a,b)=>a+b.amount, 0);
+  }
 
   return (
     <TransactionsView

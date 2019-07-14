@@ -17,6 +17,7 @@ const partitionStyles = makeStyles({
   datePartition: {
     display: 'flex',
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: theme.palette.background.default,
     paddingTop: theme.spacing(1),
@@ -60,6 +61,9 @@ function DateGroup(props){
       <Typography variant='body2'>
         {props.date}
       </Typography>
+      <Typography variant='body2'>
+        {props.total}
+      </Typography>
     </div>
   );
 }
@@ -87,12 +91,11 @@ export default (props) => {
 
   function renderList(){
     const output = [];
-    for (let group in props.data){
-      let transactions = props.data[group];
+    for (let [group, data] of Object.entries(props.data)){
       // push DateGroup component
-      output.push(<DateGroup date={transactions[0].dateString} key={transactions[0].group} />);
+      output.push(<DateGroup date={data.transactions[0].dateString} total={data.total} key={group} />);
       // push Transaction components array
-      output.push(transactions.map(t => <Transaction data={t} key={t.id} />));
+      output.push(data.transactions.map(t => <Transaction data={t} key={t.id} />));
     }
     return output;
   }
