@@ -1,11 +1,11 @@
 import React from 'react'
-import Fab from '@material-ui/core/Fab'
+import Button from '@material-ui/core/Button'
 import Icon from '@material-ui/core/Icon'
 import Modal from '@material-ui/core/Modal'
 
 import TransactionsGroup from './TransactionsGroup'
 import TransactionsEntry from './TransactionsEntry'
-import TransactionsAdd from './TransactionsAdd'
+import AddTransactionModal from './add/AddTransaction'
 
 import { makeStyles } from '@material-ui/styles'
 import { createMuiTheme } from '@material-ui/core/styles'
@@ -18,11 +18,13 @@ const useStyles = makeStyles({
     color: theme.palette.text.primary,
     padding: theme.spacing(2)
   },
-  fab: {
+  button: {
     position: 'absolute',
-    bottom: theme.spacing(2),
+    bottom: 0,
     left: '50%',
-    transform: 'translate(-50%, 0)'
+    transform: 'translate(-50%, 0)',
+    paddingLeft: theme.spacing(4),
+    paddingRight: theme.spacing(4),
   }
 });
 
@@ -65,10 +67,10 @@ export default (props) => {
   return (
     <React.Fragment>
       {renderList()}
-      <Fab className={classes.fab} color='primary' onClick={props.modal.handleOpen}>
+      <Button variant='contained' className={classes.button} color='primary' onClick={props.modal.handleOpen}>
         <Icon>add</Icon>
-      </Fab>
-      <TransactionsAdd
+      </Button>
+      <AddTransactionModal
         open={props.modal.open}
         handleClose={props.modal.handleClose}
       />

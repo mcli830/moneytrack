@@ -1,9 +1,9 @@
 import React from 'react'
 import { graphql } from 'react-apollo'
 import TransactionsView from './TransactionsView'
-import currency from '../../data/currency'
+import currency from '../../../data/currency'
 
-import CREATE_TRANSACTION_MUTATION from '../../graphql/mutations/CreateTransaction'
+import CREATE_TRANSACTION_MUTATION from '../../../graphql/mutations/CreateTransaction'
 
 function Transactions(props) {
 

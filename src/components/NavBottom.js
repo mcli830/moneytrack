@@ -15,18 +15,18 @@ function NavBottom(props) {
         showLabels
       >
         <BottomNavigationAction
-          value="transactions"
-          label="Transactions"
-          icon={<ListIcon />}
-          component={Link}
-          to="/transactions"
-        />
-        <BottomNavigationAction
           value="friends"
           label="Friends"
           icon={<FriendsIcon />}
           component={Link}
           to="/friends"
+          />
+        <BottomNavigationAction
+          value="transactions"
+          label="Transactions"
+          icon={<ListIcon />}
+          component={Link}
+          to="/transactions"
         />
         <BottomNavigationAction
           value="timeline"
