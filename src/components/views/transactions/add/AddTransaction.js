@@ -142,6 +142,7 @@ export default (props) => {
             color='primary'
             fullWidth
             className={classes.confirm}
+            disabled={!(validAmount() && validDescription())}
           >
             Add Transaction
           </Button>
