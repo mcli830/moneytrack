@@ -144,7 +144,13 @@ export default (props) => {
             className={classes.confirm}
             disabled={!(validAmount() && validDescription())}
           >
-            Add Transaction
+            {
+              !validAmount()
+              ? 'Add an amount'
+              : !validDescription()
+                ? 'Add a description'
+                : 'Add transaction'
+            }
           </Button>
         </Container>
       </Slide>

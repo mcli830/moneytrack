@@ -6,7 +6,7 @@ import Container from '@material-ui/core/Container'
 
 import DataWrapper from './components/DataWrapper'
 import Login from './components/auth/Login'
-import Account from './components/views/Account'
+// import Account from './components/views/Account'
 import Transactions from './components/views/transactions/Transactions'
 import Friends from './components/views/Friends'
 import Timeline from './components/views/Timeline'

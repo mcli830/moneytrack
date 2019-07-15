@@ -1,7 +1,6 @@
 import React from 'react'
 import Button from '@material-ui/core/Button'
 import Icon from '@material-ui/core/Icon'
-import Modal from '@material-ui/core/Modal'
 
 import TransactionsGroup from './TransactionsGroup'
 import TransactionsEntry from './TransactionsEntry'
@@ -48,20 +47,6 @@ export default (props) => {
       );
     }
     return output;
-  }
-
-  async function handleCreateTransaction(){
-
-    // create modal to add new transaction
-  }
-
-  const [modalOpen, setModalOpen] = React.useState(false);
-
-  const handleModalOpen = () => {
-    setModalOpen(true);
-  }
-  const handleModalClose = () => {
-    setModalOpen(false);
   }
 
   return (

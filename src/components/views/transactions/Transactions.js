@@ -25,7 +25,7 @@ function Transactions(props) {
     groups[t.group].transactions.push(t);
   });
 
-  for (let [key, val] of Object.entries(groups)){
+  for (let [_, val] of Object.entries(groups)){
     val.total = val.transactions[0].symbol + val.transactions.reduce((a,b)=>a+b.amount, 0);
   }
 
