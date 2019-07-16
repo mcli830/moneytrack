@@ -1,17 +1,24 @@
 import gql from 'graphql-tag'
 
-export default gql`
+export const LOGGED_IN_USER = gql`
+  query LoggedInUserQuery {
+    loggedInUser {
+      id
+    }
+  }
+`
+export const GET_USER_DATA = gql`
   query GetUserData($id: ID) {
     User(id: $id) {
       id
       name
       email
+      currency
       transactions {
         id
         description
         date
         amount
-        currency
         memo
       }
     }

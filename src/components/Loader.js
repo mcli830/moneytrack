@@ -1,7 +1,7 @@
 import React from 'react'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
-export default props => {
+export default (props) => {
   const style = {
       height: '100%',
       width: '100%',
@@ -11,7 +11,7 @@ export default props => {
   }
   return(
     <div className="Spinner" style={style}>
-      <CircularProgress />
+      <CircularProgress size={props.size} thickness={props.thickness} />
     </div>
   )
 }

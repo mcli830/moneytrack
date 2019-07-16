@@ -46,9 +46,6 @@ const useStyles = makeStyles({
     color: theme.palette.text.primary,
     textAlign: 'right',
     padding: 0,
-  },
-  currency: {
-    color: theme.palette.text.secondary
   }
 });
 
@@ -79,8 +76,12 @@ export default (props) => {
             placeholder: '0'
           }}
           endAdornment={
-            <InputAdornment position='end' className={classes.currency}>
-              {props.currency}
+            <InputAdornment
+              position='end'
+            >
+              <Typography color={props.validAmount() ? 'primary' : 'textSecondary'}>
+                {props.currency}
+              </Typography>
             </InputAdornment>
           }
         />

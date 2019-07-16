@@ -6,6 +6,7 @@ type User @model {
   email: String @isUnique
   name: String!
   password: String!
+  currency: Currency @defaultValue(value: USD)
   createdAt: DateTime!
   updatedAt: DateTime!
   transactions: [Transaction!]! @relation(name: "UserTransactions")
@@ -19,7 +20,6 @@ type Transaction @model {
   id: ID! @isUnique
   date: DateTime!
   amount: Int!
-  currency: Currency!
   description: String!
   memo: String
   creator: User! @relation(name: "UserTransactions")

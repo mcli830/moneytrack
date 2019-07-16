@@ -15,7 +15,10 @@ const useStyles = makeStyles({
   root: {
     backgroundColor: theme.palette.background.default,
     color: theme.palette.text.primary,
-    padding: theme.spacing(2)
+    height: '100%',
+    width: '100%',
+    overflowX: 'hidden',
+    overflowY: 'auto'
   },
   button: {
     position: 'absolute',
@@ -50,15 +53,16 @@ export default (props) => {
   }
 
   return (
-    <React.Fragment>
+    <div className={classes.root}>
       {renderList()}
       <Button variant='contained' className={classes.button} color='primary' onClick={props.modal.handleOpen}>
         <Icon>add</Icon>
       </Button>
       <AddTransactionModal
+        user={props.user}
         open={props.modal.open}
         handleClose={props.modal.handleClose}
       />
-    </React.Fragment>
+    </div>
   );
 }

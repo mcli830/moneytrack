@@ -40,3 +40,17 @@ code {
   align-items: center;
   padding: 5% 0;
 }
+
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+
+@media only screen and (min-width: 961){
+  ::-webkit-scrollbar {
+    width: 3px;
+    height: 3px;
+    opacity: 1;
+  }
+}

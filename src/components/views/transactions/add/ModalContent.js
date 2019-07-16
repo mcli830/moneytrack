@@ -47,7 +47,7 @@ export default (props) => {
                 position='start'
                 className={classes.fieldAdornment}
               >
-                <Icon>today</Icon>
+                <Icon color='primary'>today</Icon>
               </InputAdornment>
             )
           }}
@@ -68,7 +68,7 @@ export default (props) => {
               position='start'
               className={classes.fieldAdornment}
             >
-              <Icon color={props.validDescription() ? 'inherit' : 'disabled'}>label</Icon>
+              <Icon color={props.validDescription() ? 'primary' : 'disabled'}>label</Icon>
             </InputAdornment>
           )
         }}
@@ -88,7 +88,7 @@ export default (props) => {
               position='start'
               className={classes.fieldAdornment}
             >
-              <Icon color={props.validMemo() ? 'inherit' : 'disabled'}>create</Icon>
+              <Icon color={props.validMemo() ? 'primary' : 'disabled'}>create</Icon>
             </InputAdornment>
           )
         }}

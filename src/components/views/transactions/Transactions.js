@@ -1,34 +1,38 @@
 import React from 'react'
-import { graphql } from 'react-apollo'
+import { withApollo } from 'react-apollo'
 import TransactionsView from './TransactionsView'
 import currency from '../../../data/currency'
 
-import CREATE_TRANSACTION_MUTATION from '../../../graphql/mutations/CreateTransaction'
+import { LOGGED_IN_USER } from '../../../graphql/queries'
+import { GET_USER_DATA } from '../../../graphql/queries'
 
 function Transactions(props) {
-
-  function getDateString(date){
-    return date.toDateString().replace(/\w+\s(\w+)(\s\w+)(\s\w+)/, '$1$2,$3');
-  }
-
+  // get user data from apollo cache
+  const { loggedInUser } = props.client.cache.readQuery({
+    query: LOGGED_IN_USER
+  })
+  const { User } = props.client.cache.readQuery({
+    query: GET_USER_DATA,
+    variables: { id: loggedInUser.id }
+  });
+  // format transaction data into date groups for rendering
   const groups = {};
-
-  const transactions = props.user.transactions;
-  transactions.forEach(t => {
+  User.transactions.forEach(t => {
     t.date = new Date(t.date);
     t.dateString = getDateString(t.date);
     t.group = t.date.getUTCDate();
-    t.symbol = currency[t.currency];
+    t.symbol = currency[User.currency];
     if (!groups[t.group]) groups[t.group] = {
       transactions: []
     };
     groups[t.group].transactions.push(t);
   });
-
+  // calculate sums for transaction date groups
   for (let [_, val] of Object.entries(groups)){
     val.total = val.transactions[0].symbol + val.transactions.reduce((a,b)=>a+b.amount, 0);
   }
 
+  // transactions view state
   const [modalOpen, setModalOpen] = React.useState(false);
   const handleModalOpen = () => {
     setModalOpen(true)
@@ -39,6 +43,7 @@ function Transactions(props) {
 
   return (
     <TransactionsView
+      user={User}
       data={groups}
       modal={{
         open: modalOpen,
@@ -47,10 +52,12 @@ function Transactions(props) {
       }}
       createTransaction={props.createTransactionMutation}
     />
-  )
+  );
+
+  // helper
+  function getDateString(date){
+    return date.toDateString().replace(/\w+\s(\w+)(\s\w+)(\s\w+)/, '$1$2,$3');
+  }
 }
 
-export default graphql(
-  CREATE_TRANSACTION_MUTATION,
-  { name: 'createTransactionMutation' }
-)(Transactions);
+export default withApollo(Transactions);

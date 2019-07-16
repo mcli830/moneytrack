@@ -3,9 +3,8 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 import { Query, withApollo } from 'react-apollo'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Container from '@material-ui/core/Container'
-
-import DataWrapper from './components/DataWrapper'
 import Login from './components/auth/Login'
+import DataWrapper from './components/DataWrapper'
 // import Account from './components/views/Account'
 import Transactions from './components/views/transactions/Transactions'
 import Friends from './components/views/Friends'
@@ -22,10 +21,6 @@ import LOGGED_IN_USER_QUERY from './graphql/queries/LoggedInUser'
 class App extends React.Component {
   constructor(props){
     super(props);
-    this.state = {
-      user: null
-    }
-    this.covertState = this.covertState.bind(this);
   }
 
   // auth
@@ -46,18 +41,7 @@ class App extends React.Component {
     window.location.href = '/';
   }
 
-  // state
-  covertState(obj){
-    Object.assign(this.state, obj);
-  }
-
   // render
-  _rootRedirect = () => {
-    return (
-      <Redirect to={this.state.user.isLoggedIn ? '/account' : '/login'} />
-    );
-  }
-
   _renderLogin = () => {
     return (
       <React.Fragment>
@@ -69,7 +53,7 @@ class App extends React.Component {
     );
   }
 
-  _renderDataWrapper = id => {
+  _renderRoutes = id => {
     const styles = {
       view: {
         flex: '1 1 auto',
@@ -80,14 +64,14 @@ class App extends React.Component {
       }
     }
     return (
-      <DataWrapper covertState={this.covertState} variables={{ id }} >
+      <DataWrapper variables={{ id }}>
         <Router>
           <UserHeader logout={this._logout} />
           <Container style={styles.view} maxWidth='md'>
             <Switch>
-              <Route path='/transactions' render={()=><Transactions user={this.state.user} />} />
-              <Route path='/friends' render={()=><Friends user={this.state.user} />} />
-              <Route path='/timeline' render={()=><Timeline user={this.state.user} />} />
+              <Route path='/transactions' component={Transactions} />
+              <Route path='/friends' component={Friends} />
+              <Route path='/timeline' component={Timeline} />
               <Route path='/' render={()=><Redirect to='/transactions' />} />
             </Switch>
           </Container>
@@ -106,9 +90,9 @@ class App extends React.Component {
             if (loading) return <Loader />;
             if (error) return <ErrorPage message={error.message} />
             if (data.loggedInUser && data.loggedInUser.id !== null){
-              return this._renderDataWrapper(data.loggedInUser.id);
+              return this._renderRoutes(data.loggedInUser.id);
             }
-            return this._renderLogin();
+            return this._renderLogin;
           }}
         </Query>
       </div>

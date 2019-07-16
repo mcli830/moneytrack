@@ -3,12 +3,14 @@ import Modal from '@material-ui/core/Modal'
 import Slide from '@material-ui/core/Slide'
 import Container from '@material-ui/core/Container'
 import Button from '@material-ui/core/Button'
-
 import ModalHeader from './ModalHeader'
 import ModalContent from './ModalContent'
-
+import Loader from '../../../Loader'
 import { makeStyles } from '@material-ui/styles'
 import { createMuiTheme } from '@material-ui/core/styles'
+import { withApollo, Mutation } from 'react-apollo'
+import { ADD_TRANSACTION_MUTATION } from '../../../../graphql/mutations'
+import { GET_USER_DATA, LOGGED_IN_USER } from '../../../../graphql/queries'
 
 const theme = createMuiTheme();
 
@@ -32,17 +34,16 @@ const useStyles = makeStyles({
     position: 'absolute',
     bottom: 0,
     borderRadius: 0,
-    boxShadow: 'none'
+    boxShadow: 'none',
+    width: '100%'
   }
 })
-
 
 // state handling
 function baseState() {
   return {
     icon: '',
     amount: 0,
-    currency: 'USD',
     date: new Date(),
     description: '',
     memo: ''
@@ -67,7 +68,7 @@ const reducer = (state, action) => {
   }
 }
 
-export default (props) => {
+function AddTransaction(props){
   const classes = useStyles();
 
   // state & reducer
@@ -125,7 +126,7 @@ export default (props) => {
             amount={state.amount}
             changeAmount={changeAmount}
             validAmount={validAmount}
-            currency={state.currency}
+            currency={props.user.currency}
           />
           <ModalContent
             date={state.date}
@@ -136,24 +137,75 @@ export default (props) => {
             validDescription={validDescription}
             validMemo={validMemo}
           />
-          <Button
-            variant='contained'
-            size='large'
-            color='primary'
-            fullWidth
-            className={classes.confirm}
-            disabled={!(validAmount() && validDescription())}
-          >
-            {
-              !validAmount()
-              ? 'Add an amount'
-              : !validDescription()
-                ? 'Add a description'
-                : 'Add transaction'
-            }
-          </Button>
+          <SendMutationButton />
         </Container>
       </Slide>
     </Modal>
   );
+
+  //render helper
+  function SendMutationButton(){
+    return (
+      <Mutation
+        mutation={ADD_TRANSACTION_MUTATION}
+        update={(cache, { data })=>{
+          const { loggedInUser } = cache.readQuery({query: LOGGED_IN_USER});
+          const { User } = cache.readQuery({
+            query: GET_USER_DATA,
+            variables: {
+              id: loggedInUser.id
+            }
+          })
+          cache.writeQuery({
+            query: GET_USER_DATA,
+            data: {
+              User: {
+                ...User,
+                transactions: User.transactions.concat([data.createTransaction])
+              }
+            }
+          })
+          closeModal();
+        }}
+      >
+        {(addTransaction, {data, error, loading}) => (
+          <Button
+            id='gql-add-transaction'
+            variant='contained'
+            size='large'
+            color='primary'
+            className={classes.confirm}
+            disabled={loading || !(validAmount() && validDescription())}
+            onClick={()=>addTransaction({
+              variables: {
+                creatorId: props.user.id,
+                date: state.date,
+                description: state.description,
+                amount: parseInt(state.amount),
+                memo: state.memo
+              }
+            })}
+          >
+            {error ? console.error(error) : null}
+            { loading
+              ? <Loader size={26} thickness={3} />
+              : !validAmount()
+                ? 'Add an amount'
+                : !validDescription()
+                  ? 'Add a description'
+                  : 'Add transaction'
+            }
+          </Button>
+        )}
+      </Mutation>
+    )
+  }
 }
+
+
+
+// export default graphql(ADD_TRANSACTION_MUTATION,{
+//   name: 'addTransactionMutation'
+// })(AddTransaction);
+
+export default withApollo(AddTransaction);
