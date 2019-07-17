@@ -16,7 +16,7 @@ import Loader from './components/Loader'
 import ErrorPage from './components/Error'
 import './index.css';
 
-import LOGGED_IN_USER_QUERY from './graphql/queries/LoggedInUser'
+import { LOGGED_IN_USER } from './graphql/queries'
 
 class App extends React.Component {
   constructor(props){
@@ -85,14 +85,14 @@ class App extends React.Component {
     return (
       <div className="App">
         <CssBaseline />
-        <Query query={LOGGED_IN_USER_QUERY}>
+        <Query query={LOGGED_IN_USER}>
           {({ data, loading, error}) => {
             if (loading) return <Loader />;
             if (error) return <ErrorPage message={error.message} />
             if (data.loggedInUser && data.loggedInUser.id !== null){
               return this._renderRoutes(data.loggedInUser.id);
             }
-            return this._renderLogin;
+            return this._renderLogin();
           }}
         </Query>
       </div>
