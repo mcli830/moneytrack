@@ -15,21 +15,16 @@ import { GET_USER_DATA, LOGGED_IN_USER } from '../../graphql/queries'
 const theme = createMuiTheme();
 
 const useStyles = makeStyles({
-  backdrop: {
-    backgroundColor: 'transparent'
-  },
   slide: {
-    transformOrigin: '50% 100%',
     height: '100%',
     padding: 0
   },
   container: {
-    height: '100vh',
     backgroundColor: theme.palette.background.paper,
+    height: '100%',
     padding: 0,
     display: 'flex',
     flexDirection: 'column',
-    position: 'relative'
   },
   confirm: {
     borderRadius: 0,
@@ -116,8 +111,8 @@ function AddTransactionModal(props){
         }
       }}
     >
-      <Slide direction='up' mountOnEnter unmountOnExit in={props.open} className={classes.slide}>
-        <Container maxWidth='md' className={classes.container}>
+      <Slide direction='up' in={props.open} className={classes.container} mountOnEnter unmountOnExit>
+        <Container maxWidth='md'>
           <ModalHeader
             closeModal={closeModal}
             icon={state.icon}
