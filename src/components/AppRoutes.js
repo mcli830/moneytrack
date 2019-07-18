@@ -4,8 +4,9 @@ import Container from '@material-ui/core/Container'
 import DataProvider from './DataProvider'
 import UserHeader from './UserHeader'
 import Transactions from './views/transactions/Transactions'
-import Friends from './views/Friends'
-import Timeline from './views/Timeline'
+// import Friends from './views/Friends'
+// import Timeline from './views/Timeline'
+import ComingSoon from './ComingSoon'
 import NavBottom from './NavBottom'
 import AddTransactionModal from './add/AddTransaction'
 
@@ -32,8 +33,8 @@ export default (props) => {
                 <Transactions />
               </DataProvider>
             )} />
-          <Route path='/friends' component={Friends} />
-          <Route path='/timeline' component={Timeline} />
+          <Route path='/friends' component={ComingSoon} />
+          <Route path='/timeline' component={ComingSoon} />
           <Route path='/' render={()=><Redirect to='/transactions' />} />
         </Switch>
       </Container>
