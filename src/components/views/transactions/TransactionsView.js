@@ -1,10 +1,6 @@
 import React from 'react'
-import Button from '@material-ui/core/Button'
-import Icon from '@material-ui/core/Icon'
-
-import TransactionsGroup from './TransactionsGroup'
-import TransactionsEntry from './TransactionsEntry'
-import AddTransactionModal from './add/AddTransaction'
+import Typography from '@material-ui/core/Typography'
+import TransactionsList from './TransactionsList'
 
 import { makeStyles } from '@material-ui/styles'
 import { createMuiTheme } from '@material-ui/core/styles'
@@ -17,52 +13,55 @@ const useStyles = makeStyles({
     color: theme.palette.text.primary,
     height: '100%',
     width: '100%',
+  },
+  list: {
+    height: '100%',
+    width: '100%',
     overflowX: 'hidden',
-    overflowY: 'auto'
+    overflowY: 'scroll',
   },
   button: {
     position: 'absolute',
-    bottom: 0,
+    height: theme.spacing(6),
+    top: '100%',
     left: '50%',
     transform: 'translate(-50%, 0)',
-    paddingLeft: theme.spacing(4),
-    paddingRight: theme.spacing(4),
+    paddingLeft: theme.spacing(6),
+    paddingRight: theme.spacing(6),
+  },
+  emptyList: {
+    display: 'block',
+    textAlign: 'center',
+    height: '100%',
+    '& > *': {
+      marginTop: '50%',
+      transform: 'translate(0, -50%)'
+    }
   }
 });
 
 export default (props) => {
   const classes = useStyles();
 
-  function renderList(){
-    const output = [];
-    for (let [group, data] of Object.entries(props.data)){
-      output.push(
-        <TransactionsGroup
-          date={data.transactions[0].dateString}
-          total={data.total}
-          key={group}
-        />
-      );
-      output.push(
-        data.transactions.map(t => (
-          <TransactionsEntry data={t} key={t.id} />
-        ))
-      );
-    }
-    return output;
+  function EmptyList(){
+    return (
+      <div className={classes.emptyList}>
+        <Typography variant='body1'>
+          {'Add a transaction with the + button'}
+        </Typography>
+      </div>
+    )
   }
 
   return (
     <div className={classes.root}>
-      {renderList()}
-      <Button variant='contained' className={classes.button} color='primary' onClick={props.modal.handleOpen}>
-        <Icon>add</Icon>
-      </Button>
-      <AddTransactionModal
-        user={props.user}
-        open={props.modal.open}
-        handleClose={props.modal.handleClose}
-      />
+      <div className={classes.list}>
+        {
+          props.data.length < 1
+          ? <EmptyList />
+          : <TransactionsList data={props.data} />
+        }
+      </div>
     </div>
   );
 }

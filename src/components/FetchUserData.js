@@ -6,7 +6,7 @@ import ErrorPage from './Error'
 
 import { GET_USER_DATA } from '../graphql/queries'
 
-function DataWrapper(props) {
+function FetchUserData(props) {
   return (
     <Query query={GET_USER_DATA} variables={props.variables}>
     {({ data, loading, error}) => {
@@ -18,4 +18,4 @@ function DataWrapper(props) {
   );
 }
 
-export default withApollo(DataWrapper)
+export default withApollo(FetchUserData)

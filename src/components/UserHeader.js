@@ -5,7 +5,8 @@ import { createMuiTheme } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
-import AccountIcon from '@material-ui/icons/AccountCircle'
+import AddIcon from '@material-ui/icons/Add'
+import SettingsIcon from '@material-ui/icons/Settings'
 
 const theme = createMuiTheme();
 
@@ -30,10 +31,16 @@ const useStyles = makeStyles({
     padding: '0.5em 0',
     textAlign: 'center',
   },
-  account: {
+  button: {
+    borderRadius: '50%',
+    width: 'auto',
+    height: 'auto',
+    padding: theme.spacing(2),
+  },
+  icon: {
     color: theme.palette.background.default
   }
-})
+});
 
 function capitalize(str){
   return str[0].toUpperCase() + str.slice(1);
@@ -44,16 +51,14 @@ function UserHeader(props) {
   return props.history.location.pathname !== '/' && (
     <div className={classes.root}>
       <Container maxWidth='md' className={classes.container}>
-        <Button>
-          <AccountIcon className={classes.account} />
+        <Button onClick={props.logout} className={classes.button}>
+          <SettingsIcon className={classes.icon} />
         </Button>
         <Typography variant="h4" className={classes.header}>
           {capitalize(props.history.location.pathname.slice(1))}
         </Typography>
-        <Button onClick={()=>props.logout()}>
-          <Typography variant="button" className={classes.text}>
-            Logout
-          </Typography>
+        <Button onClick={props.openAddModal} className={classes.button}>
+          <AddIcon className={classes.icon} />
         </Button>
       </Container>
     </div>

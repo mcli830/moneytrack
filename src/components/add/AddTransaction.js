@@ -5,12 +5,12 @@ import Container from '@material-ui/core/Container'
 import Button from '@material-ui/core/Button'
 import ModalHeader from './ModalHeader'
 import ModalContent from './ModalContent'
-import Loader from '../../../Loader'
+import Loader from '../Loader'
 import { makeStyles } from '@material-ui/styles'
 import { createMuiTheme } from '@material-ui/core/styles'
 import { withApollo, Mutation } from 'react-apollo'
-import { ADD_TRANSACTION_MUTATION } from '../../../../graphql/mutations'
-import { GET_USER_DATA, LOGGED_IN_USER } from '../../../../graphql/queries'
+import { ADD_TRANSACTION_MUTATION } from '../../graphql/mutations'
+import { GET_USER_DATA, LOGGED_IN_USER } from '../../graphql/queries'
 
 const theme = createMuiTheme();
 
@@ -25,14 +25,13 @@ const useStyles = makeStyles({
   },
   container: {
     height: '100vh',
+    backgroundColor: theme.palette.background.paper,
     padding: 0,
     display: 'flex',
     flexDirection: 'column',
     position: 'relative'
   },
   confirm: {
-    position: 'absolute',
-    bottom: 0,
     borderRadius: 0,
     boxShadow: 'none',
     width: '100%'
@@ -68,7 +67,7 @@ const reducer = (state, action) => {
   }
 }
 
-function AddTransaction(props){
+function AddTransactionModal(props){
   const classes = useStyles();
 
   // state & reducer
@@ -113,7 +112,7 @@ function AddTransaction(props){
       onClose={closeModal}
       BackdropProps={{
         style: {
-          backgroundColor: theme.palette.background.default,
+          backgroundColor: 'transparent',
         }
       }}
     >
@@ -126,7 +125,7 @@ function AddTransaction(props){
             amount={state.amount}
             changeAmount={changeAmount}
             validAmount={validAmount}
-            currency={props.user.currency}
+            currency={props.data.user.currency}
           />
           <ModalContent
             date={state.date}
@@ -178,7 +177,7 @@ function AddTransaction(props){
             disabled={loading || !(validAmount() && validDescription())}
             onClick={()=>addTransaction({
               variables: {
-                creatorId: props.user.id,
+                creatorId: props.data.user.id,
                 date: state.date,
                 description: state.description,
                 amount: parseInt(state.amount),
@@ -206,6 +205,6 @@ function AddTransaction(props){
 
 // export default graphql(ADD_TRANSACTION_MUTATION,{
 //   name: 'addTransactionMutation'
-// })(AddTransaction);
+// })(AddTransactionModal);
 
-export default withApollo(AddTransaction);
+export default withApollo(AddTransactionModal);

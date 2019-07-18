@@ -1,16 +1,9 @@
 import React from 'react'
-import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
 import { Query, withApollo } from 'react-apollo'
 import CssBaseline from '@material-ui/core/CssBaseline'
-import Container from '@material-ui/core/Container'
 import Login from './components/auth/Login'
-import DataWrapper from './components/DataWrapper'
-// import Account from './components/views/Account'
-import Transactions from './components/views/transactions/Transactions'
-import Friends from './components/views/Friends'
-import Timeline from './components/views/Timeline'
-import NavBottom from './components/NavBottom'
-import UserHeader from './components/UserHeader'
+import FetchUserData from './components/FetchUserData'
+import AppRoutes from './components/AppRoutes'
 import AppHeader from './components/AppHeader'
 import Loader from './components/Loader'
 import ErrorPage from './components/Error'
@@ -21,24 +14,24 @@ import { LOGGED_IN_USER } from './graphql/queries'
 class App extends React.Component {
   constructor(props){
     super(props);
+    this.state = {
+      addTransactionModal: false
+    }
+    this.handleAddTransactionModal = this.handleAddTransactionModal.bind(this);
   }
 
   // auth
-  // _isLoaded(){
-  //   return !this.props.loggedInUserQuery.loading;
-  // }
-  //
-  // _isLoggedIn(){
-  //   const query = this.props.loggedInUserQuery;
-  //   console.log('query', query)
-  //   const isLoggedIn = query.loggedInUser && query.loggedInUser.id !== null;
-  //   return isLoggedIn;
-  // }
-
   _logout(history) {
     console.log('logout')
     localStorage.removeItem('graphcoolToken');
     window.location.href = '/';
+  }
+
+  // handlers
+  handleAddTransactionModal(bool){
+    this.setState({
+      addTransactionModal: bool
+    });
   }
 
   // render
@@ -53,31 +46,15 @@ class App extends React.Component {
     );
   }
 
-  _renderRoutes = id => {
-    const styles = {
-      view: {
-        flex: '1 1 auto',
-        display: 'flex',
-        flexDirection: 'column',
-        position: 'relative',
-        padding: 0
-      }
-    }
+  _fetchDataAndRenderRoutes = id => {
     return (
-      <DataWrapper variables={{ id }}>
-        <Router>
-          <UserHeader logout={this._logout} />
-          <Container style={styles.view} maxWidth='md'>
-            <Switch>
-              <Route path='/transactions' component={Transactions} />
-              <Route path='/friends' component={Friends} />
-              <Route path='/timeline' component={Timeline} />
-              <Route path='/' render={()=><Redirect to='/transactions' />} />
-            </Switch>
-          </Container>
-          <NavBottom />
-        </Router>
-      </DataWrapper>
+      <FetchUserData variables={{ id }}>
+        <AppRoutes
+          state={this.state}
+          handleAddTransactionModal={this.handleAddTransactionModal}
+          logout={this._logout}
+        />
+      </FetchUserData>
     )
   }
 
@@ -90,7 +67,7 @@ class App extends React.Component {
             if (loading) return <Loader />;
             if (error) return <ErrorPage message={error.message} />
             if (data.loggedInUser && data.loggedInUser.id !== null){
-              return this._renderRoutes(data.loggedInUser.id);
+              return this._fetchDataAndRenderRoutes(data.loggedInUser.id);
             }
             return this._renderLogin();
           }}
