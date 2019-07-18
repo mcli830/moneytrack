@@ -2,20 +2,18 @@ import React from 'react'
 import Typography from '@material-ui/core/Typography'
 import Slide from '@material-ui/core/Slide'
 import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemText from '@material-ui/core/ListItemText'
 import ListSubheader from '@material-ui/core/ListSubheader'
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
-import Button from '@material-ui/core/Button'
 import EditIcon from '@material-ui/icons/Edit'
 import DeleteIcon from '@material-ui/icons/Delete'
 import SwipeOptions from '../../actions/SwipeOptions'
 import { makeStyles } from '@material-ui/styles'
 import { createMuiTheme } from '@material-ui/core/styles'
 import amber from '@material-ui/core/colors/amber'
+import red from '@material-ui/core/colors/red'
 
 const theme = createMuiTheme();
 const editColor = theme.palette.augmentColor(amber);
+const deleteColor = theme.palette.augmentColor(red);
 
 const useStyles = makeStyles({
   root: {
@@ -42,6 +40,7 @@ const useStyles = makeStyles({
     paddingLeft: theme.spacing(3),
     paddingRight: theme.spacing(3),
     borderBottom: `1px solid ${theme.palette.grey[100]}`,
+    borderRight: `1px solid ${theme.palette.grey[100]}`,
     position: 'relative',
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2),
@@ -62,23 +61,40 @@ const useStyles = makeStyles({
     fontSize: theme.typography.subtitle2.fontSize,
     marginLeft: theme.spacing(0.5)
   },
-  edit: {
-    backgroundColor: editColor.main,
-    color: theme.palette.primary.contrastText,
-    width: '100%',
-    height: '100%',
+  option: {
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: theme.palette.background.paper,
+    '& > *': {
+      width: 50,
+      height: 50,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderRadius: '50%',
+      userSelect: 'none',
+      transition: `${theme.transitions.duration.shortest}ms ${theme.transitions.easing.easeOut}`,
+      '&:active': {
+        transform: 'scale(1.1)'
+      }
+    }
+  },
+  edit: {
+    backgroundColor: editColor[400],
+    color: theme.palette.primary.contrastText,
+    '&:hover': {
+      backgroundColor: editColor[600],
+      cursor: 'pointer',
+    }
   },
   delete: {
-    backgroundColor: theme.palette.error.main,
+    backgroundColor: deleteColor[400],
     color: theme.palette.error.contrastText,
-    width: '100%',
-    height: '100%',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center'
+    '&:hover': {
+      backgroundColor: deleteColor[600],
+      cursor: 'pointer',
+    }
   }
 });
 
@@ -88,17 +104,15 @@ function TransactionsList(props){
   const [swiping, setSwiping] = React.useState(null);
 
   const itemRightOptions = [
-    <div
-      className={classes.edit}
-      onClick={()=>console.log('edit')}
-    >
-      <EditIcon />
+    <div className={classes.option}>
+      <div className={classes.edit} onClick={()=>console.log('edit')}>
+        <EditIcon />
+      </div>
     </div>,
-    <div
-      className={classes.delete}
-      onClick={()=>console.log('delete')}
-    >
-      <DeleteIcon />
+    <div className={classes.option}>
+      <div className={classes.delete} onClick={()=>console.log('delete')}>
+        <DeleteIcon />
+      </div>
     </div>
   ];
 
@@ -117,11 +131,12 @@ function TransactionsList(props){
               {group.transactions.map(t => {
                 return (
                   <Slide key={t.id} in={true} direction="right" mountOnEnter unmountOnExit>
-                    <div>
+                    <li>
                       <SwipeOptions
-                        active={swiping == t.id}
+                        active={swiping === t.id}
                         onSwiping={()=>setSwiping(t.id)}
                         right={itemRightOptions}
+                        unitSize={60}
                       >
                         <div className={classes.item} onClick={swiping === t.id ? null : ()=>setSwiping(null)}>
                           <Typography>
@@ -133,7 +148,7 @@ function TransactionsList(props){
                           </div>
                         </div>
                       </SwipeOptions>
-                    </div>
+                    </li>
                   </Slide>
                 );
               })}
@@ -144,18 +159,6 @@ function TransactionsList(props){
     </List>
   );
 }
-
-// <ListItem className={classes.item}>
-//   <ListItemText
-//     primary={t.description}
-//     secondary={t.memo}
-//   />
-//   <ListItemSecondaryAction className={classes.flexRow}>
-//     <Typography>{t.symbol}{t.amount}</Typography>
-//     <Typography className={classes.currency}>{t.currency}</Typography>
-//   </ListItemSecondaryAction>
-// </ListItem>
-
 
 
 export default TransactionsList;

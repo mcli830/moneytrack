@@ -33,10 +33,10 @@ function SwipeOptions(props) {
     if (props.onSwiped) props.onSwiped();
     if (active){
       if (e.velocity > 2) {
-        if (e.dir == 'Left') {
+        if (e.dir === 'Left') {
           return setPos(pos > 0 ? limit.right : 0);
         }
-        if (e.dir == 'Right') {
+        if (e.dir === 'Right') {
           return setPos(pos < 0 ? limit.left : 0);
         }
       }
