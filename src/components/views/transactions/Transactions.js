@@ -40,7 +40,7 @@ function Transactions(props) {
     return Object.keys(groups).map(k => ({
       ...groups[k],
       total: groups[k].transactions.reduce((a,b)=>a+b.amount, 0)
-    }));
+    })).reverse();
   }
 }
 

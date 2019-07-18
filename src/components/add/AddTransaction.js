@@ -142,7 +142,9 @@ function AddTransactionModal(props){
     </Modal>
   );
 
-  //render helper
+  ///////////////////
+  // render helper
+  //////////////////
   function SendMutationButton(){
     return (
       <Mutation
@@ -200,11 +202,5 @@ function AddTransactionModal(props){
     )
   }
 }
-
-
-
-// export default graphql(ADD_TRANSACTION_MUTATION,{
-//   name: 'addTransactionMutation'
-// })(AddTransactionModal);
 
 export default withApollo(AddTransactionModal);
