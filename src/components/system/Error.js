@@ -2,7 +2,7 @@ import React from 'react'
 import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
 import Paper from '@material-ui/core/Paper'
-import AppHeader from './AppHeader'
+import AppHeader from '../AppHeader'
 
 export default props => {
   const styles = {

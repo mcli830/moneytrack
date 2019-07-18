@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Swipeable } from 'react-swipeable'
 
-
 function SwipeOptions(props) {
 
   const { delta, trackTouch, trackMouse } = props;
@@ -46,6 +45,13 @@ function SwipeOptions(props) {
     }
   }
 
+  function handlePress(e) {
+    e.currentTarget.style.boxShadow = 'inset 0 0 18px rgba(0,0,0,0.08)';
+  }
+  function handleRelease(e) {
+    e.currentTarget.style.boxShadow = 'none';
+  }
+
   const styles = {
     root: {
       position: 'relative',
@@ -74,8 +80,22 @@ function SwipeOptions(props) {
     },
     child: {
       zIndex: 1,
-      transform: active ? `translate(${pos*-1}px, 0)` : 'none'
+      transform: active ? `translate(${pos*-1}px, 0)` : 'none',
     }
+  }
+
+  const addProps = {
+    style: styles.child
+  }
+  if (props.pressable) {
+    Object.assign(addProps, {
+      onMouseDown: handlePress,
+      onTouchStart: handlePress,
+      onMouseUp: handleRelease,
+      onMouseLeave: handleRelease,
+      onTouchEnd: handleRelease,
+      onTouchCancel: handleRelease,
+    })
   }
 
   return (
@@ -101,7 +121,7 @@ function SwipeOptions(props) {
           }))}
         </div>
       )}
-      {React.cloneElement(props.children, { style: styles.child })}
+      {React.cloneElement(props.children, addProps)}
     </Swipeable>
   );
 }
@@ -119,6 +139,7 @@ SwipeOptions.propTypes = {
   motionBuffer: PropTypes.number,
   snapZone: PropTypes.number,
   active: PropTypes.bool,
+  pressable: PropTypes.bool,
 }
 
 SwipeOptions.defaultProps = {
@@ -131,6 +152,7 @@ SwipeOptions.defaultProps = {
   motionBuffer: 0.1,
   snapZone: 0.7,
   active: true,
+  pressable: false,
 }
 
 export default SwipeOptions;

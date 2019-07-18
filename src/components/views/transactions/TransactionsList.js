@@ -137,6 +137,7 @@ function TransactionsList(props){
                         onSwiping={()=>setSwiping(t.id)}
                         right={itemRightOptions}
                         unitSize={60}
+                        pressable
                       >
                         <div className={classes.item} onClick={swiping === t.id ? null : ()=>setSwiping(null)}>
                           <Typography>

@@ -20,13 +20,15 @@ function NavBottom(props) {
           icon={<FriendsIcon />}
           component={Link}
           to="/friends"
-          />
+          disableRipple
+        />
         <BottomNavigationAction
           value="transactions"
           label="Transactions"
           icon={<ListIcon />}
           component={Link}
           to="/transactions"
+          disableRipple
         />
         <BottomNavigationAction
           value="timeline"
@@ -34,6 +36,7 @@ function NavBottom(props) {
           icon={<TimelineIcon />}
           component={Link}
           to="/timeline"
+          disableRipple
         />
       </BottomNavigation>
     </div>

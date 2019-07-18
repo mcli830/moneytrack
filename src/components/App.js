@@ -1,15 +1,15 @@
 import React from 'react'
 import { Query, withApollo } from 'react-apollo'
 import CssBaseline from '@material-ui/core/CssBaseline'
-import Login from './components/auth/Login'
-import FetchUserData from './components/FetchUserData'
-import AppRoutes from './components/AppRoutes'
-import AppHeader from './components/AppHeader'
-import Loader from './components/Loader'
-import ErrorPage from './components/Error'
-import './index.css';
+import Login from './auth/Login'
+import FetchUserData from './data/FetchUserData'
+import AppRoutes from './AppRoutes'
+import AppHeader from './AppHeader'
+import Loader from './system/Loader'
+import ErrorPage from './system/Error'
+import '../index.css';
 
-import { LOGGED_IN_USER } from './graphql/queries'
+import { LOGGED_IN_USER } from '../graphql/queries'
 
 class App extends React.Component {
   constructor(props){

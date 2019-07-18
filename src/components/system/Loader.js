@@ -10,7 +10,7 @@ export default (props) => {
       alignItems: 'center'
   }
   return(
-    <div className="Spinner" style={style}>
+    <div style={style}>
       <CircularProgress size={props.size} thickness={props.thickness} />
     </div>
   )

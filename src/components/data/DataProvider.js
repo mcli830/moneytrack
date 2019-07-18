@@ -1,7 +1,7 @@
 import React from 'react'
 import { withApollo } from 'react-apollo'
-import { LOGGED_IN_USER } from '../graphql/queries'
-import { GET_USER_DATA } from '../graphql/queries'
+import { LOGGED_IN_USER } from '../../graphql/queries'
+import { GET_USER_DATA } from '../../graphql/queries'
 
 function DataProvider(props) {
 
