@@ -15,9 +15,14 @@ class App extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      addTransactionModal: false
+      modals: {
+        transaction: {
+          isOpen: false,
+          crud: '',
+        }
+      }
     }
-    this.handleAddTransactionModal = this.handleAddTransactionModal.bind(this);
+    this.openTransactionModal = this.openTransactionModal.bind(this);
   }
 
   // auth
@@ -28,9 +33,15 @@ class App extends React.Component {
   }
 
   // handlers
-  handleAddTransactionModal(bool){
+  openTransactionModal(crud){
     this.setState({
-      addTransactionModal: bool
+      modals: {
+        ...this.state.modals,
+        transaction: {
+          isOpen: !!crud,
+          crud: crud
+        }
+      }
     });
   }
 
@@ -51,7 +62,7 @@ class App extends React.Component {
       <FetchUserData variables={{ id }}>
         <AppRoutes
           state={this.state}
-          handleAddTransactionModal={this.handleAddTransactionModal}
+          openTransactionModal={this.openTransactionModal}
           logout={this._logout}
         />
       </FetchUserData>

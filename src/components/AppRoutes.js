@@ -8,7 +8,7 @@ import Transactions from './views/transactions/Transactions'
 // import Timeline from './views/Timeline'
 import ComingSoon from './system/ComingSoon'
 import NavBottom from './NavBottom'
-import AddTransactionModal from './add/AddTransaction'
+import TransactionModal from './modal/transaction/TransactionModal'
 
 export default (props) => {
   const styles = {
@@ -24,7 +24,7 @@ export default (props) => {
     <Router>
       <UserHeader
         logout={props.logout}
-        openAddModal={()=>props.handleAddTransactionModal(true)}
+        openTransactionModal={()=>props.openTransactionModal('create')}
       />
       <Container style={styles.view} maxWidth='md'>
         <Switch>
@@ -40,9 +40,10 @@ export default (props) => {
       </Container>
       <NavBottom />
       <DataProvider>
-        <AddTransactionModal
-          open={props.state.addTransactionModal}
-          handleClose={()=>props.handleAddTransactionModal(false)}
+        <TransactionModal
+          open={props.state.modals.transaction.isOpen}
+          crud={props.state.modals.transaction.crud}
+          handleClose={()=>props.openTransactionModal('')}
         />
       </DataProvider>
     </Router>

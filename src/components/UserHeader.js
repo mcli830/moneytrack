@@ -57,7 +57,7 @@ function UserHeader(props) {
         <Typography variant="h4" className={classes.header}>
           {capitalize(props.history.location.pathname.slice(1))}
         </Typography>
-        <Button onClick={props.openAddModal} className={classes.button}>
+        <Button onClick={props.openTransactionModal} className={classes.button}>
           <AddIcon className={classes.icon} />
         </Button>
       </Container>

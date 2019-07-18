@@ -55,7 +55,7 @@ export default (props) => {
   return (
     <div className={classes.root}>
       <div className={classes.controls}>
-        <Button onClick={props.closeModal}>
+        <Button onClick={props.closeModal} disableRipple>
           <Typography variant='caption'>
             Cancel
           </Typography>
