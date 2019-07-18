@@ -6,10 +6,17 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListSubheader from '@material-ui/core/ListSubheader'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
+import Icon from '@material-ui/core/Icon'
+import SwipeOptions from '../../actions/SwipeOptions'
+import Swipeout from 'rc-swipeout'
 import { makeStyles } from '@material-ui/styles'
 import { createMuiTheme } from '@material-ui/core/styles'
+import yellow from '@material-ui/core/colors/yellow'
 
 const theme = createMuiTheme();
+const editColor = theme.palette.augmentColor(yellow);
+console.log(theme)
+console.log(editColor)
 
 const useStyles = makeStyles({
   root: {
@@ -35,36 +42,52 @@ const useStyles = makeStyles({
     backgroundColor: theme.palette.background.paper,
     paddingLeft: theme.spacing(3),
     paddingRight: theme.spacing(3),
+    borderBottom: `1px solid ${theme.palette.grey[100]}`,
+    position: 'relative',
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  itemRight: {
+    display: 'inline-block',
+    width: 'auto',
+    '& > *': {
+      display: 'inline-block',
+    }
   },
   currency: {
     color: theme.palette.text.disabled,
     fontSize: theme.typography.subtitle2.fontSize,
-    marginLeft: theme.spacing(1)
+    marginLeft: theme.spacing(0.5)
+  },
+  edit: {
+    backgroundColor: editColor[700],
+    color: theme.palette.primary.contrastText,
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  delete: {
+    backgroundColor: theme.palette.error.main,
+    color: theme.palette.error.contrastText,
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });
 
-// function renderList(){
-//   if (Object.keys(props.data).length < 1) return <EmptyList />;
-//   const output = [];
-//   for (let [group, data] of Object.entries(props.data)){
-//     output.push(
-//       <TransactionsGroup
-//         date={data.transactions[0].dateString}
-//         total={data.total}
-//         key={group}
-//       />
-//     );
-//     output.push(
-//       data.transactions.map(t => (
-//         <TransactionsEntry data={t} key={t.id} />
-//       ))
-//     );
-//   }
-//   return output;
-// }
-
 function TransactionsList(props){
   const classes = useStyles();
+
+  const [swiping, setSwiping] = React.useState(null);
+
   return (
     <List className={classes.root}>
       {props.data.map(group => {
@@ -80,15 +103,32 @@ function TransactionsList(props){
               {group.transactions.map(t => {
                 return (
                   <Slide key={t.id} in={true} direction="right" mountOnEnter unmountOnExit>
-                    <ListItem className={classes.item}>
-                      <ListItemText
-                        primary={t.description}
-                      />
-                      <ListItemSecondaryAction className={classes.flexRow}>
-                        <Typography>{t.symbol}{t.amount}</Typography>
-                        <Typography className={classes.currency}>{t.currency}</Typography>
-                      </ListItemSecondaryAction>
-                    </ListItem>
+                    <div>
+                      <SwipeOptions
+                        active={swiping == t.id}
+                        setActive={()=>setSwiping(t.id)}
+                        left={
+                          <div className={classes.edit} onClick={()=>console.log('edit')}>
+                            <Icon>edit</Icon>
+                          </div>
+                        }
+                        right={
+                          <div className={classes.delete} onClick={()=>console.log('delete')}>
+                            <Icon>delete</Icon>
+                          </div>
+                        }
+                      >
+                        <div className={classes.item} onClick={swiping === t.id ? null : ()=>setSwiping(null)}>
+                          <Typography>
+                            {t.description}
+                          </Typography>
+                          <div className={classes.itemRight}>
+                            <Typography>{t.symbol}{t.amount}</Typography>
+                            <Typography className={classes.currency}>{t.currency}</Typography>
+                          </div>
+                        </div>
+                      </SwipeOptions>
+                    </div>
                   </Slide>
                 );
               })}
@@ -99,5 +139,18 @@ function TransactionsList(props){
     </List>
   );
 }
+
+// <ListItem className={classes.item}>
+//   <ListItemText
+//     primary={t.description}
+//     secondary={t.memo}
+//   />
+//   <ListItemSecondaryAction className={classes.flexRow}>
+//     <Typography>{t.symbol}{t.amount}</Typography>
+//     <Typography className={classes.currency}>{t.currency}</Typography>
+//   </ListItemSecondaryAction>
+// </ListItem>
+
+
 
 export default TransactionsList;
