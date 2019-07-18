@@ -6,17 +6,16 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListSubheader from '@material-ui/core/ListSubheader'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
-import Icon from '@material-ui/core/Icon'
+import Button from '@material-ui/core/Button'
+import EditIcon from '@material-ui/icons/Edit'
+import DeleteIcon from '@material-ui/icons/Delete'
 import SwipeOptions from '../../actions/SwipeOptions'
-import Swipeout from 'rc-swipeout'
 import { makeStyles } from '@material-ui/styles'
 import { createMuiTheme } from '@material-ui/core/styles'
-import yellow from '@material-ui/core/colors/yellow'
+import amber from '@material-ui/core/colors/amber'
 
 const theme = createMuiTheme();
-const editColor = theme.palette.augmentColor(yellow);
-console.log(theme)
-console.log(editColor)
+const editColor = theme.palette.augmentColor(amber);
 
 const useStyles = makeStyles({
   root: {
@@ -64,7 +63,7 @@ const useStyles = makeStyles({
     marginLeft: theme.spacing(0.5)
   },
   edit: {
-    backgroundColor: editColor[700],
+    backgroundColor: editColor.main,
     color: theme.palette.primary.contrastText,
     width: '100%',
     height: '100%',
@@ -88,6 +87,21 @@ function TransactionsList(props){
 
   const [swiping, setSwiping] = React.useState(null);
 
+  const itemRightOptions = [
+    <div
+      className={classes.edit}
+      onClick={()=>console.log('edit')}
+    >
+      <EditIcon />
+    </div>,
+    <div
+      className={classes.delete}
+      onClick={()=>console.log('delete')}
+    >
+      <DeleteIcon />
+    </div>
+  ];
+
   return (
     <List className={classes.root}>
       {props.data.map(group => {
@@ -106,17 +120,8 @@ function TransactionsList(props){
                     <div>
                       <SwipeOptions
                         active={swiping == t.id}
-                        setActive={()=>setSwiping(t.id)}
-                        left={
-                          <div className={classes.edit} onClick={()=>console.log('edit')}>
-                            <Icon>edit</Icon>
-                          </div>
-                        }
-                        right={
-                          <div className={classes.delete} onClick={()=>console.log('delete')}>
-                            <Icon>delete</Icon>
-                          </div>
-                        }
+                        onSwiping={()=>setSwiping(t.id)}
+                        right={itemRightOptions}
                       >
                         <div className={classes.item} onClick={swiping === t.id ? null : ()=>setSwiping(null)}>
                           <Typography>
