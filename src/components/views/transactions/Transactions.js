@@ -2,7 +2,6 @@ import React from 'react'
 import { withApollo } from 'react-apollo'
 import TransactionsView from './TransactionsView'
 import AsyncLoader from '../../system/AsyncLoader'
-import Loader from '../../system/Loader'
 import currency from '../../../data/currency'
 
 function Transactions(props) {
@@ -18,9 +17,7 @@ function Transactions(props) {
     </AsyncLoader>
   );
 
-  //////////////////
   // helpers
-  //////////////////
   function getDateString(date){
     return date.toDateString().replace(/\w+\s(\w+)(\s\w+)(\s\w+)/, '$1$2,$3');
   }

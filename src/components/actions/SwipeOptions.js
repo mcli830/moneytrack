@@ -4,21 +4,27 @@ import { Swipeable } from 'react-swipeable'
 
 function SwipeOptions(props) {
 
-  const { delta, trackTouch, trackMouse } = props;
-  const config = { delta, trackTouch, trackMouse };
-  const { active, unitSize, motionBuffer, snapZone, left, right } = props;
+  const { delta, disableTouch, disableMouse } = props;
+  const config = {
+    delta,
+    trackTouch: !disableTouch,
+    trackMouse: !disableMouse,
+  };
+  const { disabled, unitSize, motionBuffer, snapZone, left, right } = props;
   const limit = {
     right: right.length * unitSize,
     left: left.length * unitSize * -1,
   }
 
   const [pos, setPos] = React.useState(0);
+  const [swiping, setSwiping] = React.useState(false)
 
   function handleSwiping(e){
     if (props.onSwiping) props.onSwiping();
+    setSwiping(true);
     const rightLimit = limit.right > 0 ? limit.right : unitSize;
     const leftLimit = limit.left < 0 ? limit.left : unitSize * -1;
-    if (active){
+    if (!disabled){
       const d = pos + e.deltaX * motionBuffer;
       const dsoft = d*0.5;
       setPos(d > rightLimit ? rightLimit
@@ -30,7 +36,8 @@ function SwipeOptions(props) {
   }
   function handleSwiped(e){
     if (props.onSwiped) props.onSwiped();
-    if (active){
+    setSwiping(false);
+    if (!disabled){
       if (e.velocity > 2) {
         if (e.dir === 'Left') {
           return setPos(pos > 0 ? limit.right : 0);
@@ -80,7 +87,8 @@ function SwipeOptions(props) {
     },
     child: {
       zIndex: 1,
-      transform: active ? `translate(${pos*-1}px, 0)` : 'none',
+      transform: !disabled ? `translate(${pos*-1}px, 0)` : 'none',
+      transition: swiping ? 'none' : 'transform 0.6s cubic-bezier(0.23, 1, 0.32, 1)',
     }
   }
 
@@ -133,12 +141,12 @@ SwipeOptions.propTypes = {
   onSwiping: PropTypes.func,
   onSwiped: PropTypes.func,
   delta: PropTypes.number,
-  trackTouch: PropTypes.bool,
-  trackMouse: PropTypes.bool,
+  disableTouch: PropTypes.bool,
+  disableMouse: PropTypes.bool,
   unitSize: PropTypes.number,
   motionBuffer: PropTypes.number,
   snapZone: PropTypes.number,
-  active: PropTypes.bool,
+  disabled: PropTypes.bool,
   pressable: PropTypes.bool,
 }
 
@@ -146,13 +154,13 @@ SwipeOptions.defaultProps = {
   left: [],
   right: [],
   delta: 4,
-  trackTouch: true,
-  trackMouse: true,
+  disableTouch: false,
+  disableMouse: false,
   unitSize: 64,
   motionBuffer: 0.1,
   snapZone: 0.7,
-  active: true,
   pressable: false,
+  disabled: false,
 }
 
 export default SwipeOptions;

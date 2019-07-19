@@ -133,7 +133,7 @@ function TransactionsList(props){
                   <Slide key={t.id} in={true} direction="right" mountOnEnter unmountOnExit>
                     <li>
                       <SwipeOptions
-                        active={swiping === t.id}
+                        disabled={swiping !== t.id}
                         onSwiping={()=>setSwiping(t.id)}
                         right={itemRightOptions}
                         unitSize={60}
