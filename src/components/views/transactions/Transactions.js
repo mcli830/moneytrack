@@ -1,17 +1,21 @@
 import React from 'react'
 import { withApollo } from 'react-apollo'
 import TransactionsView from './TransactionsView'
+import AsyncLoader from '../../system/AsyncLoader'
+import Loader from '../../system/Loader'
 import currency from '../../../data/currency'
 
 function Transactions(props) {
   // prepare data for rendering
-  const groupData = formatData();
+  const [groupData, setGroupData] = React.useState(true);
+  const operation = ()=>{
+    setGroupData(formatData(props));
+  }
 
   return (
-    <TransactionsView
-      user={props.data.user}
-      data={groupData}
-    />
+    <AsyncLoader operation={operation}>
+      <TransactionsView user={props.data.user} data={groupData} />
+    </AsyncLoader>
   );
 
   //////////////////
@@ -20,7 +24,7 @@ function Transactions(props) {
   function getDateString(date){
     return date.toDateString().replace(/\w+\s(\w+)(\s\w+)(\s\w+)/, '$1$2,$3');
   }
-  function formatData(){
+  function formatData(props){
     const groups = {};
     props.data.user.transactions.forEach(t => {
       t.date = new Date(t.date);
