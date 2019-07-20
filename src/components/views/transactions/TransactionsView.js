@@ -13,12 +13,15 @@ const useStyles = makeStyles({
     color: theme.palette.text.primary,
     height: '100%',
     width: '100%',
+    display: 'flex',
+    flexDirection: 'column'
   },
   list: {
-    height: '100%',
+    height: '1 1 auto',
+    maxHeight: '100%',
     width: '100%',
-    overflowX: 'hidden',
-    overflowY: 'scroll',
+    display: 'flex',
+    flexDirection: 'column',
   },
   button: {
     position: 'absolute',
