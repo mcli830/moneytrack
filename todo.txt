@@ -1,3 +1,2 @@
 Transactions:
-  - month header transition time not occuring when swiping
   - Add filler months in between current month and earliest transaction recorded

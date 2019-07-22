@@ -54,11 +54,11 @@ export default (props) => {
   }
 
   // rendering the subcomponent via function instead of functional component allows css transition
-  function renderMonth(props) {
+  function renderMonth({ key, name, position }) {
     return (
-      <div className={classes.column} style={Object.assign({}, styles[props.position], styles.transition)}>
+      <div key={key} className={classes.column} style={Object.assign({}, styles[position], styles.transition)}>
         <Typography variant='button' className={classes.month}>
-          {props.name}
+          {name}
         </Typography>
       </div>
     );
