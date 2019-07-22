@@ -32,7 +32,7 @@ function Transactions(props) {
         date: tDate,
         dateString: `${MONTH[tDate.getUTCMonth()]} ${tDate.getUTCDate()}`,
         // monthId = (year)(month) e.g. 201907 = July 2019
-        monthId: tDate.getUTCFullYear()*100 + tDate.getUTCMonth()+1,
+        monthId: tDate.getUTCFullYear()*100 + tDate.getUTCMonth(),
         // dateId = [1-31] i.e. the date number
         dateId: tDate.getUTCDate(),
         currency: props.data.user.currency,
@@ -42,7 +42,7 @@ function Transactions(props) {
       if (!dataset[current.monthId]){
         dataset[current.monthId] = {
           id: current.monthId,
-          name: `${MONTH[current.date.getUTCMonth()]} ${current.date.getUTCFullYear()}`,
+          name: getMonthName(current.date),
           groups: {}
         }
       }
@@ -59,6 +59,27 @@ function Transactions(props) {
       // add transaction to its date group
       dataset[current.monthId].groups[current.dateId].transactions.push(current);
     })
+    // fill in month sets with empty months up to current month
+    // const monthsWithData = dataset.map(set => new Date(set.id.slice(0,4), set.id.slice(4)));
+    // const earliestDate = new Date(Math.min.apply(Math, monthsWithData));
+    const earliestMonthId = Math.min.apply(Math, Object.keys(dataset)).toString();
+    const earliestMonth = new Date(earliestMonthId.slice(0,4), earliestMonthId.slice(4));
+    const today = new Date();
+    const currentMonth = new Date(today.getUTCFullYear(), today.getUTCMonth());
+    for (let y = earliestMonth.getUTCFullYear(); y <= currentMonth.getUTCFullYear(); y++){
+      let startingMonth = y === earliestMonth.getUTCFullYear() ? earliestMonth.getUTCMonth() : 0;
+      let endingMonth = y === currentMonth.getUTCFullYear() ? currentMonth.getUTCMonth() : 11;
+      for (let m = startingMonth; m <= endingMonth ; m++){
+        const workingId = y*100 + m;
+        if (!dataset[workingId]) {
+          dataset[workingId] = {
+            id: workingId,
+            name: getMonthName(new Date(y, m)),
+            groups: {}
+          }
+        }
+      }
+    }
     // return dataset as array with inner groups as arrays
     return Object.keys(dataset).map(monthId => {
       // convert group data object into array with totals and sorted inversely by date id
@@ -73,6 +94,11 @@ function Transactions(props) {
         groups: groupData
       }
     });
+
+    // helpers
+    function getMonthName(date){
+      return `${MONTH[date.getUTCMonth()]} ${date.getUTCFullYear()}`;
+    }
   }
 }
 

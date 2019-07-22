@@ -1,8 +1,8 @@
 import React from 'react'
-import Typography from '@material-ui/core/Typography'
 import SwipeableViews from './SwipeableViews'
 import TransactionsHead from './TransactionsHead'
 import TransactionsList from './TransactionsList'
+import EmptyList from './EmptyList'
 import { makeStyles } from '@material-ui/styles'
 import { createMuiTheme } from '@material-ui/core/styles'
 
@@ -24,15 +24,6 @@ const useStyles = makeStyles({
   views: {
     flex: '1 1 auto',
   },
-  emptyList: {
-    display: 'block',
-    textAlign: 'center',
-    height: '100%',
-    '& > *': {
-      marginTop: '50%',
-      transform: 'translate(0, -50%)'
-    }
-  }
 });
 
 export default (props) => {
@@ -41,19 +32,6 @@ export default (props) => {
     height: '100%',
     maxHeight: '100%',
   }
-
-  const viewRef = [];
-  props.data.forEach(x => {
-    viewRef.push(React.useRef());
-  })
-
-  const EmptyList = () => (
-    <div className={classes.emptyList}>
-      <Typography variant='body1'>
-        {'Add a transaction with the + button'}
-      </Typography>
-    </div>
-  );
 
   const ListViews = () => (
     <SwipeableViews
@@ -65,7 +43,7 @@ export default (props) => {
       )}
     >
       {props.data.map((monthSet, i) => (
-        <div key={monthSet.id} ref={viewRef[i]}>
+        <div key={monthSet.id}>
           <TransactionsList data={monthSet.groups} />
         </div>
       ))}
