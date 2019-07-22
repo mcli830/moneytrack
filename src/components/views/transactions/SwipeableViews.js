@@ -41,16 +41,20 @@ function SwipeableViews(props) {
     if (scrolling){
       setScrolling(false);
     }
+    var nextView = view;
     const rect = centerRef.current.getBoundingClientRect();
     if (Math.abs(pos) > rect.width*0.5){
       if (pos > 0) {
-        setView(view+1);
+        nextView = view+1;
+        setView(view+1)
       } else {
-        setView(view-1);
+        nextView = view-1;
+        setView(view-1)
       }
+      // setView(nextView);
     }
     setPos(0);
-    if (props.onSwiped) props.onSwiped(view);
+    if (props.onSwiped) props.onSwiped(nextView);
   }
 
   const styles = {
@@ -94,7 +98,7 @@ function SwipeableViews(props) {
   return (
     <div style={styles.root}>
       <div style={styles.header}>
-        {React.cloneElement(props.headerComponent, { view, pos, swiping })}
+        {props.headerComponent({ view, pos, swiping })}
       </div>
       <Swipeable
         {...config}
@@ -102,21 +106,21 @@ function SwipeableViews(props) {
         onSwiped={handleSwiped}
         style={styles.viewContainer}
         >
-        {props.children.map((elem, index) => {
+        {props.children.map((renderChild, index) => {
           switch(index){
             case view:
-              return React.cloneElement(elem, {
+              return renderChild({
                 ref: centerRef,
-                style: Object.assign(elem.style ? elem.style : {}, styles.view, styles.center)
+                style: Object.assign({}, styles.view, styles.center)
               });
             case view-1:
-              return React.cloneElement(elem, {
-                style: Object.assign(elem.style ? elem.style : {}, styles.view, styles.left)
+              return renderChild({
+                style: Object.assign({}, styles.view, styles.left)
               });
             case view+1:
-              return React.cloneElement(elem, {
-                style: Object.assign(elem.style ? elem.style : {}, styles.view, styles.right)
-              });
+              return renderChild({
+                style: Object.assign({}, styles.view, styles.right)
+              })
             default:
               return null;
           }
@@ -127,7 +131,8 @@ function SwipeableViews(props) {
 }
 
 SwipeableViews.propTypes = {
-  children: PropTypes.arrayOf(PropTypes.element),
+  children: PropTypes.arrayOf(PropTypes.func),
+  headerComponent: PropTypes.func,
   useParentState: PropTypes.bool,
   delta: PropTypes.number,
   disableTouch: PropTypes.bool,

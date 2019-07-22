@@ -39,7 +39,7 @@ class App extends React.Component {
         ...this.state.modals,
         transaction: {
           isOpen: !!crud,
-          crud: crud
+          crud,
         }
       }
     });
@@ -63,6 +63,9 @@ class App extends React.Component {
         <AppRoutes
           state={this.state}
           openTransactionModal={this.openTransactionModal}
+          handlers={{
+            openTransactionModal: this.openTransactionModal,
+          }}
           logout={this._logout}
         />
       </FetchUserData>

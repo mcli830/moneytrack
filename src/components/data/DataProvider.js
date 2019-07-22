@@ -6,10 +6,10 @@ import { GET_USER_DATA } from '../../graphql/queries'
 function DataProvider(props) {
 
   // get user data from apollo cache
-  const { loggedInUser } = props.client.cache.readQuery({
+  const { loggedInUser } = props.client.readQuery({
     query: LOGGED_IN_USER
   })
-  const { User } = props.client.cache.readQuery({
+  const { User } = props.client.readQuery({
     query: GET_USER_DATA,
     variables: { id: loggedInUser.id }
   });

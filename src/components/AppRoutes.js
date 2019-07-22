@@ -24,7 +24,7 @@ export default (props) => {
     <Router>
       <UserHeader
         logout={props.logout}
-        openTransactionModal={()=>props.openTransactionModal('create')}
+        openTransactionModal={()=>props.handlers.openTransactionModal('create')}
       />
       <Container style={styles.view} maxWidth='md'>
         <Switch>
@@ -43,7 +43,7 @@ export default (props) => {
         <TransactionModal
           open={props.state.modals.transaction.isOpen}
           crud={props.state.modals.transaction.crud}
-          handleClose={()=>props.openTransactionModal('')}
+          handleClose={()=>props.handlers.openTransactionModal('')}
         />
       </DataProvider>
     </Router>

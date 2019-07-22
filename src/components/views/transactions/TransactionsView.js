@@ -37,17 +37,23 @@ export default (props) => {
     <SwipeableViews
       containerStyle={containerStyle}
       startingView={props.startingView}
-      headerComponent={(
+      headerComponent={(addProps) => (
         <TransactionsHead
+          {...addProps}
           months={props.data.map(d => d.name)}
         />
       )}
+      onSwiped={(view)=>props.setPage(view)}
     >
-      {props.data.map((monthSet, i) => (
-        <div key={monthSet.id}>
-          <TransactionsList data={monthSet.groups} />
-        </div>
-      ))}
+      {props.data.map((monthSet, i) => {
+        return (addProps) => {
+          return (
+            <div {...addProps} key={monthSet.id}>
+              <TransactionsList data={monthSet.groups} />
+            </div>
+          );
+        }
+      })}
     </SwipeableViews>
   );
 
