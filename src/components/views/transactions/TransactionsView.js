@@ -1,7 +1,8 @@
 import React from 'react'
 import Typography from '@material-ui/core/Typography'
+import SwipeableViews from './SwipeableViews'
+import TransactionsHead from './TransactionsHead'
 import TransactionsList from './TransactionsList'
-
 import { makeStyles } from '@material-ui/styles'
 import { createMuiTheme } from '@material-ui/core/styles'
 
@@ -11,26 +12,17 @@ const useStyles = makeStyles({
   root: {
     backgroundColor: theme.palette.background.default,
     color: theme.palette.text.primary,
-    height: '100%',
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'column'
-  },
-  list: {
-    height: '1 1 auto',
-    maxHeight: '100%',
-    width: '100%',
     display: 'flex',
     flexDirection: 'column',
+    height: '100%',
+    maxHeight: '100%',
+    width: '100%',
   },
-  button: {
-    position: 'absolute',
-    height: theme.spacing(6),
-    top: '100%',
-    left: '50%',
-    transform: 'translate(-50%, 0)',
-    paddingLeft: theme.spacing(6),
-    paddingRight: theme.spacing(6),
+  head: {
+    width: '100%'
+  },
+  views: {
+    flex: '1 1 auto',
   },
   emptyList: {
     display: 'block',
@@ -45,24 +37,48 @@ const useStyles = makeStyles({
 
 export default (props) => {
   const classes = useStyles();
-
-  function EmptyList(){
-    return (
-      <div className={classes.emptyList}>
-        <Typography variant='body1'>
-          {'Add a transaction with the + button'}
-        </Typography>
-      </div>
-    )
+  const containerStyle = {
+    height: '100%',
+    maxHeight: '100%',
   }
+
+  const viewRef = [];
+  props.data.forEach(x => {
+    viewRef.push(React.useRef());
+  })
+
+  const EmptyList = () => (
+    <div className={classes.emptyList}>
+      <Typography variant='body1'>
+        {'Add a transaction with the + button'}
+      </Typography>
+    </div>
+  );
+
+  const ListViews = () => (
+    <SwipeableViews
+      containerStyle={containerStyle}
+      headerComponent={(
+        <TransactionsHead
+          months={props.data.map(d => d.name)}
+        />
+      )}
+    >
+      {props.data.map((monthSet, i) => (
+        <div key={monthSet.id} ref={viewRef[i]}>
+          <TransactionsList data={monthSet.groups} />
+        </div>
+      ))}
+    </SwipeableViews>
+  );
 
   return (
     <div className={classes.root}>
-      <div className={classes.list}>
+      <div className={classes.views}>
         {
           props.data.length < 1
           ? <EmptyList />
-          : <TransactionsList data={props.data} />
+          : <ListViews />
         }
       </div>
     </div>

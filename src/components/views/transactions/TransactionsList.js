@@ -1,11 +1,10 @@
 import React from 'react'
 import Typography from '@material-ui/core/Typography'
-import Slide from '@material-ui/core/Slide'
+// import Slide from '@material-ui/core/Slide'
 import List from '@material-ui/core/List'
 import ListSubheader from '@material-ui/core/ListSubheader'
 // import EditIcon from '@material-ui/icons/Edit'
 // import DeleteIcon from '@material-ui/icons/Delete'
-import TransactionsListTop from './TransactionsListTop'
 import { makeStyles } from '@material-ui/styles'
 import { createMuiTheme } from '@material-ui/core/styles'
 // import amber from '@material-ui/core/colors/amber'
@@ -16,12 +15,11 @@ const theme = createMuiTheme();
 // const deleteColor = theme.palette.augmentColor(red);
 
 const useStyles = makeStyles({
-  root: {
-    flex: '1 1 auto',
-    overflowX: 'hidden',
-    overflowY: 'auto',
-  },
   list: {
+    height: '100%',
+    maxHeight: '100%',
+    overflowX: 'hidden',
+    overflowY: 'scroll',
     padding: 0,
   },
   ul: {
@@ -123,44 +121,33 @@ function TransactionsList(props){
   // const listItemOnClick = swiping === t.id ? null : () => setSwiping(null);
 
   return (
-    <React.Fragment>
-      <TransactionsListTop />
-      <div className={classes.root}>
-        <List className={classes.list}>
-          {props.data.map(group => {
-            return (
-              <li key={group.number}>
-                <ul className={classes.ul}>
-                  <Slide in direction="right" mountOnEnter unmountOnExit>
-                    <ListSubheader className={[classes.subheader, classes.flexRow].join(' ')}>
-                      <Typography variant='subtitle1'>{group.dateString}</Typography>
-                      <Typography variant='subtitle1'>{group.symbol + group.total}</Typography>
-                    </ListSubheader>
-                  </Slide>
-                  {group.transactions.map(t => {
-                    return (
-                      <Slide key={t.id} in direction="right" mountOnEnter unmountOnExit>
-                        <li>
-                          <div className={classes.item}>
-                            <Typography>
-                              {t.description}
-                            </Typography>
-                            <div className={classes.itemRight}>
-                              <Typography>{t.symbol}{t.amount}</Typography>
-                              <Typography className={classes.currency}>{t.currency}</Typography>
-                            </div>
-                          </div>
-                        </li>
-                      </Slide>
-                    );
-                  })}
-                </ul>
-              </li>
-            );
-          })}
-        </List>
-      </div>
-    </React.Fragment>
+    <List className={classes.list}>
+      {props.data.map(group => {
+        return (
+          <li key={group.id}>
+            <ul className={classes.ul}>
+              <ListSubheader className={[classes.subheader, classes.flexRow].join(' ')}>
+                <Typography variant='subtitle1'>{group.dateString}</Typography>
+                <Typography variant='subtitle1'>{group.symbol + group.total}</Typography>
+              </ListSubheader>
+              {group.transactions.map(t => (
+                <li key={t.id}>
+                  <div className={classes.item}>
+                    <Typography>
+                      {t.description}
+                    </Typography>
+                    <div className={classes.itemRight}>
+                      <Typography>{t.symbol}{t.amount}</Typography>
+                      <Typography className={classes.currency}>{t.currency}</Typography>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </li>
+        );
+      })}
+    </List>
   );
 }
 
