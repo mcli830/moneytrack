@@ -18,6 +18,7 @@ const useStyles = makeStyles({
   rootOverlay: {
     position: 'absolute',
     zIndex: 2,
+    pointerEvents: 'none',
     height: '100%',
     width: '100%',
     background: `linear-gradient(90deg, ${theme.palette.grey[200]}, transparent 30%, transparent 70%, ${theme.palette.grey[200]})`
@@ -31,7 +32,7 @@ const useStyles = makeStyles({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    transition: `${theme.transitions.duration.shorter} ${theme.transitions.easing.easeOut}`
+    // transition: `${theme.transitions.duration.shorter}ms ${theme.transitions.easing.easeOut}`
     // transition: '200ms cubic-bezier(0.23, 1, 0.32, 1)',
   },
   month: {
@@ -44,6 +45,7 @@ export default (props) => {
   const offset = props.pos*0.33;
 
   const styles = {
+    transition: { transition: props.swiping ? 'none' : '200ms cubic-bezier(0.23, 1, 0.32, 1)' },
     l2: { right: `calc(100% + ${offset}px)`, opacity: 0.5 },
     l1: { right: `calc(66.66% + ${offset}px)`, opacity: 0.5},
     c: { right: `calc(33.33% + ${offset}px)`},
@@ -51,9 +53,10 @@ export default (props) => {
     r2: { right: `calc(-33.33% + ${offset}px)`, opacity: 0.5},
   }
 
-  function Month(props) {
+  // rendering the subcomponent via function instead of functional component allows css transition
+  function renderMonth(props) {
     return (
-      <div className={classes.column} style={styles[props.position]}>
+      <div className={classes.column} style={Object.assign({}, styles[props.position], styles.transition)}>
         <Typography variant='button' className={classes.month}>
           {props.name}
         </Typography>
@@ -66,15 +69,15 @@ export default (props) => {
       {props.months.map((month, index) => {
         switch(index){
           case props.view-2:
-            return <Month key={index} name={month} position='l2' />
+            return renderMonth({key: index, name: month, position:'l2' });
           case props.view-1:
-            return <Month key={index} name={month} position='l1' />
+            return renderMonth({key: index, name: month, position:'l1' });
           case props.view:
-            return <Month key={index} name={month} position='c' />
+            return renderMonth({key: index, name: month, position:'c' });
           case props.view+1:
-            return <Month key={index} name={month} position='r1' />
+            return renderMonth({key: index, name: month, position:'r1' });
           case props.view+2:
-            return <Month key={index} name={month} position='r2' />
+            return renderMonth({key: index, name: month, position:'r2' });
           default:
             return null;
         }
