@@ -5,6 +5,7 @@ import { createMuiTheme } from '@material-ui/core/styles'
 
 const theme = createMuiTheme();
 
+
 const useStyles = makeStyles({
   root: {
     margin: 0,
@@ -14,49 +15,40 @@ const useStyles = makeStyles({
     position: 'relative',
     overflow: 'hidden',
   },
+  rootOverlay: {
+    position: 'absolute',
+    zIndex: 2,
+    height: '100%',
+    width: '100%',
+    background: `linear-gradient(90deg, ${theme.palette.grey[200]}, transparent 30%, transparent 70%, ${theme.palette.grey[200]})`
+  },
   column: {
     position: 'absolute',
+    zIndex: 1,
     height: '100%',
     width: '33.33%',
     textAlign: 'center',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    transition: '200ms cubic-bezier(0.23, 1, 0.32, 1)',
+    transition: `${theme.transitions.duration.shorter} ${theme.transitions.easing.easeOut}`
+    // transition: '200ms cubic-bezier(0.23, 1, 0.32, 1)',
   },
   month: {
     color: theme.palette.primary.main,
   },
 });
 
-
-
-
 export default (props) => {
   const classes = useStyles();
   const offset = props.pos*0.33;
 
   const styles = {
-    l2: {
-      right: `calc(100% + ${offset}px)`,
-      opacity: 0.2,
-    },
-    l1: {
-      right: `calc(66.66% + ${offset}px)`,
-      opacity: 0.5,
-    },
-    c: {
-      right: `calc(33.33% + ${offset}px)`,
-      opacity: 1,
-    },
-    r1: {
-      right: offset+'px',
-      opacity: 0.5,
-    },
-    r2: {
-      right: `calc(-33.33% + ${offset}px)`,
-      opacity: 0.2,
-    }
+    l2: { right: `calc(100% + ${offset}px)`, opacity: 0.5 },
+    l1: { right: `calc(66.66% + ${offset}px)`, opacity: 0.5},
+    c: { right: `calc(33.33% + ${offset}px)`},
+    r1: { right: offset+'px', opacity: 0.5},
+    r2: { right: `calc(-33.33% + ${offset}px)`, opacity: 0.5},
   }
 
   function Month(props) {
@@ -87,6 +79,7 @@ export default (props) => {
             return null;
         }
       })}
+      <div className={classes.rootOverlay} />
     </div>
   );
 }
