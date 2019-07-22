@@ -36,6 +36,7 @@ export default (props) => {
   const ListViews = () => (
     <SwipeableViews
       containerStyle={containerStyle}
+      startingView={props.startingView}
       headerComponent={(
         <TransactionsHead
           months={props.data.map(d => d.name)}

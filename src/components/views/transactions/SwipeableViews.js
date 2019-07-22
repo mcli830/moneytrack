@@ -13,7 +13,7 @@ function SwipeableViews(props) {
 
   const centerRef = React.useRef();
   const viewCount = props.children.length;
-  const [view, setView] = React.useState(0);
+  const [view, setView] = React.useState(props.startingView);
   const [swiping, setSwiping] = React.useState(false);
   const [scrolling, setScrolling] = React.useState(false);
   const [pos, setPos] = React.useState(0);
@@ -135,6 +135,7 @@ SwipeableViews.propTypes = {
   onSwiping: PropTypes.func,
   onSwiped: PropTypes.func,
   containerStyle: PropTypes.object,
+  startingView: PropTypes.number,
 }
 
 SwipeableViews.defaultProps = {
@@ -143,6 +144,7 @@ SwipeableViews.defaultProps = {
   disableTouch: false,
   trackMouse: false,
   containerStyle: {},
+  startingView: 0,
 }
 
 export default SwipeableViews;

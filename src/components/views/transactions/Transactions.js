@@ -7,14 +7,14 @@ import { MONTH } from '../../../data/enums'
 
 function Transactions(props) {
   // prepare data for rendering
-  const [data, setData] = React.useState(true);
+  const [data, setData] = React.useState(null);
   const operation = ()=>{
     setData(formatData(props));
   }
 
   return (
     <AsyncLoader operation={operation}>
-      <TransactionsView user={props.data.user} data={data} />
+      <TransactionsView user={props.data.user} startingView={getStartingView()} data={data} />
     </AsyncLoader>
   );
 
@@ -22,6 +22,17 @@ function Transactions(props) {
   // function getDateString(date){
   //   return date.toDateString().replace(/\w+\s(\w+)(\s\w+)(\s\w+)/, '$1$2,$3');
   // }
+  function getMonthName(date){
+    return `${MONTH[date.getUTCMonth()]} ${date.getUTCFullYear()}`;
+  }
+  function getMonthId(date){
+    return date.getUTCFullYear()*100 + date.getUTCMonth();
+  }
+  function getStartingView(){
+    if (!data) return null;
+    return data.findIndex(month => month.isCurrentMonth);
+  }
+
   function formatData(props){
     const dataset = {}
     props.data.user.transactions.forEach(t => {
@@ -32,7 +43,7 @@ function Transactions(props) {
         date: tDate,
         dateString: `${MONTH[tDate.getUTCMonth()]} ${tDate.getUTCDate()}`,
         // monthId = (year)(month) e.g. 201907 = July 2019
-        monthId: tDate.getUTCFullYear()*100 + tDate.getUTCMonth(),
+        monthId: getMonthId(tDate),
         // dateId = [1-31] i.e. the date number
         dateId: tDate.getUTCDate(),
         currency: props.data.user.currency,
@@ -43,7 +54,8 @@ function Transactions(props) {
         dataset[current.monthId] = {
           id: current.monthId,
           name: getMonthName(current.date),
-          groups: {}
+          groups: {},
+          isCurrentMonth: current.monthId === getMonthId(new Date()),
         }
       }
       // create date set if not existing
@@ -66,6 +78,7 @@ function Transactions(props) {
     const earliestMonth = new Date(earliestMonthId.slice(0,4), earliestMonthId.slice(4));
     const today = new Date();
     const currentMonth = new Date(today.getUTCFullYear(), today.getUTCMonth());
+    // loop to fill empty months
     for (let y = earliestMonth.getUTCFullYear(); y <= currentMonth.getUTCFullYear(); y++){
       let startingMonth = y === earliestMonth.getUTCFullYear() ? earliestMonth.getUTCMonth() : 0;
       let endingMonth = y === currentMonth.getUTCFullYear() ? currentMonth.getUTCMonth() : 11;
@@ -75,7 +88,8 @@ function Transactions(props) {
           dataset[workingId] = {
             id: workingId,
             name: getMonthName(new Date(y, m)),
-            groups: {}
+            groups: {},
+            isCurrentMonth: workingId === getMonthId(new Date()),
           }
         }
       }
@@ -94,11 +108,6 @@ function Transactions(props) {
         groups: groupData
       }
     });
-
-    // helpers
-    function getMonthName(date){
-      return `${MONTH[date.getUTCMonth()]} ${date.getUTCFullYear()}`;
-    }
   }
 }
 
