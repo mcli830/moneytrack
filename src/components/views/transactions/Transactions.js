@@ -1,21 +1,42 @@
 import React from 'react'
 import { withApollo } from 'react-apollo'
+import Async from 'react-async'
 import TransactionsView from './TransactionsView'
+import Loader from '../../system/Loader'
+import Error from '../../system/Error'
 import currency from '../../../data/currency'
 import { MONTH } from '../../../data/enums'
 
 function Transactions(props) {
 
-  const data = formatData(props.data);
-  const lastPage = props.lastPage !== null ? props.lastPage : getStartingView(data);
+  const processData = () => new Promise((resolve, reject) => {
+    setTimeout(()=>{
+      resolve(formatData(props.data));
+    }, 100)
+  });
 
   return (
-    <TransactionsView
-      user={props.data.user}
-      data={data}
-      lastPage={lastPage}
-      setPage={props.setPage}
-    />
+    <Async promiseFn={processData}>
+      <Async.Loading>
+        <Loader message='Loading' />
+      </Async.Loading>
+      <Async.Resolved>
+        {data => {
+          const lastPage = props.lastPage !== null ? props.lastPage : getStartingView(data);
+          return (
+            <TransactionsView
+              user={props.data.user}
+              data={data}
+              lastPage={lastPage}
+              setPage={props.setPage}
+            />
+          );
+        }}
+      </Async.Resolved>
+      <Async.Rejected>
+        {error => <Error message={error.message} />}
+      </Async.Rejected>
+    </Async>
   );
 
 }
