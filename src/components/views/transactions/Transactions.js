@@ -1,50 +1,23 @@
 import React from 'react'
 import { withApollo } from 'react-apollo'
 import TransactionsView from './TransactionsView'
-import AsyncLoader from '../../system/AsyncLoader'
+import Loader from '../../system/Loader'
 import currency from '../../../data/currency'
 import { MONTH } from '../../../data/enums'
 
-class Transactions extends React.Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      data: null,
-      page: false,
-    }
-    this.operation = this.operation.bind(this);
-    this.setPage = this.setPage.bind(this);
-  }
-  // lifecycle
-  shouldComponentUpdate(nextProps, nextState){
-    // only update if data is different (i.e. page change is ignored)
-    // this allows for smooth transitions and keeping current page with modal interaction
-    return this.state.data != nextState.data;
-  }
+function Transactions(props) {
 
-  // handlers
-  setPage(page){
-    this.setState({page});
-  }
-  // data operation for AsyncLoader to use
-  operation(){
-    this.setState({
-      data: formatData(this.props.data)
-    })
-  }
+  const data = formatData(props.data);
+  const lastPage = props.lastPage !== null ? props.lastPage : getStartingView(data);
 
-  render(){
-    return (
-      <AsyncLoader operation={this.operation}>
-        <TransactionsView
-          user={this.props.data.user}
-          data={this.state.data}
-          startingView={this.state.page ? this.state.page : getStartingView(this.state.data)}
-          setPage={this.setPage}
-          />
-      </AsyncLoader>
-    );
-  }
+  return (
+    <TransactionsView
+      user={props.data.user}
+      data={data}
+      lastPage={lastPage}
+      setPage={props.setPage}
+    />
+  );
 
 }
 
@@ -60,7 +33,9 @@ function getMonthId(date){
 }
 function getStartingView(data){
   if (!data) return null;
-  return data.findIndex(month => month.isCurrentMonth);
+  const today = new Date();
+  const currentMonthId = today.getUTCFullYear()*100 + today.getUTCMonth();
+  return data.findIndex(month => currentMonthId === month.id);
 }
 
 function formatData(data){
@@ -85,7 +60,6 @@ function formatData(data){
         id: current.monthId,
         name: getMonthName(current.date),
         groups: {},
-        isCurrentMonth: current.monthId === getMonthId(new Date()),
       }
     }
     // create date set if not existing
@@ -119,7 +93,6 @@ function formatData(data){
           id: workingId,
           name: getMonthName(new Date(y, m)),
           groups: {},
-          isCurrentMonth: workingId === getMonthId(new Date()),
         }
       }
     }
@@ -132,7 +105,7 @@ function formatData(data){
         ...dataset[monthId].groups[dateId],
         total: dataset[monthId].groups[dateId].transactions.reduce((a,b)=>a+b.amount,0),
       };
-    }).sort((a,b)=>a.id-b.id);
+    }).sort((a,b)=>b.id-a.id);
     return {
       ...dataset[monthId],
       groups: groupData

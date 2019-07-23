@@ -46,12 +46,10 @@ function SwipeableViews(props) {
     if (Math.abs(pos) > rect.width*0.5){
       if (pos > 0) {
         nextView = view+1;
-        setView(view+1)
       } else {
         nextView = view-1;
-        setView(view-1)
       }
-      // setView(nextView);
+      setView(nextView);
     }
     setPos(0);
     if (props.onSwiped) props.onSwiped(nextView);

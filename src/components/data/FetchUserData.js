@@ -10,7 +10,7 @@ function FetchUserData(props) {
   return (
     <Query query={GET_USER_DATA} variables={props.variables}>
     {({ data, loading, error}) => {
-      if (loading) return <Loader />;
+      if (loading) return <Loader message='Fetching data...' />;
       if (error) return <ErrorPage message={error.message} />;
       return props.children;
     }}

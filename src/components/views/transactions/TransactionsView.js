@@ -36,7 +36,7 @@ export default (props) => {
   const ListViews = () => (
     <SwipeableViews
       containerStyle={containerStyle}
-      startingView={props.startingView}
+      startingView={props.lastPage}
       headerComponent={(addProps) => (
         <TransactionsHead
           {...addProps}

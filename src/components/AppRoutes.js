@@ -30,7 +30,10 @@ export default (props) => {
         <Switch>
           <Route path='/transactions' render={() => (
               <DataProvider>
-                <Transactions />
+                <Transactions
+                  lastPage={props.locals.lastPage}
+                  setPage={p=>props.setLocals({lastPage: p})}
+                />
               </DataProvider>
             )} />
           <Route path='/friends' component={ComingSoon} />

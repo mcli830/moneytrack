@@ -22,6 +22,10 @@ class App extends React.Component {
         }
       }
     }
+    this.locals = {
+      lastPage: null,
+    }
+    this.setLocals = this.setLocals.bind(this);
     this.openTransactionModal = this.openTransactionModal.bind(this);
   }
 
@@ -33,6 +37,10 @@ class App extends React.Component {
   }
 
   // handlers
+  setLocals(x){
+    Object.assign(this.locals, x);
+  }
+
   openTransactionModal(crud){
     this.setState({
       modals: {
@@ -66,6 +74,8 @@ class App extends React.Component {
           handlers={{
             openTransactionModal: this.openTransactionModal,
           }}
+          locals={this.locals}
+          setLocals={this.setLocals}
           logout={this._logout}
         />
       </FetchUserData>
@@ -78,7 +88,7 @@ class App extends React.Component {
         <CssBaseline />
         <Query query={LOGGED_IN_USER}>
           {({ data, loading, error}) => {
-            if (loading) return <Loader />;
+            if (loading) return <Loader message='Authenticating...' />;
             if (error) return <ErrorPage message={error.message} />
             if (data.loggedInUser && data.loggedInUser.id !== null){
               return this._fetchDataAndRenderRoutes(data.loggedInUser.id);

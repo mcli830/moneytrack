@@ -2,6 +2,7 @@ import React from 'react'
 import Typography from '@material-ui/core/Typography'
 import List from '@material-ui/core/List'
 import ListSubheader from '@material-ui/core/ListSubheader'
+import Slide from '@material-ui/core/Slide'
 import EmptyList from './EmptyList'
 import { makeStyles } from '@material-ui/styles'
 import { createMuiTheme } from '@material-ui/core/styles'
@@ -85,12 +86,12 @@ function TransactionsList(props){
   const renderList = () => props.data.map(group => (
     <li key={group.id}>
       <ul className={classes.ul}>
-        <ListSubheader className={[classes.subheader, classes.flexRow].join(' ')}>
-          <Typography variant='subtitle1'>{group.dateString}</Typography>
-          <Typography variant='subtitle1'>{group.symbol + group.total}</Typography>
+          <ListSubheader className={[classes.subheader, classes.flexRow].join(' ')}>
+            <Typography variant='subtitle1'>{group.dateString}</Typography>
+            <Typography variant='subtitle1'>{group.symbol + group.total}</Typography>
         </ListSubheader>
-        {group.transactions.map(t => (
-          <li key={t.id}>
+        {group.transactions.map((t,i) => (
+          <li key={i}>
             <div className={classes.item}>
               <Typography>
                 {t.description}
