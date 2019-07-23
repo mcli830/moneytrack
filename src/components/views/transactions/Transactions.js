@@ -1,7 +1,6 @@
 import React from 'react'
 import { withApollo } from 'react-apollo'
 import TransactionsView from './TransactionsView'
-import Loader from '../../system/Loader'
 import currency from '../../../data/currency'
 import { MONTH } from '../../../data/enums'
 
