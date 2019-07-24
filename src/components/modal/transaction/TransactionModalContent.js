@@ -14,16 +14,25 @@ const useStyles = makeStyles({
   root: {
     borderRadius: 0,
     backgroundColor: theme.palette.background.paper,
-    flex: '1 1 auto'
+    flex: '1 1 auto',
+    overflowX: 'hidden',
+    overflowY: 'auto',
   },
   field: {
     display: 'block',
-    padding: theme.spacing(3)
+    padding: theme.spacing(3),
   },
   fieldInput: {
     width: '100%',
+    maxHeight: theme.spacing(15),
+    alignItems: 'flex-start',
+    overflowY: 'auto',
+    position: 'relative',
   },
   fieldAdornment: {
+    position: 'sticky',
+    top: '50%',
+    transform: 'translate(0, -50%)',
     marginRight: theme.spacing(2)
   }
 })

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import Modal from '@material-ui/core/Modal'
 import Slide from '@material-ui/core/Slide'
 import Container from '@material-ui/core/Container'
+import useMediaQuery from '@material-ui/core/useMediaQuery'
 import TransactionModalHeader from './TransactionModalHeader'
 import TransactionModalContent from './TransactionModalContent'
 import CrudButtonCreateTransaction from '../../crud/CrudButtonCreateTransaction'
@@ -14,13 +15,16 @@ import { createMuiTheme } from '@material-ui/core/styles'
 const theme = createMuiTheme();
 
 const useStyles = makeStyles({
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+  },
   slide: {
     height: '100%',
     padding: 0
   },
   container: {
     backgroundColor: theme.palette.background.paper,
-    height: '100%',
     padding: 0,
     display: 'flex',
     flexDirection: 'column',
@@ -40,7 +44,15 @@ function newState() {
 
 // Component
 function TransactionModal(props){
+  const smallDevice = useMediaQuery(theme.breakpoints.down('sm'));
   const classes = useStyles();
+  const styles = {
+    container: {
+      height: smallDevice ? '100%' : 'auto',
+      minHeight: smallDevice ? 'none' : '60%',
+      maxHeight: smallDevice ? '100%' : `90%`,
+    }
+  }
 
   // state
   const [state, setState] = React.useState(newState());
@@ -69,10 +81,12 @@ function TransactionModal(props){
       onRendered={()=> {
         if (props.crud === 'update') setTimeout(setState(getTransactionData()))
       }}
-      hideBackdrop
+      className={classes.modal}
+      disableAutoFocus
+      hideBackdrop={smallDevice}
     >
       <Slide direction='up' in={props.open} className={classes.container} mountOnEnter unmountOnExit>
-        <Container maxWidth='md'>
+        <Container maxWidth='sm' style={styles.container}>
           <TransactionModalHeader
             closeModal={closeModal}
             icon={state.icon}
@@ -94,7 +108,7 @@ function TransactionModal(props){
             validMemo={valid.memo}
             deleteButton={renderDeleteButton()}
           />
-        {renderActionButton()}
+          {renderActionButton()}
         </Container>
       </Slide>
     </Modal>

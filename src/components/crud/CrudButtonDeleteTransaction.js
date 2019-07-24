@@ -13,7 +13,7 @@ const theme = createMuiTheme();
 const useStyles = makeStyles({
   root: {
     width: '100%',
-    paddingTop: theme.spacing(3),
+    padding: theme.spacing(3, 0),
     textAlign: 'center',
   },
   button: {
