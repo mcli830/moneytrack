@@ -66,7 +66,9 @@ function TransactionModal(props){
     <Modal
       open={props.open}
       onClose={closeModal}
-      onRendered={()=>setTimeout(setState(getTransactionData()))}
+      onRendered={()=> {
+        if (props.crud === 'update') setTimeout(setState(getTransactionData()))
+      }}
       hideBackdrop
     >
       <Slide direction='up' in={props.open} className={classes.container} mountOnEnter unmountOnExit>

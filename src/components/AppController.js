@@ -26,7 +26,7 @@ export default (props) => {
         logout={props.logout}
         openTransactionModal={()=>props.handlers.openTransactionModal('create')}
       />
-      <Container style={styles.view} maxWidth='md'>
+      <Container style={styles.view} maxWidth='sm'>
         <Switch>
           <Route path='/transactions' render={() => (
               <DataProvider>

@@ -50,7 +50,7 @@ function UserHeader(props) {
   const classes = useStyles();
   return props.history.location.pathname !== '/' && (
     <div className={classes.root}>
-      <Container maxWidth='md' className={classes.container}>
+      <Container maxWidth='sm' className={classes.container}>
         <Button onClick={props.logout} className={classes.button}>
           <SettingsIcon className={classes.icon} />
         </Button>
