@@ -42,7 +42,7 @@ function Transactions(props) {
 
 }
 
-// helpers
+// external helpers
 // function getDateString(date){
 //   return date.toDateString().replace(/\w+\s(\w+)(\s\w+)(\s\w+)/, '$1$2,$3');
 // }

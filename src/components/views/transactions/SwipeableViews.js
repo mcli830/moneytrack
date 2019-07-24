@@ -96,7 +96,7 @@ function SwipeableViews(props) {
   return (
     <div style={styles.root}>
       <div style={styles.header}>
-        {props.headerComponent({ view, pos, swiping })}
+        {props.headerComponent({ view, pos, swiping, setView })}
       </div>
       <Swipeable
         {...config}
