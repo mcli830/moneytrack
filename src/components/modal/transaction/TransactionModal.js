@@ -7,6 +7,7 @@ import TransactionModalHeader from './TransactionModalHeader'
 import TransactionModalContent from './TransactionModalContent'
 import CrudButtonCreateTransaction from '../../crud/CrudButtonCreateTransaction'
 import CrudButtonUpdateTransaction from '../../crud/CrudButtonUpdateTransaction'
+import CrudButtonDeleteTransaction from '../../crud/CrudButtonDeleteTransaction'
 import { makeStyles } from '@material-ui/styles'
 import { createMuiTheme } from '@material-ui/core/styles'
 
@@ -80,6 +81,7 @@ function TransactionModal(props){
             currency={props.data.user.currency}
           />
           <TransactionModalContent
+            crud={props.crud}
             date={state.date}
             changeDate={changeDate}
             description={state.description}
@@ -88,6 +90,7 @@ function TransactionModal(props){
             changeMemo={changeMemo}
             validDescription={valid.description}
             validMemo={valid.memo}
+            deleteButton={renderDeleteButton()}
           />
         {renderActionButton()}
         </Container>
@@ -119,6 +122,15 @@ function TransactionModal(props){
       default:
         return null;
     }
+  }
+  // render delete button
+  function renderDeleteButton(){
+    return (
+      <CrudButtonDeleteTransaction
+        transactionId={props.currentId}
+        closeModal={closeModal}
+      />
+    );
   }
   // get individual transaction data for modal if crud=update
   function getTransactionData(){

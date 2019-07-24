@@ -8,7 +8,7 @@ import { GET_USER_DATA, LOGGED_IN_USER } from '../../graphql/queries'
 import amber from '@material-ui/core/colors/amber'
 
 function CrudButtonUpdateTransaction(props){
-  const { valid, updateData } = props;
+  const { valid, updateData, transactionId } = props;
   const styles = {
     button: {
       borderRadius: 0,
@@ -21,7 +21,6 @@ function CrudButtonUpdateTransaction(props){
     <Mutation
       mutation={UPDATE_TRANSACTION_MUTATION}
       update={(cache, { data })=>{
-        console.log('update cache', {cache, data});
         const { loggedInUser } = cache.readQuery({query: LOGGED_IN_USER});
         const { User } = cache.readQuery({
           query: GET_USER_DATA,
@@ -29,9 +28,8 @@ function CrudButtonUpdateTransaction(props){
         });
         const updatedId = data.updateTransaction.id;
         const index = User.transactions.findIndex(d => d.id === updatedId);
-        const newData = [].concat(User.transactions);
+        const newData = User.transactions.slice();
         newData[index] = data.updateTransaction;
-        console.log({ updatedId, index, newData })
         cache.writeQuery({
           query: GET_USER_DATA,
           data: {
@@ -49,12 +47,12 @@ function CrudButtonUpdateTransaction(props){
           id='gql-update-transaction'
           variant='contained'
           size='large'
-          color='secondary'
+          color='primary'
           style={styles.button}
           disabled={loading || !(valid.amount() && valid.description())}
           onClick={()=>updateTransaction({
             variables: {
-              id: props.transactionId,
+              id: transactionId,
               date: updateData.date,
               description: updateData.description,
               amount: parseInt(updateData.amount),

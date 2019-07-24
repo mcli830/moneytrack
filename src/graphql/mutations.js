@@ -27,7 +27,6 @@ export const ADD_TRANSACTION_MUTATION = gql`
     }
   }
 `
-
 export const UPDATE_TRANSACTION_MUTATION = gql`
   mutation UpdateTransaction(
     $id: ID!
@@ -52,6 +51,19 @@ export const UPDATE_TRANSACTION_MUTATION = gql`
         id
         name
       }
+    }
+  }
+`
+export const DELETE_TRANSACTION_MUTATION = gql`
+  mutation DeleteTransaction(
+    $id: ID!
+  ) {
+    deleteTransaction(
+      id: $id
+    ) {
+      id
+      description
+      date
     }
   }
 `

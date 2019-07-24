@@ -21,7 +21,7 @@ export default (props) => {
   }
   return(
     <div style={styles.root}>
-      <CircularProgress size={props.size} thickness={props.thickness} />
+      <CircularProgress size={props.size} thickness={props.thickness} color={props.color} />
       {props.message && <Typography style={styles.message}>{props.message}</Typography>}
     </div>
   )

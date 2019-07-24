@@ -93,6 +93,7 @@ export default (props) => {
           )
         }}
       />
+      {props.crud === 'update' && props.deleteButton}
     </div>
   );
 }
