@@ -1,6 +1,7 @@
 import React from 'react'
 import Typography from '@material-ui/core/Typography'
 import List from '@material-ui/core/List'
+import ButtonBase from '@material-ui/core/ButtonBase'
 import ListSubheader from '@material-ui/core/ListSubheader'
 import EmptyList from './EmptyList'
 import { makeStyles } from '@material-ui/styles'
@@ -34,6 +35,8 @@ const useStyles = makeStyles({
   },
   item: {
     backgroundColor: theme.palette.background.paper,
+    margin: 0,
+    width: '100%',
     paddingLeft: theme.spacing(3),
     paddingRight: theme.spacing(3),
     borderBottom: `1px solid ${theme.palette.grey[100]}`,
@@ -91,7 +94,10 @@ function TransactionsList(props){
         </ListSubheader>
         {group.transactions.map((t,i) => (
           <li key={i}>
-            <div className={classes.item}>
+            <ButtonBase
+              className={classes.item}
+              onClick={()=>props.updateTransactionModal(t.id)}
+            >
               <Typography>
                 {t.description}
               </Typography>
@@ -99,7 +105,7 @@ function TransactionsList(props){
                 <Typography>{t.symbol}{t.amount}</Typography>
                 <Typography className={classes.currency}>{t.currency}</Typography>
               </div>
-            </div>
+            </ButtonBase>
           </li>
         ))}
       </ul>

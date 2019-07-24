@@ -12,7 +12,7 @@ function Transactions(props) {
   const processData = () => new Promise((resolve, reject) => {
     setTimeout(()=>{
       resolve(formatData(props.data));
-    }, 100)
+    })
   });
 
   return (
@@ -29,6 +29,7 @@ function Transactions(props) {
               data={data}
               lastPage={lastPage}
               setPage={props.setPage}
+              updateTransactionModal={props.updateTransactionModal}
             />
           );
         }}

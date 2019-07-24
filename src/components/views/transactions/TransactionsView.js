@@ -49,7 +49,7 @@ export default (props) => {
         return (addProps) => {
           return (
             <div {...addProps} key={monthSet.id}>
-              <TransactionsList data={monthSet.groups} />
+              <TransactionsList data={monthSet.groups} updateTransactionModal={props.updateTransactionModal} />
             </div>
           );
         }

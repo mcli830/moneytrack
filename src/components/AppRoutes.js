@@ -33,6 +33,7 @@ export default (props) => {
                 <Transactions
                   lastPage={props.locals.lastPage}
                   setPage={p=>props.setLocals({lastPage: p})}
+                  updateTransactionModal={id=>props.handlers.openTransactionModal('update', {id})}
                 />
               </DataProvider>
             )} />
@@ -46,6 +47,7 @@ export default (props) => {
         <TransactionModal
           open={props.state.modals.transaction.isOpen}
           crud={props.state.modals.transaction.crud}
+          currentId={props.state.modals.transaction.currentId}
           handleClose={()=>props.handlers.openTransactionModal('')}
         />
       </DataProvider>

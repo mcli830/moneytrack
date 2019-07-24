@@ -7,6 +7,7 @@ import AppRoutes from './AppRoutes'
 import AppHeader from './AppHeader'
 import Loader from './system/Loader'
 import ErrorPage from './system/Error'
+import fetchDataFromApollo from './functions/fetchDataFromApollo'
 import '../index.css';
 
 import { LOGGED_IN_USER } from '../graphql/queries'
@@ -19,6 +20,7 @@ class App extends React.Component {
         transaction: {
           isOpen: false,
           crud: '',
+          data: {}
         }
       }
     }
@@ -41,13 +43,14 @@ class App extends React.Component {
     Object.assign(this.locals, x);
   }
 
-  openTransactionModal(crud){
+  openTransactionModal(crud, o){
     this.setState({
       modals: {
         ...this.state.modals,
         transaction: {
           isOpen: !!crud,
           crud,
+          currentId: crud === 'update' ? o.id : null,
         }
       }
     });
