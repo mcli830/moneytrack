@@ -23,9 +23,7 @@ function CrudButtonCreateTransaction(props){
         const { loggedInUser } = cache.readQuery({query: LOGGED_IN_USER});
         const { User } = cache.readQuery({
           query: GET_USER_DATA,
-          variables: {
-            id: loggedInUser.id
-          }
+          variables: { id: loggedInUser.id },
         })
         cache.writeQuery({
           query: GET_USER_DATA,
@@ -53,7 +51,7 @@ function CrudButtonCreateTransaction(props){
               date: createData.date,
               description: createData.description,
               amount: parseInt(createData.amount),
-              memo: createData.memo
+              memo: createData.memo,
             }
           })}
         >
@@ -73,7 +71,7 @@ function CrudButtonCreateTransaction(props){
 }
 
 CrudButtonCreateTransaction.propTypes = {
-  createData: PropTypes.object.isRequired, // data use to create new db document
+  createData: PropTypes.object.isRequired, // data used to create new db document
   creatorId: PropTypes.string.isRequired,
   closeModal: PropTypes.func.isRequired,
   valid: PropTypes.object.isRequired,

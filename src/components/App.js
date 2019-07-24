@@ -3,11 +3,10 @@ import { Query, withApollo } from 'react-apollo'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Login from './auth/Login'
 import FetchUserData from './data/FetchUserData'
-import AppRoutes from './AppRoutes'
+import AppController from './AppController'
 import AppHeader from './AppHeader'
 import Loader from './system/Loader'
 import ErrorPage from './system/Error'
-import fetchDataFromApollo from './functions/fetchDataFromApollo'
 import '../index.css';
 
 import { LOGGED_IN_USER } from '../graphql/queries'
@@ -68,10 +67,10 @@ class App extends React.Component {
     );
   }
 
-  _fetchDataAndRenderRoutes = id => {
+  _renderApp = id => {
     return (
       <FetchUserData variables={{ id }}>
-        <AppRoutes
+        <AppController
           state={this.state}
           openTransactionModal={this.openTransactionModal}
           handlers={{
@@ -94,7 +93,7 @@ class App extends React.Component {
             if (loading) return <Loader message='Authenticating...' />;
             if (error) return <ErrorPage message={error.message} />
             if (data.loggedInUser && data.loggedInUser.id !== null){
-              return this._fetchDataAndRenderRoutes(data.loggedInUser.id);
+              return this._renderApp(data.loggedInUser.id);
             }
             return this._renderLogin();
           }}

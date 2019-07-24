@@ -84,6 +84,7 @@ function TransactionModal(props){
             changeDate={changeDate}
             description={state.description}
             changeDescription={changeDescription}
+            memo={state.memo}
             changeMemo={changeMemo}
             validDescription={valid.description}
             validMemo={valid.memo}
@@ -108,12 +109,18 @@ function TransactionModal(props){
         );
       case 'update':
         return (
-          <CrudButtonUpdateTransaction />
+          <CrudButtonUpdateTransaction
+            transactionId={props.currentId}
+            updateData={state}
+            closeModal={closeModal}
+            valid={valid}
+          />
         );
       default:
         return null;
     }
   }
+  // get individual transaction data for modal if crud=update
   function getTransactionData(){
     const t = props.data.user.transactions.find(t => t.id === props.currentId);
     const result = {
