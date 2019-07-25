@@ -4,7 +4,7 @@ import Async from 'react-async'
 import TransactionsView from './TransactionsView'
 import Loader from '../../system/Loader'
 import Error from '../../system/Error'
-import currency from '../../../data/currency'
+import { CURRENCY } from '../../../data/resolvers'
 import { MONTH } from '../../../data/enums'
 
 function Transactions(props) {
@@ -73,7 +73,7 @@ function formatData(data){
       // dateId = [1-31] i.e. the date number
       dateId: tDate.getUTCDate(),
       currency: data.user.currency,
-      symbol: currency[data.user.currency],
+      symbol: CURRENCY[data.user.currency],
     };
     // create month set if not existing
     if (!dataset[current.monthId]){

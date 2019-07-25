@@ -11,6 +11,7 @@ import CrudButtonUpdateTransaction from '../../crud/CrudButtonUpdateTransaction'
 import CrudButtonDeleteTransaction from '../../crud/CrudButtonDeleteTransaction'
 import { makeStyles } from '@material-ui/styles'
 import { withTheme } from '@material-ui/core/styles'
+import { CATEGORY } from '../../../data/resolvers'
 
 const useStyles = makeStyles(theme => ({
   modal: {
@@ -41,7 +42,7 @@ const useStyles = makeStyles(theme => ({
 // state handling
 function newState() {
   return {
-    icon: '',
+    category: '',
     amount: 0,
     date: new Date(new Date().toDateString()),
     description: '',
@@ -64,13 +65,14 @@ function TransactionModal(props){
   // state
   const [state, setState] = React.useState(newState());
   // actions
-  const changeIcon = icon => setState({...state, icon});
+  const changeCategory = category => setState({...state, category});
   const changeDate = date => setState({...state, date});
   const changeAmount = e => setState({...state, amount: e.target.value });
   const changeDescription = e => setState({...state, description: e.target.value });
   const changeMemo = e => setState({...state, memo: e.target.value });
   // state validation
   const valid = {
+    category: () => Object.keys(CATEGORY).includes(state.category),
     amount: () => state.amount > 0,
     description: () => state.description !== '',
     memo: () => state.memo !== '',
@@ -80,8 +82,6 @@ function TransactionModal(props){
     setState(newState());
     props.handleClose();
   }
-
-  const crudColor = getCrudColor();
 
   return (
     <Modal
@@ -98,26 +98,37 @@ function TransactionModal(props){
         <Container maxWidth='sm' style={styles.container}>
           <TransactionModalHeader
             crud={props.crud}
-            crudColor={crudColor}
+            crudColor={getCrudColor()}
             closeModal={closeModal}
-            icon={state.icon}
-            changeIcon={changeIcon}
-            amount={state.amount}
-            changeAmount={changeAmount}
-            validAmount={valid.amount}
+            category={{
+              value: state.category,
+              handler: changeCategory,
+              valid: valid.category,
+            }}
+            amount={{
+              value: state.amount,
+              handler: changeAmount,
+              valid: valid.amount,
+            }}
             currency={props.data.user.currency}
           />
           <TransactionModalContent
             crud={props.crud}
-            crudColor={crudColor}
-            date={state.date}
-            changeDate={changeDate}
-            description={state.description}
-            changeDescription={changeDescription}
-            memo={state.memo}
-            changeMemo={changeMemo}
-            validDescription={valid.description}
-            validMemo={valid.memo}
+            crudColor={getCrudColor()}
+            date={{
+              value: state.date,
+              handler: changeDate,
+            }}
+            description={{
+              value: state.description,
+              handler: changeDescription,
+              valid: valid.description,
+            }}
+            memo={{
+              value: state.memo,
+              handler: changeMemo,
+              valid: valid.memo,
+            }}
             deleteButton={renderDeleteButton()}
           />
           {renderActionButton()}
@@ -136,7 +147,7 @@ function TransactionModal(props){
             createData={state}
             closeModal={closeModal}
             valid={valid}
-            crudColor={props.crudColor}
+            crudColor={getCrudColor()}
           />
         );
       case 'update':
@@ -146,7 +157,7 @@ function TransactionModal(props){
             updateData={state}
             closeModal={closeModal}
             valid={valid}
-            crudColor={props.crudColor}
+            crudColor={getCrudColor()}
           />
         );
       default:
@@ -168,7 +179,6 @@ function TransactionModal(props){
     const result = {
       ...t,
       date: new Date(t.date),
-      icon: '',
     }
     return result;
   }

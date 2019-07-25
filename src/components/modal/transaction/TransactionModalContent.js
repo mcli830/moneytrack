@@ -42,8 +42,8 @@ export default (props) => {
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <DatePicker
           id='date'
-          value={props.date}
-          onChange={props.changeDate}
+          value={props.date.value}
+          onChange={props.date.hanlder}
           className={classes.field}
           InputProps={{
             disableUnderline: true,
@@ -62,8 +62,8 @@ export default (props) => {
       <TextField
         id='description'
         className={classes.field}
-        value={props.description}
-        onChange={props.changeDescription}
+        value={props.description.value}
+        onChange={props.description.handler}
         multiline
         InputProps={{
           className: classes.fieldInput,
@@ -74,7 +74,7 @@ export default (props) => {
               position='start'
               className={classes.fieldAdornment}
             >
-              <Icon color={props.validDescription() ? props.crudColor : 'disabled'}>label</Icon>
+              <Icon color={props.description.valid() ? props.crudColor : 'disabled'}>label</Icon>
             </InputAdornment>
           )
         }}
@@ -82,8 +82,8 @@ export default (props) => {
       <TextField
         id='memo'
         className={classes.field}
-        value={props.memo}
-        onChange={props.changeMemo}
+        value={props.memo.value}
+        onChange={props.memo.handler}
         multiline
         InputProps={{
           className: classes.fieldInput,
@@ -94,7 +94,7 @@ export default (props) => {
               position='start'
               className={classes.fieldAdornment}
             >
-              <Icon color={props.validMemo() ? props.crudColor : 'disabled'}>create</Icon>
+              <Icon color={props.memo.valid() ? props.crudColor : 'disabled'}>create</Icon>
             </InputAdornment>
           )
         }}

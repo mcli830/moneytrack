@@ -28,18 +28,21 @@ type Transaction @model {
 }
 
 enum Category {
-  Dining
+  FoodAndDrink
   Shopping
   Transport
   Home
-  Bills
+  BillsAndFees
+  Maintenance
   Entertainment
   Travel
-  Personal
-  Health
+  FamilyAndPersonal
+  Healthcare
   Education
   Hobbies
   Gifts
+  Work
+  Investment
   Other
 }
 

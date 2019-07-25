@@ -47,6 +47,13 @@ code {
   opacity: 0;
 }
 
+/* remove up/down arrows from number input */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  display: none;
+}
+
 @media only screen and (min-width: 961){
   ::-webkit-scrollbar {
     width: 3px;

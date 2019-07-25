@@ -58,11 +58,13 @@ function CrudButtonCreateTransaction(props){
           {error ? console.error(error) : null}
           { loading
             ? <Loader size={26} thickness={3} />
-            : !valid.amount()
-              ? 'Add an amount'
-              : !valid.description()
-                ? 'Add a description'
-                : 'Add transaction'
+            : !valid.category()
+              ? 'Choose a category'
+              : !valid.amount()
+                ? 'Add an amount'
+                : !valid.description()
+                  ? 'Add a description'
+                  : 'Save transaction'
           }
         </Button>
       )}
