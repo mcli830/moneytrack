@@ -1,5 +1,2 @@
-UserHeader:
-  - Add settings menu
-
 Graphcool & TransactionsModal:
   - Add icon data

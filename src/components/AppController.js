@@ -22,10 +22,12 @@ export default (props) => {
   }
   return (
     <Router>
-      <UserHeader
-        logout={props.logout}
-        openTransactionModal={()=>props.handlers.openTransactionModal('create')}
-      />
+      <DataProvider>
+        <UserHeader
+          logout={props.logout}
+          openTransactionModal={()=>props.handlers.openTransactionModal('create')}
+        />
+      </DataProvider>
       <Container style={styles.view} maxWidth='sm'>
         <Switch>
           <Route path='/transactions' render={() => (
