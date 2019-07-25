@@ -4,13 +4,10 @@ import Icon from '@material-ui/core/Icon'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import { MuiPickersUtilsProvider, DatePicker } from '@material-ui/pickers'
 import DateFnsUtils from '@date-io/date-fns'
-
 import { makeStyles } from '@material-ui/styles'
-import { createMuiTheme } from '@material-ui/core/styles'
+import { useTheme } from '@material-ui/core/styles'
 
-const theme = createMuiTheme();
-
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   root: {
     borderRadius: 0,
     backgroundColor: theme.palette.background.paper,
@@ -35,10 +32,10 @@ const useStyles = makeStyles({
     transform: 'translate(0, -50%)',
     marginRight: theme.spacing(2)
   }
-})
+}));
 
 export default (props) => {
-  const classes = useStyles();
+  const classes = useStyles(useTheme());
 
   return (
     <div className={classes.root}>
@@ -56,7 +53,7 @@ export default (props) => {
                 position='start'
                 className={classes.fieldAdornment}
               >
-                <Icon color='primary'>today</Icon>
+                <Icon color={props.crudColor}>today</Icon>
               </InputAdornment>
             )
           }}
@@ -77,7 +74,7 @@ export default (props) => {
               position='start'
               className={classes.fieldAdornment}
             >
-              <Icon color={props.validDescription() ? 'primary' : 'disabled'}>label</Icon>
+              <Icon color={props.validDescription() ? props.crudColor : 'disabled'}>label</Icon>
             </InputAdornment>
           )
         }}
@@ -97,7 +94,7 @@ export default (props) => {
               position='start'
               className={classes.fieldAdornment}
             >
-              <Icon color={props.validMemo() ? 'primary' : 'disabled'}>create</Icon>
+              <Icon color={props.validMemo() ? props.crudColor : 'disabled'}>create</Icon>
             </InputAdornment>
           )
         }}

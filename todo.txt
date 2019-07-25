@@ -1,2 +1,5 @@
-Transactions:
-  - Add filler months in between current month and earliest transaction recorded
+UserHeader:
+  - Add settings menu
+
+Graphcool & TransactionsModal:
+  - Add icon data

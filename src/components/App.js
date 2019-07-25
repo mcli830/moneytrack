@@ -7,9 +7,31 @@ import AppController from './AppController'
 import AppHeader from './AppHeader'
 import Loader from './system/Loader'
 import ErrorPage from './system/Error'
+import { createMuiTheme } from '@material-ui/core/styles'
+import { ThemeProvider } from '@material-ui/styles'
+import blue from '@material-ui/core/colors/blue'
+import green from '@material-ui/core/colors/green'
+import orange from '@material-ui/core/colors/orange'
 import '../index.css';
-
 import { LOGGED_IN_USER } from '../graphql/queries'
+
+const augmentColor = createMuiTheme().palette.augmentColor;
+const makePalette = (muiColor, contrastText = '#fff') => ({
+  ...augmentColor(muiColor),
+  contrastText,
+})
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: blue[700],
+      light: blue[500],
+      dark: blue[900],
+      contrastText: '#fff'
+    },
+    secondary: makePalette(green),
+    tertiary: makePalette(orange),
+  }
+});
 
 class App extends React.Component {
   constructor(props){
@@ -86,19 +108,21 @@ class App extends React.Component {
 
   render(){
     return (
-      <div className="App">
-        <CssBaseline />
-        <Query query={LOGGED_IN_USER}>
-          {({ data, loading, error}) => {
-            if (loading) return <Loader message='Authenticating...' />;
-            if (error) return <ErrorPage message={error.message} />
-            if (data.loggedInUser && data.loggedInUser.id !== null){
-              return this._renderApp(data.loggedInUser.id);
-            }
-            return this._renderLogin();
-          }}
-        </Query>
-      </div>
+      <ThemeProvider theme={theme}>
+        <div className="App">
+          <CssBaseline />
+          <Query query={LOGGED_IN_USER}>
+            {({ data, loading, error}) => {
+              if (loading) return <Loader message='Authenticating...' />;
+              if (error) return <ErrorPage message={error.message} />
+              if (data.loggedInUser && data.loggedInUser.id !== null){
+                return this._renderApp(data.loggedInUser.id);
+              }
+              return this._renderLogin();
+            }}
+          </Query>
+        </div>
+      </ThemeProvider>
     );
   }
 }

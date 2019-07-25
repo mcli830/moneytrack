@@ -5,7 +5,6 @@ import Loader from '../system/Loader'
 import { withApollo, Mutation } from 'react-apollo'
 import { UPDATE_TRANSACTION_MUTATION } from '../../graphql/mutations'
 import { GET_USER_DATA, LOGGED_IN_USER } from '../../graphql/queries'
-import amber from '@material-ui/core/colors/amber'
 
 function CrudButtonUpdateTransaction(props){
   const { valid, updateData, transactionId } = props;
@@ -47,7 +46,7 @@ function CrudButtonUpdateTransaction(props){
           id='gql-update-transaction'
           variant='contained'
           size='large'
-          color='primary'
+          color={props.crudColor}
           style={styles.button}
           disabled={loading || !(valid.amount() && valid.description())}
           onClick={()=>updateTransaction({

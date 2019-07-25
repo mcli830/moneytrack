@@ -42,7 +42,7 @@ function CrudButtonCreateTransaction(props){
           id='gql-add-transaction'
           variant='contained'
           size='large'
-          color='primary'
+          color={props.crudColor}
           style={styles.button}
           disabled={loading || !(valid.amount() && valid.description())}
           onClick={()=>addTransaction({

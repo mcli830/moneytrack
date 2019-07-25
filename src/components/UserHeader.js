@@ -1,16 +1,14 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom'
 import { makeStyles } from '@material-ui/styles'
-import { createMuiTheme } from '@material-ui/core/styles'
+import { useTheme } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import AddIcon from '@material-ui/icons/Add'
 import SettingsIcon from '@material-ui/icons/Settings'
 
-const theme = createMuiTheme();
-
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   root: {
     backgroundColor: theme.palette.primary.main,
   },
@@ -40,14 +38,14 @@ const useStyles = makeStyles({
   icon: {
     color: theme.palette.background.default
   }
-});
+}));
 
 function capitalize(str){
   return str[0].toUpperCase() + str.slice(1);
 }
 
 function UserHeader(props) {
-  const classes = useStyles();
+  const classes = useStyles(useTheme());
   return props.history.location.pathname !== '/' && (
     <div className={classes.root}>
       <Container maxWidth='sm' className={classes.container}>

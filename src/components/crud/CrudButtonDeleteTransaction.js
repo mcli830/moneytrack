@@ -4,31 +4,28 @@ import Loader from '../system/Loader'
 import { withApollo, Mutation } from 'react-apollo'
 import { DELETE_TRANSACTION_MUTATION } from '../../graphql/mutations'
 import { GET_USER_DATA, LOGGED_IN_USER } from '../../graphql/queries'
-import red from '@material-ui/core/colors/red'
-import { createMuiTheme } from '@material-ui/core/styles'
+import { useTheme } from '@material-ui/core/styles'
 import { makeStyles } from '@material-ui/styles'
 
-const theme = createMuiTheme();
-
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   root: {
     width: '100%',
     padding: theme.spacing(3, 0),
     textAlign: 'center',
   },
   button: {
-    color: theme.palette.error.main,
-    borderColor: theme.palette.error.main,
+    color: theme.palette.error.light,
+    borderColor: theme.palette.error.light,
     '&:hover': {
       color: theme.palette.error.contrastText,
-      backgroundColor: theme.palette.error.main,
+      backgroundColor: theme.palette.error.light,
     }
   }
-})
+}))
 
 function CrudButtonDeleteTransaction(props){
   const { transactionId } = props;
-  const classes = useStyles();
+  const classes = useStyles(useTheme());
 
   return (
     <Mutation

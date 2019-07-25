@@ -5,11 +5,9 @@ import ButtonBase from '@material-ui/core/ButtonBase'
 import ListSubheader from '@material-ui/core/ListSubheader'
 import EmptyList from './EmptyList'
 import { makeStyles } from '@material-ui/styles'
-import { createMuiTheme } from '@material-ui/core/styles'
+import { useTheme } from '@material-ui/core/styles'
 
-const theme = createMuiTheme();
-
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   list: {
     height: '100%',
     maxHeight: '100%',
@@ -80,10 +78,10 @@ const useStyles = makeStyles({
       }
     }
   },
-});
+}));
 
 function TransactionsList(props){
-  const classes = useStyles();
+  const classes = useStyles(useTheme());
 
   const renderList = () => props.data.map(group => (
     <li key={group.id}>

@@ -1,51 +1,51 @@
 import React from 'react'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
-import { createMuiTheme } from '@material-ui/core/styles'
+import { useTheme } from '@material-ui/core/styles'
 
-const theme = createMuiTheme();
-
-
-const useStyles = makeStyles({
-  root: {
-    margin: 0,
-    width: '100%',
-    height: theme.spacing(4),
-    backgroundColor: theme.palette.grey[200],
-    position: 'relative',
-    overflow: 'hidden',
-  },
-  rootOverlay: {
-    position: 'absolute',
-    zIndex: 2,
-    pointerEvents: 'none',
-    height: '100%',
-    width: '100%',
-    background: `linear-gradient(90deg, ${theme.palette.grey[200]}, transparent 30%, transparent 70%, ${theme.palette.grey[200]})`
-  },
-  column: {
-    position: 'absolute',
-    zIndex: 1,
-    height: '100%',
-    width: '33.33%',
-    textAlign: 'center',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    userSelect: 'none',
-    opacity: 0.5,
-    cursor: 'pointer',
-    '&:hover': {
-      opacity: 1,
+const useStyles = makeStyles(theme => {
+  const headerColor = theme.palette.grey[200];
+  return {
+    root: {
+      margin: 0,
+      width: '100%',
+      height: theme.spacing(4),
+      backgroundColor: headerColor,
+      position: 'relative',
+      overflow: 'hidden',
     },
-  },
-  month: {
-    color: theme.palette.primary.main,
+    rootOverlay: {
+      position: 'absolute',
+      zIndex: 2,
+      pointerEvents: 'none',
+      height: '100%',
+      width: '100%',
+      background: `linear-gradient(90deg, ${headerColor}, transparent 30%, transparent 70%, ${headerColor})`
+    },
+    column: {
+      position: 'absolute',
+      zIndex: 1,
+      height: '100%',
+      width: '33.33%',
+      textAlign: 'center',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      userSelect: 'none',
+      opacity: 0.5,
+      cursor: 'pointer',
+      '&:hover': {
+        opacity: 1,
+      },
+    },
+    month: {
+      color: theme.palette.primary.main,
+    }
   }
 });
 
 export default (props) => {
-  const classes = useStyles();
+  const classes = useStyles(useTheme());
   const offset = props.pos*0.33;
 
   const styles = {

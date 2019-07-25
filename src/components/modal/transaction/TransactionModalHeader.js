@@ -5,13 +5,10 @@ import InputBase from '@material-ui/core/InputBase'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import Icon from '@material-ui/core/Icon'
 import Typography from '@material-ui/core/Typography'
-
+import { useTheme } from '@material-ui/core/styles'
 import { makeStyles } from '@material-ui/styles'
-import { createMuiTheme } from '@material-ui/core/styles'
 
-const theme = createMuiTheme();
-
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   root: {
     backgroundColor: theme.palette.grey[100],
     display: 'flex',
@@ -39,7 +36,7 @@ const useStyles = makeStyles({
     border: `2px dotted ${theme.palette.text.secondary}`
   },
   amountWrapper: {
-    marginRight: theme.spacing(3)
+    margin: theme.spacing(0, 3)
   },
   amount: {
     fontSize: theme.typography.h5.fontSize,
@@ -47,10 +44,10 @@ const useStyles = makeStyles({
     textAlign: 'right',
     padding: 0,
   }
-});
+}));
 
 export default (props) => {
-  const classes = useStyles();
+  const classes = useStyles(useTheme());
 
   return (
     <div className={classes.root}>
@@ -79,7 +76,7 @@ export default (props) => {
             <InputAdornment
               position='end'
             >
-              <Typography color={props.validAmount() ? 'primary' : 'textSecondary'}>
+              <Typography color={props.validAmount() ? props.crudColor : 'textSecondary'}>
                 {props.currency}
               </Typography>
             </InputAdornment>

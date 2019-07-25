@@ -10,11 +10,9 @@ import CrudButtonCreateTransaction from '../../crud/CrudButtonCreateTransaction'
 import CrudButtonUpdateTransaction from '../../crud/CrudButtonUpdateTransaction'
 import CrudButtonDeleteTransaction from '../../crud/CrudButtonDeleteTransaction'
 import { makeStyles } from '@material-ui/styles'
-import { createMuiTheme } from '@material-ui/core/styles'
+import { withTheme } from '@material-ui/core/styles'
 
-const theme = createMuiTheme();
-
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   modal: {
     display: 'flex',
     alignItems: 'center',
@@ -28,8 +26,17 @@ const useStyles = makeStyles({
     padding: 0,
     display: 'flex',
     flexDirection: 'column',
+    borderTop: `${theme.spacing(1)}px solid repeating-linear-gradient(
+      -90deg,
+      ${theme.palette.primary.main},
+      ${theme.palette.primary.main} ${50*0.33}%,
+      ${theme.palette.secondary.main} ${50*0.33}%,
+      ${theme.palette.secondary.main} ${50*0.66}%,
+      ${theme.palette.tertiary.main} ${50*0.66}%,
+      ${theme.palette.tertiary.main} ${50}%
+    )`,
   }
-})
+}))
 
 // state handling
 function newState() {
@@ -44,8 +51,8 @@ function newState() {
 
 // Component
 function TransactionModal(props){
-  const smallDevice = useMediaQuery(theme.breakpoints.down('sm'));
-  const classes = useStyles();
+  const classes = useStyles(props.theme);
+  const smallDevice = useMediaQuery(props.theme.breakpoints.down('sm'));
   const styles = {
     container: {
       height: smallDevice ? '100%' : 'auto',
@@ -74,6 +81,8 @@ function TransactionModal(props){
     props.handleClose();
   }
 
+  const crudColor = getCrudColor();
+
   return (
     <Modal
       open={props.open}
@@ -88,6 +97,8 @@ function TransactionModal(props){
       <Slide direction='up' in={props.open} className={classes.container} mountOnEnter unmountOnExit>
         <Container maxWidth='sm' style={styles.container}>
           <TransactionModalHeader
+            crud={props.crud}
+            crudColor={crudColor}
             closeModal={closeModal}
             icon={state.icon}
             changeIcon={changeIcon}
@@ -98,6 +109,7 @@ function TransactionModal(props){
           />
           <TransactionModalContent
             crud={props.crud}
+            crudColor={crudColor}
             date={state.date}
             changeDate={changeDate}
             description={state.description}
@@ -124,6 +136,7 @@ function TransactionModal(props){
             createData={state}
             closeModal={closeModal}
             valid={valid}
+            crudColor={props.crudColor}
           />
         );
       case 'update':
@@ -133,6 +146,7 @@ function TransactionModal(props){
             updateData={state}
             closeModal={closeModal}
             valid={valid}
+            crudColor={props.crudColor}
           />
         );
       default:
@@ -156,10 +170,12 @@ function TransactionModal(props){
       date: new Date(t.date),
       icon: '',
     }
-    console.log({result})
     return result;
   }
-
+  // get color of modal depending on crud action
+  function getCrudColor(){
+    return props.crud === 'update' ? 'primary' : 'secondary'
+  }
 
 }
 
@@ -179,4 +195,4 @@ TransactionModal.defaultProps = {
   data: {},
 }
 
-export default TransactionModal;
+export default withTheme(TransactionModal);

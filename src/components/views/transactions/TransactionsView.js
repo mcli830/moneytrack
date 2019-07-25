@@ -4,11 +4,9 @@ import TransactionsHead from './TransactionsHead'
 import TransactionsList from './TransactionsList'
 import EmptyList from './EmptyList'
 import { makeStyles } from '@material-ui/styles'
-import { createMuiTheme } from '@material-ui/core/styles'
+import { useTheme } from '@material-ui/core/styles'
 
-const theme = createMuiTheme();
-
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   root: {
     backgroundColor: theme.palette.background.default,
     color: theme.palette.text.primary,
@@ -24,10 +22,10 @@ const useStyles = makeStyles({
   views: {
     flex: '1 1 auto',
   },
-});
+}));
 
-export default (props) => {
-  const classes = useStyles();
+function TransactionsView(props) {
+  const classes = useStyles(useTheme());
   const containerStyle = {
     height: '100%',
     maxHeight: '100%',
@@ -69,3 +67,5 @@ export default (props) => {
     </div>
   );
 }
+
+export default TransactionsView;
