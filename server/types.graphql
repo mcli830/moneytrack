@@ -22,8 +22,25 @@ type Transaction @model {
   amount: Int!
   description: String!
   memo: String
+  category: String
   creator: User! @relation(name: "UserTransactions")
   createdAt: DateTime!
+}
+
+enum Category {
+  Dining
+  Shopping
+  Transport
+  Home
+  Bills
+  Entertainment
+  Travel
+  Personal
+  Health
+  Education
+  Hobbies
+  Gifts
+  Other
 }
 
 enum Currency {
