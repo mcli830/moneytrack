@@ -1,11 +1,16 @@
 import React from 'react'
 import Typography from '@material-ui/core/Typography'
 import List from '@material-ui/core/List'
-import ButtonBase from '@material-ui/core/ButtonBase'
 import ListSubheader from '@material-ui/core/ListSubheader'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemText from '@material-ui/core/ListItemText'
+import ListItemAvatar from '@material-ui/core/ListItemAvatar'
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
+import Icon from '@material-ui/core/Icon'
+import ButtonBase from '@material-ui/core/ButtonBase'
 import EmptyList from './EmptyList'
 import { makeStyles } from '@material-ui/styles'
-import { useTheme } from '@material-ui/core/styles'
+import { withTheme } from '@material-ui/core/styles'
 
 const useStyles = makeStyles(theme => ({
   list: {
@@ -31,28 +36,36 @@ const useStyles = makeStyles(theme => ({
     paddingLeft: theme.spacing(3),
     paddingRight: theme.spacing(3),
   },
-  item: {
-    backgroundColor: theme.palette.background.paper,
-    margin: 0,
+  listItemWrapper: {
     width: '100%',
-    paddingLeft: theme.spacing(3),
-    paddingRight: theme.spacing(3),
-    borderBottom: `1px solid ${theme.palette.grey[100]}`,
-    borderRight: `1px solid ${theme.palette.grey[100]}`,
-    position: 'relative',
-    paddingTop: theme.spacing(2),
-    paddingBottom: theme.spacing(2),
+  },
+  listItem: {
+    width: '100%',
+    backgroundColor: theme.palette.background.paper,
+  },
+  listItemAvatar: {
+    marginLeft: theme.spacing(1),
+  },
+  listItemIconWrapper: {
+    borderRadius: '50%',
+    height: theme.spacing(5),
+    width: theme.spacing(5),
     display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
   },
-  itemRight: {
-    display: 'inline-block',
-    width: 'auto',
-    '& > *': {
-      display: 'inline-block',
-    }
+  listItemIcon: {
+    borderRadius: '50%',
+    color: '#fff',
+  },
+  listItemSecondary: {
+    right: theme.spacing(3),
+  },
+  iconEmpty: {
+    height: theme.typography.h4.fontSize,
+    width: theme.typography.h4.fontSize,
+    borderRadius: '50%',
+    border: `2px dotted ${theme.palette.grey[200]}`
   },
   currency: {
     color: theme.palette.text.disabled,
@@ -81,7 +94,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function TransactionsList(props){
-  const classes = useStyles(useTheme());
+  const classes = useStyles(props.theme);
 
   const renderList = () => props.data.map(group => (
     <li key={group.id}>
@@ -93,16 +106,24 @@ function TransactionsList(props){
         {group.transactions.map((t,i) => (
           <li key={i}>
             <ButtonBase
-              className={classes.item}
               onClick={()=>props.updateTransactionModal(t.id)}
+              className={classes.listItemWrapper}
             >
-              <Typography>
-                {t.description}
-              </Typography>
-              <div className={classes.itemRight}>
-                <Typography>{t.symbol}{t.amount}</Typography>
-                <Typography className={classes.currency}>{t.currency}</Typography>
-              </div>
+              <ListItem alignItems='center' classes={{container: classes.listItem}}>
+                <ListItemAvatar className={classes.listItemAvatar}>
+                  {t.category
+                    ? <div style={{backgroundColor: t.category.mui.color}} className={classes.listItemIconWrapper}>
+                        <Icon className={classes.listItemIcon}>{t.category.mui.icon}</Icon>
+                      </div>
+                    : <div className={classes.iconEmpty} />
+                  }
+                </ListItemAvatar>
+                <ListItemText primary={t.description} secondary={t.memo} />
+                <ListItemSecondaryAction className={classes.listItemSecondary}>
+                  <Typography component='span'>{t.symbol}{t.amount}</Typography>
+                  <Typography component='span' className={classes.currency}>{t.currency}</Typography>
+                </ListItemSecondaryAction>
+              </ListItem>
             </ButtonBase>
           </li>
         ))}
@@ -112,8 +133,7 @@ function TransactionsList(props){
 
   return (
     <List className={classes.list}>
-      {
-        props.data.length < 1
+      {props.data.length < 1
         ? <EmptyList />
         : renderList()
       }
@@ -121,4 +141,4 @@ function TransactionsList(props){
   );
 }
 
-export default TransactionsList;
+export default withTheme(TransactionsList);

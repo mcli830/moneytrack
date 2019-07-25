@@ -6,7 +6,6 @@ import { withApollo, Mutation } from 'react-apollo'
 import { ADD_TRANSACTION_MUTATION } from '../../graphql/mutations'
 import { GET_USER_DATA, LOGGED_IN_USER } from '../../graphql/queries'
 
-
 function CrudButtonCreateTransaction(props){
   const { valid, createData } = props;
   const styles = {
@@ -48,6 +47,7 @@ function CrudButtonCreateTransaction(props){
           onClick={()=>addTransaction({
             variables: {
               creatorId: props.creatorId,
+              category: createData.category,
               date: createData.date,
               description: createData.description,
               amount: parseInt(createData.amount),

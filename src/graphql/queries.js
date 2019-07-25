@@ -16,6 +16,7 @@ export const GET_USER_DATA = gql`
       currency
       transactions {
         id
+        category
         description
         date
         amount

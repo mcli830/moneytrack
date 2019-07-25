@@ -52,6 +52,7 @@ function CrudButtonUpdateTransaction(props){
           onClick={()=>updateTransaction({
             variables: {
               id: transactionId,
+              category: updateData.category,
               date: updateData.date,
               description: updateData.description,
               amount: parseInt(updateData.amount),
@@ -68,7 +69,7 @@ function CrudButtonUpdateTransaction(props){
                 ? 'Add an amount'
                 : !valid.description()
                   ? 'Add a description'
-                  : 'Save transaction'
+                  : 'Save changes'
           }
         </Button>
       )}

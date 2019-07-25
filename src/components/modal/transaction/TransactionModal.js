@@ -62,9 +62,12 @@ function TransactionModal(props){
     }
   }
 
-  // state
+  // data state
   const [state, setState] = React.useState(newState());
-  // actions
+  // ui state
+  const [popover, setPopover] = React.useState(null);
+  const popoverAnchorRef = React.useRef();
+  // data actions
   const changeCategory = category => setState({...state, category});
   const changeDate = date => setState({...state, date});
   const changeAmount = e => setState({...state, amount: e.target.value });
@@ -88,7 +91,13 @@ function TransactionModal(props){
       open={props.open}
       onClose={closeModal}
       onRendered={()=> {
-        if (props.crud === 'update') setTimeout(setState(getTransactionData()))
+        if (props.crud === 'update') {
+          setTimeout(()=>setState(getTransactionData()));
+        } else {
+          setTimeout(()=> {
+            if (!valid.category()) setPopover(popoverAnchorRef.current);
+          }, 300);
+        }
       }}
       className={classes.modal}
       disableAutoFocus
@@ -111,6 +120,11 @@ function TransactionModal(props){
               valid: valid.amount,
             }}
             currency={props.data.user.currency}
+            popover={{
+              anchorRef: popoverAnchorRef,
+              anchorEl: popover,
+              setAnchorEl: setPopover,
+            }}
           />
           <TransactionModalContent
             crud={props.crud}

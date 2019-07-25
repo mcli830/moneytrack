@@ -25,96 +25,112 @@ export const CURRENCY = {
 
 export const CATEGORY = {
   FoodAndDrink: {
+    name: 'FoodAndDrink',
     mui: {
       icon: 'restaurant',
       color: orange[500],
     },
   },
   Shopping: {
+    name: 'Shopping',
     mui: {
       icon: 'shopping_basket',
       color: pink[400],
     },
   },
   Transport: {
+    name: 'Transport',
     mui: {
       icon: 'train',
       color: amber[600],
     },
   },
   Home: {
+    name: 'Home',
     mui: {
       icon: 'home',
       color: brown[400],
     },
   },
   BillsAndFees: {
+    name: 'BillsAndFees',
     mui: {
       icon: 'receipt',
       color: green[600],
     },
   },
   Maintenance: {
+    name: 'Maintenance',
     mui: {
       icon: 'build',
       color: blueGrey[500],
     },
   },
   Entertainment: {
+    name: 'Entertainment',
     mui: {
       icon: 'videogame_asset',
       color: deepPurple[500],
     },
   },
   Travel: {
+    name: 'Travel',
     mui: {
       icon: 'airplanemode_active',
       color: lightBlue[500],
     },
   },
   FamilyAndPersonal: {
+    name: 'FamilyAndPersonal',
     mui: {
       icon: 'person',
-      color: blue[500],
+      color: blue[600],
     },
   },
   Healthcare: {
+    name: 'Healthcare',
     mui: {
       icon: 'local_hospital',
       color: red[600],
     },
   },
   Education: {
+    name: 'Education',
     mui: {
       icon: 'school',
       color: cyan[500],
     },
   },
   Hobbies: {
+    name: 'Hobbies',
     mui: {
       icon: 'palette',
       color: teal[500],
     },
   },
   Gifts: {
+    name: 'Gifts',
     mui: {
       icon: 'cake',
       color: deepOrange[500],
     },
   },
   Work: {
+    name: 'Work',
     mui: {
       icon: 'work',
       color: indigo[500],
     },
   },
   Investment: {
+    name: 'Investment',
     mui: {
       icon: 'monetization_on',
       color: lightGreen[600],
     },
   },
   Other: {
+    name: 'Other',
     mui: {
       icon: 'beach_access',
       color: grey[700],

@@ -30,15 +30,37 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2)
   },
+  modalControls: {
+    textAlign: 'center',
+    position: 'relative',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    minHeight: theme.spacing(4),
+  },
+  cancelButton: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+  },
+  modalHeader: {
+    color: '#fff',
+    fontSize: theme.spacing(2),
+    fontWeight: 'bold',
+  },
   iconWrapper: {
     marginLeft: theme.spacing(3),
     padding: 0,
+    transformOrigin: 'left center',
+    transform: 'scale(1.5)',
   },
   iconEmpty: {
-    height: theme.typography.h4.fontSize,
-    width: theme.typography.h4.fontSize,
+    height: theme.spacing(3),
+    width: theme.spacing(3),
     borderRadius: '50%',
-    border: `2px dotted ${theme.palette.text.secondary}`
+    border: `2px dotted ${theme.palette.text.secondary}`,
+    boxShadow: `inset 0 0 4px ${theme.palette.grey[500]}`,
+    backgroundColor: theme.palette.grey[300],
   },
   popoverPaper: {
     backgroundColor: theme.palette.background.default,
@@ -100,25 +122,18 @@ function TransactionModalHeader(props) {
       color: props.category.value ? props.theme.palette.background.default : props.theme.palette.text.secondary,
     }
   }
-  // popover state
-  const [anchorEl, setAnchorEl] = React.useState(null);
+
   // handlers
   function openCategoryMenu(e){
-    setAnchorEl(e.currentTarget);
+    props.popover.setAnchorEl(e.currentTarget);
   }
   function closeCategoryMenu(){
-    setAnchorEl(null);
+    props.popover.setAnchorEl(null);
   }
 
   return (
     <div className={classes.root} style={styles.root} >
-      <div id='modal-controls'>
-        <Button onClick={props.closeModal} disableRipple>
-          <Typography variant='caption' style={styles.cancel}>
-            Cancel
-          </Typography>
-        </Button>
-      </div>
+      {renderModalControls()}
       <div className={classes.data}>
         {renderIconButton()}
         {renderAmountInput()}
@@ -127,13 +142,27 @@ function TransactionModalHeader(props) {
   );
 
   // internal helpers
+  function renderModalControls(){
+    return (
+      <div className={classes.modalControls}>
+        <Button onClick={props.closeModal} disableRipple className={classes.cancelButton}>
+          <Typography variant='caption' style={styles.cancel}>
+            Cancel
+          </Typography>
+        </Button>
+        <Typography variant='h3' className={classes.modalHeader}>
+          {displayText(props.category.value)}
+        </Typography>
+      </div>
+    );
+  }
   function renderIconButton(){
     return (
       <div className={classes.iconWrapper}>
-        <ButtonBase onClick={openCategoryMenu} disableRipple>
+        <ButtonBase onClick={openCategoryMenu} ref={props.popover.anchorRef}>
           {
             props.category.value
-            ? <Icon style={styles.iconButton}>
+            ? <Icon size='large' style={styles.iconButton}>
                 {CATEGORY[props.category.value].mui.icon}
               </Icon>
             : <div className={classes.iconEmpty} />
@@ -148,8 +177,8 @@ function TransactionModalHeader(props) {
     return (
       <Popover
         id={'category-menu'}
-        open={Boolean(anchorEl)}
-        anchorEl={anchorEl}
+        open={Boolean(props.popover.anchorEl)}
+        anchorEl={props.popover.anchorEl}
         onClose={closeCategoryMenu}
         getContentAnchorEl={null}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left'}}
@@ -185,10 +214,8 @@ function TransactionModalHeader(props) {
               <Grid item xs={3} key={i} className={classes.gridItem}>
                 <Button
                   onClick={clickHandler}
-                  classes={{
-                    label: classes.categoryMenuButton,
-                  }}
-                  >
+                  classes={{label: classes.categoryMenuButton}}
+                >
                   <Icon size='large' style={{color: mui.color}}>{mui.icon}</Icon>
                   <Typography
                     variant='caption'

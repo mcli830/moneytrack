@@ -3,6 +3,7 @@ import gql from 'graphql-tag'
 export const ADD_TRANSACTION_MUTATION = gql`
   mutation AddTransaction(
     $creatorId: ID!
+    $category: Category
     $description: String!
     $amount: Int!
     $date: DateTime!
@@ -10,6 +11,7 @@ export const ADD_TRANSACTION_MUTATION = gql`
   ) {
     createTransaction(
       creatorId: $creatorId
+      category: $category
       description: $description
       amount: $amount
       date: $date
@@ -17,6 +19,7 @@ export const ADD_TRANSACTION_MUTATION = gql`
     ) {
       id
       date
+      category
       amount
       description
       memo
@@ -30,6 +33,7 @@ export const ADD_TRANSACTION_MUTATION = gql`
 export const UPDATE_TRANSACTION_MUTATION = gql`
   mutation UpdateTransaction(
     $id: ID!
+    $category: Category
     $description: String!
     $amount: Int!
     $date: DateTime!
@@ -37,6 +41,7 @@ export const UPDATE_TRANSACTION_MUTATION = gql`
   ) {
     updateTransaction(
       id: $id
+      category: $category
       description: $description
       amount: $amount
       date: $date
@@ -44,6 +49,7 @@ export const UPDATE_TRANSACTION_MUTATION = gql`
     ) {
       id
       date
+      category
       amount
       description
       memo
@@ -62,6 +68,7 @@ export const DELETE_TRANSACTION_MUTATION = gql`
       id: $id
     ) {
       id
+      category
       description
       date
     }
