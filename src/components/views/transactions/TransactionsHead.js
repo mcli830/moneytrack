@@ -87,7 +87,10 @@ export default (props) => {
         key={key}
         className={classes.column}
         style={Object.assign({}, styles[position], styles.transition)}
-        onClick={typeof nextView === 'number' ? ()=>props.setView(nextView) : null}
+        onClick={typeof nextView === 'number' ? ()=>{
+          props.setPage(nextView);
+          props.setView(nextView);
+        } : null}
       >
         <Typography variant='button' className={classes.month}>
           {name}

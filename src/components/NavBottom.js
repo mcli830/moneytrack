@@ -3,7 +3,7 @@ import { Link, withRouter } from 'react-router-dom'
 import BottomNavigation from '@material-ui/core/BottomNavigation'
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
 import ListIcon from '@material-ui/icons/List'
-import FriendsIcon from '@material-ui/icons/People'
+import FriendsIcon from '@material-ui/icons/SupervisedUserCircle'
 import TimelineIcon from '@material-ui/icons/Timeline'
 
 function NavBottom(props) {

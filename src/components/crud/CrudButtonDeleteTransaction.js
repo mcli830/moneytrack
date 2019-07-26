@@ -1,5 +1,6 @@
 import React from 'react'
-import Button from '@material-ui/core/Button'
+import IconButton from '@material-ui/core/IconButton'
+import DeleteIcon from '@material-ui/icons/Delete'
 import Loader from '../system/Loader'
 import { withApollo, Mutation } from 'react-apollo'
 import { DELETE_TRANSACTION_MUTATION } from '../../graphql/mutations'
@@ -8,18 +9,10 @@ import { useTheme } from '@material-ui/core/styles'
 import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    width: '100%',
-    padding: theme.spacing(3, 0),
-    textAlign: 'center',
-  },
   button: {
-    color: theme.palette.error.light,
-    borderColor: theme.palette.error.light,
-    '&:hover': {
-      color: theme.palette.error.contrastText,
-      backgroundColor: theme.palette.error.light,
-    }
+    padding: theme.spacing(1),
+    color: theme.palette.grey[50],
+    opacity: 0.9,
   }
 }))
 
@@ -53,23 +46,21 @@ function CrudButtonDeleteTransaction(props){
       }}
     >
       {(deleteTransaction, {data, error, loading})=>(
-        <div className={classes.root}>
-          <Button
-            id='gql-delete-transaction'
-            variant='outlined'
-            size='medium'
-            className={classes.button}
-            onClick={()=>deleteTransaction({
-              variables: { id: transactionId }
-            })}
-          >
-            {error ? console.error(error) : null}
-            {loading
-             ? <Loader size={26} thickness={3} color='inherit' />
-             : 'Delete'
-            }
-          </Button>
-        </div>
+        <IconButton
+          id='gql-delete-transaction'
+          variant='outlined'
+          size='small'
+          className={classes.button}
+          onClick={()=>deleteTransaction({
+            variables: { id: transactionId }
+          })}
+        >
+          {error ? console.error(error) : null}
+          {loading
+            ? <Loader size={26} thickness={3} color='inherit' />
+            : <DeleteIcon />
+          }
+        </IconButton>
       )}
     </Mutation>
   );

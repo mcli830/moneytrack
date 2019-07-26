@@ -109,15 +109,15 @@ function SwipeableViews(props) {
             case view:
               return renderChild({
                 ref: centerRef,
-                style: Object.assign({}, styles.view, styles.center)
+                style: Object.assign({}, styles.view, styles.center),
               });
             case view-1:
               return renderChild({
-                style: Object.assign({}, styles.view, styles.left)
+                style: Object.assign({}, styles.view, styles.left),
               });
             case view+1:
               return renderChild({
-                style: Object.assign({}, styles.view, styles.right)
+                style: Object.assign({}, styles.view, styles.right),
               })
             default:
               return null;

@@ -35,32 +35,43 @@ const useStyles = makeStyles(theme => ({
     position: 'relative',
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'flex-end',
-    minHeight: theme.spacing(4),
+    minHeight: theme.spacing(5),
+    // '& > *': {
+    //   flex: '1 1 auto',
+    // },
   },
-  cancelButton: {
+  controlButtonLeft: {
     position: 'absolute',
-    left: 0,
-    top: 0,
+    top: theme.spacing(0.5),
+    left: theme.spacing(0.5),
+  },
+  controlButtonRight: {
+    position: 'absolute',
+    top: theme.spacing(0.5),
+    right: theme.spacing(0.5),
   },
   modalHeader: {
+    alignSelf: 'flex-end',
     color: '#fff',
-    fontSize: theme.spacing(2),
+    fontSize: theme.spacing(2.2),
     fontWeight: 'bold',
+    textAlign: 'center',
   },
   iconWrapper: {
     marginLeft: theme.spacing(3),
-    padding: 0,
-    transformOrigin: 'left center',
+    padding: theme.spacing(0.5),
+    borderRadius: '50%',
+    transformOrigin: '20% center',
+    transition: `${theme.transitions.duration.shorter}ms ${theme.transitions.easing.easeOut}`,
     transform: 'scale(1.5)',
+    '&:hover': {
+      boxShadow: theme.shadows[5],
+    },
   },
   iconEmpty: {
     height: theme.spacing(3),
     width: theme.spacing(3),
     borderRadius: '50%',
-    border: `2px dotted ${theme.palette.text.secondary}`,
-    boxShadow: `inset 0 0 4px ${theme.palette.grey[500]}`,
-    backgroundColor: theme.palette.grey[300],
   },
   popoverPaper: {
     backgroundColor: theme.palette.background.default,
@@ -145,21 +156,31 @@ function TransactionModalHeader(props) {
   function renderModalControls(){
     return (
       <div className={classes.modalControls}>
-        <Button onClick={props.closeModal} disableRipple className={classes.cancelButton}>
-          <Typography variant='caption' style={styles.cancel}>
-            Cancel
-          </Typography>
-        </Button>
+        <div className={classes.controlButtonLeft}>
+          <Button onClick={props.closeModal} disableRipple fullWidth={false}>
+            <Typography variant='caption' style={styles.cancel}>
+              Cancel
+            </Typography>
+          </Button>
+        </div>
         <Typography variant='h3' className={classes.modalHeader}>
           {displayText(props.category.value)}
         </Typography>
+        <div className={classes.controlButtonRight}>
+          {props.crud === 'update' && props.deleteButton}
+        </div>
       </div>
     );
   }
   function renderIconButton(){
     return (
-      <div className={classes.iconWrapper}>
-        <ButtonBase onClick={openCategoryMenu} ref={props.popover.anchorRef}>
+      <div>
+        <ButtonBase
+          onClick={openCategoryMenu}
+          ref={props.popover.anchorRef}
+          className={classes.iconWrapper}
+          style={{border: props.category.value ? '1px solid transparent' : `1px dotted ${props.theme.palette.grey[600]}`}}
+        >
           {
             props.category.value
             ? <Icon size='large' style={styles.iconButton}>

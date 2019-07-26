@@ -27,15 +27,6 @@ const useStyles = makeStyles(theme => ({
     padding: 0,
     display: 'flex',
     flexDirection: 'column',
-    borderTop: `${theme.spacing(1)}px solid repeating-linear-gradient(
-      -90deg,
-      ${theme.palette.primary.main},
-      ${theme.palette.primary.main} ${50*0.33}%,
-      ${theme.palette.secondary.main} ${50*0.33}%,
-      ${theme.palette.secondary.main} ${50*0.66}%,
-      ${theme.palette.tertiary.main} ${50*0.66}%,
-      ${theme.palette.tertiary.main} ${50}%
-    )`,
   }
 }))
 
@@ -125,6 +116,7 @@ function TransactionModal(props){
               anchorEl: popover,
               setAnchorEl: setPopover,
             }}
+            deleteButton={renderDeleteButton()}
           />
           <TransactionModalContent
             crud={props.crud}
@@ -143,7 +135,6 @@ function TransactionModal(props){
               handler: changeMemo,
               valid: valid.memo,
             }}
-            deleteButton={renderDeleteButton()}
           />
           {renderActionButton()}
         </Container>

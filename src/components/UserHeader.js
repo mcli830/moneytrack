@@ -14,7 +14,7 @@ import MenuIcon from '@material-ui/icons/Menu'
 import AddIcon from '@material-ui/icons/Add'
 import FaceIcon from '@material-ui/icons/Face'
 import SettingsIcon from '@material-ui/icons/Settings'
-import AccountIcon from '@material-ui/icons/AccountBox'
+import AccountIcon from '@material-ui/icons/AccountCircle'
 import PowerIcon from '@material-ui/icons/PowerSettingsNew'
 
 const useStyles = makeStyles(theme => ({

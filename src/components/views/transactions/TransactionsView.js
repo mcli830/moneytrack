@@ -39,6 +39,7 @@ function TransactionsView(props) {
         <TransactionsHead
           {...addProps}
           months={props.data.map(d => d.name)}
+          setPage={props.setPage}
         />
       )}
       onSwiped={(view)=>props.setPage(view)}
@@ -47,7 +48,10 @@ function TransactionsView(props) {
         return (addProps) => {
           return (
             <div {...addProps} key={monthSet.id}>
-              <TransactionsList data={monthSet.groups} updateTransactionModal={props.updateTransactionModal} />
+              <TransactionsList
+                data={monthSet.groups}
+                updateTransactionModal={props.updateTransactionModal}
+              />
             </div>
           );
         }
