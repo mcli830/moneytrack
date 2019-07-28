@@ -44,35 +44,22 @@ function capitalize(str){
 
 function UserHeader(props) {
   const classes = useStyles(useTheme());
-  // menu anchor state
-  // const [anchorEl, setAnchorEl] = React.useState(null);
-  // menu handlers
-  // function handleOpenMenu(e) {
-  //   setAnchorEl(e.currentTarget);
-  // }
-  // function handleCloseMenu(){
-  //   setAnchorEl(null);
-  // }
   // navigation handler
   function handleBackButton(){
     const exitTime = 100;
-    if (props.history.length > 1){
+    const navFunc = props.history.length > 1 ? props.history.goBack : ()=>props.history.replace('/transactions');
+    props.setAccountSlide({
+      in: false,
+      timeout: exitTime,
+    });
+    return setTimeout(()=>{
+      navFunc();
       props.setAccountSlide({
-        in: false,
-        timeout: exitTime,
+        in: true,
+        timeout: 300,
       });
-      return setTimeout(()=>{
-        props.history.goBack();
-        props.setAccountSlide({
-          in: true,
-          timeout: 300,
-        });
-      }, exitTime)
-    } else {
-      props.history.replace('/transactions')
-    }
+    }, exitTime)
   }
-
   // render
   return props.history.location.pathname !== '/' && (
     <div className={classes.root}>
@@ -99,19 +86,6 @@ function UserHeader(props) {
       </Container>
     </div>
   );
-
-  // internal render helper
-  // function renderUserMenu(){
-  //   return (
-  //     <UserMenu
-  //       data={props.data}
-  //       anchorEl={anchorEl}
-  //       handleOpen={handleOpenMenu}
-  //       handleClose={handleCloseMenu}
-  //       logout={props.logout}
-  //     />
-  //   );
-  // }
 }
 
 export default withRouter(UserHeader);
