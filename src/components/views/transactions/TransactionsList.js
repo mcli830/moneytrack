@@ -33,8 +33,7 @@ const useStyles = makeStyles(theme => ({
   subheader: {
     backgroundColor: theme.palette.background.default,
     fontSize: theme.typography.subtitle2.fontSize,
-    paddingLeft: theme.spacing(3),
-    paddingRight: theme.spacing(3),
+    padding: theme.spacing(0.25,3,0,3),
   },
   listItemWrapper: {
     width: '100%',

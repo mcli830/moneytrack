@@ -94,7 +94,7 @@ function TransactionModal(props){
       disableAutoFocus
       hideBackdrop={smallDevice}
     >
-      <Slide direction='left' in={props.open} className={classes.container} mountOnEnter unmountOnExit>
+      <Slide direction='up' in={props.open} className={classes.container} mountOnEnter unmountOnExit>
         <Container maxWidth='sm' style={styles.container}>
           <TransactionModalHeader
             crud={props.crud}

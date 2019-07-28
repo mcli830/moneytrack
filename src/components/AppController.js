@@ -35,7 +35,6 @@ function AppController(props) {
     return (
       <DataProvider>
         <UserHeader
-          logout={props.logout}
           openTransactionModal={()=>props.handlers.openTransactionModal('create')}
         />
       </DataProvider>
@@ -58,7 +57,7 @@ function AppController(props) {
           <Route path='/timeline' component={ComingSoon} />
           <Route path='/account' render={routeProps=>(
             <DataProvider>
-              <Account />
+              <Account logout={props.logout} />
             </DataProvider>
           )} />
           <Route path='/' render={()=><Redirect to='/transactions' />} />

@@ -11,6 +11,7 @@ import Typography from '@material-ui/core/Typography'
 import { withTheme } from '@material-ui/core/styles'
 import { makeStyles } from '@material-ui/styles'
 import { CATEGORY } from '../../../data/resolvers'
+import EmptyIcon from '../../system/EmptyIcon'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -67,11 +68,6 @@ const useStyles = makeStyles(theme => ({
     '&:hover': {
       boxShadow: theme.shadows[5],
     },
-  },
-  iconEmpty: {
-    height: theme.spacing(3),
-    width: theme.spacing(3),
-    borderRadius: '50%',
   },
   popoverPaper: {
     backgroundColor: theme.palette.background.default,
@@ -186,7 +182,7 @@ function TransactionModalHeader(props) {
             ? <Icon size='large' style={styles.iconButton}>
                 {CATEGORY[props.category.value].mui.icon}
               </Icon>
-            : <div className={classes.iconEmpty} />
+            : <EmptyIcon />
           }
         </ButtonBase>
         {renderCategoryMenuPopover()}

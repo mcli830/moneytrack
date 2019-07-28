@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography'
 import SettingsIcon from '@material-ui/icons/Settings'
 import AddIcon from '@material-ui/icons/Add'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
-import LogoutIcon from '@material-ui/icons/VpnKey'
+import EmptyIcon from './system/EmptyIcon'
 // import UserMenu from './UserMenu'
 
 const useStyles = makeStyles(theme => ({
@@ -85,11 +85,7 @@ function UserHeader(props) {
           <IconButton onClick={props.openTransactionModal} className={classes.button}>
             <AddIcon />
           </IconButton>
-        ) : (
-          <IconButton onClick={props.logout} className={classes.button}>
-            <LogoutIcon />
-          </IconButton>
-        )}
+        ) : <IconButton disabled><EmptyIcon /></IconButton>}
       </Container>
     </div>
   );

@@ -1,12 +1,13 @@
 import React from 'react'
 import AccountView from './AccountView'
 
-export default (props) => {
+function Account(props) {
 
   return (
     <AccountView
       user={props.data.user}
       stats={analyzeData(props.data.user.transactions)}
+      logout={props.logout}
     />
   )
 }
@@ -32,3 +33,5 @@ function analyzeData(data){
 
   return { total, monthly, weekly };
 }
+
+export default Account;
