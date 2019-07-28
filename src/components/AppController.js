@@ -21,6 +21,13 @@ function AppController(props) {
       padding: 0
     }
   }
+
+  // state
+  const [accountSlide, setAccountSlide] = React.useState({
+    in: true,
+    timeout: 300,
+  });
+
   return (
     <Router>
       {renderHeader()}
@@ -36,6 +43,7 @@ function AppController(props) {
       <DataProvider>
         <UserHeader
           openTransactionModal={()=>props.handlers.openTransactionModal('create')}
+          setAccountSlide={setAccountSlide}
         />
       </DataProvider>
     );
@@ -57,7 +65,7 @@ function AppController(props) {
           <Route path='/timeline' component={ComingSoon} />
           <Route path='/account' render={routeProps=>(
             <DataProvider>
-              <Account logout={props.logout} />
+              <Account slide={accountSlide} logout={props.logout} />
             </DataProvider>
           )} />
           <Route path='/' render={()=><Redirect to='/transactions' />} />

@@ -55,9 +55,19 @@ function UserHeader(props) {
   // }
   // navigation handler
   function handleBackButton(){
-    console.log(props.history.length)
+    const exitTime = 100;
     if (props.history.length > 1){
-      return props.history.goBack();
+      props.setAccountSlide({
+        in: false,
+        timeout: exitTime,
+      });
+      return setTimeout(()=>{
+        props.history.goBack();
+        props.setAccountSlide({
+          in: true,
+          timeout: 300,
+        });
+      }, exitTime)
     } else {
       props.history.replace('/transactions')
     }

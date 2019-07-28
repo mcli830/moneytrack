@@ -8,6 +8,7 @@ function Account(props) {
       user={props.data.user}
       stats={analyzeData(props.data.user.transactions)}
       logout={props.logout}
+      slide={props.slide}
     />
   )
 }

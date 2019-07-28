@@ -59,7 +59,7 @@ function AccountView(props) {
   const classes = useStyles(useTheme());
 
   return (
-    <Slide in direction='right' mountOnEnter unmountOnExit>
+    <Slide in={props.slide.in} timeout={props.slide.timeout} direction='right' mountOnEnter unmountOnExit>
       <Container maxWidth='sm' className={classes.root}>
         <List className={classes.list}>
           <Header text='Statistics' />
