@@ -34,6 +34,14 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.grey[200],
     color: theme.palette.text.secondary,
   },
+  listIconCurrency: {
+    fontSize: '1.5rem',
+    height: theme.spacing(3),
+    width: theme.spacing(3),
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   deleteButton: {
     marginTop: theme.spacing(2),
     color: theme.palette.error.light,
