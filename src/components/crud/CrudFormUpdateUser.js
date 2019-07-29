@@ -13,10 +13,11 @@ import InputBase from '@material-ui/core/InputBase'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import EmptyIcon from '../system/EmptyIcon'
-import { Mutation } from 'react-apollo'
+import { withApollo, Mutation } from 'react-apollo'
 import { useTheme } from '@material-ui/core/styles'
 import { makeStyles } from '@material-ui/styles'
 import { UPDATE_USER_MUTATION } from '../../graphql/mutations'
+import { GET_USER_DATA } from '../../graphql/queries'
 
 const useStyles = makeStyles(theme => ({
   CrudFormUpdateUser_root: {
@@ -25,16 +26,18 @@ const useStyles = makeStyles(theme => ({
     flexDirection: 'row',
     alignItems: 'center',
     padding: theme.spacing(0,3),
-    minHeight: theme.spacing(8),
+    minHeight: theme.spacing(7),
+    maxHeight: theme.spacing(7),
   },
   icon: {
     color: theme.palette.grey[400],
   },
-  actionicon: {
+  actionIcon: {
     color: theme.palette.grey[500]
   },
   saveIcon: {
     color: theme.palette.primary.main,
+    marginRight: theme.spacing(3),
   },
   form: {
     flex: '1 1 auto',
@@ -44,22 +47,12 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
   },
   formInput: {
-    width: '100%',
     color: theme.palette.text.primary,
   },
   loading: {
     pointerEvents: 'none',
-    opacity: 0.8,
+    userSelect: 'none'
   },
-  disabled: {
-    pointerEvents: 'none',
-    userSelect: 'none',
-  },
-  invis: {
-    opacity: 0,
-    pointerEvents: 'none',
-    userSelect: 'none',
-  }
 }))
 
 function CrudFormUpdateUser(props){
@@ -75,25 +68,14 @@ function CrudFormUpdateUser(props){
   }
   function editModeOff(){
     setEditing(false);
-    setFormValue(props.value);
   }
   function changeFormValue(e){
     setFormValue(e.target.value);
   }
 
-  const textInput = (
-    <InputBase
-      value={formValue}
-      onChange={changeFormValue}
-      disabled={!editing}
-      ref={inputRef}
-    />
-  )
-
   React.useEffect(() => {
-    console.log(inputRef)
     if (editing) {
-      inputRef.current.focus();
+      inputRef.current.children[0].focus();
     }
   }, [editing])
 
@@ -101,17 +83,26 @@ function CrudFormUpdateUser(props){
     <Mutation
       mutation={UPDATE_USER_MUTATION}
       update={(cache, { data })=>{
-        console.log(data);
+        cache.writeQuery({
+          query: GET_USER_DATA,
+          data: {
+            User: {
+              ...props.user,
+              ...data.updateUser.user,
+            }
+          }
+        });
+        editModeOff();
       }}
     >
       {(updateUser, {data, error, loading})=>{
-        const rootClassName = `${classes.CrudFormUpdateUser_root}${props.className ? ' '+props.className : ''}${loading ? ' '+classes.loading : ''}}`;
-        const handleSubmit = () => new Promise(resolve => resolve(
+        const rootClassName = `${classes.CrudFormUpdateUser_root}${props.className ? ' '+props.className : ''}`;
+        const handleSubmit = () => {
           updateUser({variables: {
             id: props.user.id,
             [props.name]: formValue,
-          }})
-        )).then(editModeOff);
+          }});
+        };
 
         return (
           <React.Fragment>
@@ -121,7 +112,6 @@ function CrudFormUpdateUser(props){
                 <form className={classes.form} onSubmit={(e)=>{
                   e.preventDefault();
                   if (props.value === formValue) return false;
-                  console.log('sumbitted form for '+props.name);
                   handleSubmit();
                 }}>
                   <InputBase
@@ -133,13 +123,17 @@ function CrudFormUpdateUser(props){
                       root: classes.inputBase,
                       input: classes.formInput,
                     }}
-                    endAdornment={(
+                    endAdornment={editing ? (
                       <InputAdornment position='end'>
-                        <IconButton onClick={handleSubmit} disabled={!editing || props.value === formValue} className={classes.saveIcon}>
-                          {editing ? (loading ? <CircularProgress size={24} /> : <SaveIcon />) : <EmptyIcon />}
+                        <IconButton
+                          onClick={handleSubmit}
+                          disabled={loading || !editing || props.value === formValue}
+                          className={classes.saveIcon}
+                        >
+                          {loading ? <CircularProgress size={24} /> : <SaveIcon />}
                         </IconButton>
                       </InputAdornment>
-                    )}
+                    ) : null}
                   />
                 </form>
               )} />
@@ -157,4 +151,4 @@ function CrudFormUpdateUser(props){
   );
 }
 
-export default CrudFormUpdateUser;
+export default withApollo(CrudFormUpdateUser);
