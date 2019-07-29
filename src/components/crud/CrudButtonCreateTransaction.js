@@ -50,7 +50,7 @@ function CrudButtonCreateTransaction(props){
               category: createData.category,
               date: createData.date,
               description: createData.description,
-              amount: parseInt(createData.amount),
+              amount: createData.amount,
               memo: createData.memo,
             }
           })}

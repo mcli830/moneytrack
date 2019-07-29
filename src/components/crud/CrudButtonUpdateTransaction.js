@@ -55,7 +55,7 @@ function CrudButtonUpdateTransaction(props){
               category: updateData.category,
               date: updateData.date,
               description: updateData.description,
-              amount: parseInt(updateData.amount),
+              amount: updateData.amount,
               memo: updateData.memo,
             }
           })}

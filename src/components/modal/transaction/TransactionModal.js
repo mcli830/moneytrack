@@ -151,12 +151,16 @@ function TransactionModal(props){
 
   // internal helpers
   function renderActionButton(){
+    const modalData = {
+      ...state,
+      amount: validateAmount(state.amount),
+    }
     switch(props.crud){
       case 'create':
         return (
           <CrudButtonCreateTransaction
             creatorId={props.data.user.id}
-            createData={state}
+            createData={modalData}
             closeModal={closeModal}
             valid={valid}
             crudColor={getCrudColor()}
@@ -166,7 +170,7 @@ function TransactionModal(props){
         return (
           <CrudButtonUpdateTransaction
             transactionId={props.currentId}
-            updateData={state}
+            updateData={modalData}
             closeModal={closeModal}
             valid={valid}
             crudColor={getCrudColor()}
@@ -200,7 +204,14 @@ function TransactionModal(props){
     return props.crud === 'update' ? 'primary' : 'secondary'
   }
 
+  // validate amount from string to number
+  function validateAmount(amt){
+    var v = typeof amt === 'number' ? amt.toString() : amt;
+    return parseInt(v*Math.pow(10,CURRENCY[props.data.user.currency].decimal), 10);
+  }
+
 }
+
 
 TransactionModal.propTypes = {
   open: PropTypes.bool,
