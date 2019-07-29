@@ -9,6 +9,7 @@ import EmailIcon from '@material-ui/icons/Email'
 import KeyIcon from '@material-ui/icons/VpnKey'
 import EditIcon from '@material-ui/icons/Edit'
 import AccountItem from './AccountItem'
+import TextIcon from '../../system/TextIcon'
 import { makeStyles } from '@material-ui/styles'
 import { useTheme } from '@material-ui/core/styles'
 import { CURRENCY } from '../../../data/resolvers'
@@ -33,14 +34,6 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(0.25,3,0,3),
     backgroundColor: theme.palette.grey[200],
     color: theme.palette.text.secondary,
-  },
-  listIconCurrency: {
-    fontSize: '1.5rem',
-    height: theme.spacing(3),
-    width: theme.spacing(3),
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   deleteButton: {
     marginTop: theme.spacing(2),
@@ -108,7 +101,7 @@ function AccountView(props) {
             text={props.user.currency}
             subtext='Currency'
             withIcon
-            icon={<div className={classes.listIconCurrency}>{CURRENCY[props.user.currency]}</div>}
+            icon={<TextIcon icon={CURRENCY[props.user.currency]} />}
             includeAction
             actionIcon={<EditIcon/>}
             onAction={()=>console.log('Edit currency')} />
