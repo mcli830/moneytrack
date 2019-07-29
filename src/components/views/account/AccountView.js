@@ -6,9 +6,10 @@ import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import FaceIcon from '@material-ui/icons/Face'
 import EmailIcon from '@material-ui/icons/Email'
+import TextIcon from '../../system/TextIcon'
 import AccountItem from './AccountItem'
 import CrudFormUpdateUser from '../../crud/CrudFormUpdateUser'
-import TextIcon from '../../system/TextIcon'
+import DangerZone from '../../crud/CrudAccountDangerZone'
 import { makeStyles } from '@material-ui/styles'
 import { useTheme } from '@material-ui/core/styles'
 import { CURRENCY } from '../../../data/resolvers'
@@ -33,15 +34,6 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(0.25,3,0,3),
     backgroundColor: theme.palette.grey[200],
     color: theme.palette.text.secondary,
-  },
-  deleteButton: {
-    marginTop: theme.spacing(2),
-    color: theme.palette.error.light,
-    borderColor: theme.palette.error.light,
-    '&:hover':{
-      color: theme.palette.common.white,
-      backgroundColor: theme.palette.error.light,
-    }
   },
   listItemCentered: {
     width: '100%',
@@ -102,8 +94,7 @@ function AccountView(props) {
           />
           <LogoutButton />
           <Header text='Danger Zone' />
-          <DeleteButton red text='Delete all transactions' handler={()=>console.log('delete transactions')} />
-          <DeleteButton red text='Delete Account' handler={()=>console.log('delete account')} />
+          <DangerZone />
         </List>
       </Container>
     </Slide>
@@ -115,15 +106,6 @@ function AccountView(props) {
       <Typography variant='overline' className={classes.listHeader}>
         {props.text}
       </Typography>
-    );
-  }
-  function DeleteButton(props){
-    return (
-      <div className={classes.listItemCentered}>
-        <Button variant='outlined' onClick={props.handler} className={classes.deleteButton}>
-          {props.text}
-        </Button>
-      </div>
     );
   }
   function LogoutButton(){
