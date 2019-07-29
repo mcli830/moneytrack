@@ -8,12 +8,10 @@ import EditIcon from '@material-ui/icons/Edit'
 import SaveIcon from '@material-ui/icons/Save'
 import CancelIcon from '@material-ui/icons/Cancel'
 import Divider from '@material-ui/core/Divider'
-import FormControl from '@material-ui/core/FormControl'
 import TextField from '@material-ui/core/TextField'
 import InputBase from '@material-ui/core/InputBase'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import EmptyIcon from '../system/EmptyIcon'
 import { withApollo, Mutation } from 'react-apollo'
 import { useTheme } from '@material-ui/core/styles'
 import { makeStyles } from '@material-ui/styles'
@@ -46,16 +44,21 @@ const useStyles = makeStyles(theme => ({
   },
   inputBase: {
     width: '100%',
+    backgroundColor: 'transparent !important',
     '&::before': {
       display: 'none',
-    }
+    },
   },
   formInput: {
     color: theme.palette.text.primary,
     border: 'none',
   },
+  selectIcon: {
+    marginRight: theme.spacing(0.75),
+  },
   menu: {
     padding: theme.spacing(1),
+    backgroundColor: 'transparent',
   },
   loading: {
     pointerEvents: 'none',
@@ -81,6 +84,7 @@ function CrudFormUpdateUser(props){
   function changeFormValue(e){
     setFormValue(e.target.value);
   }
+  const validInput = () => props.value === formValue;
 
   React.useEffect(() => {
     if (editing) {
@@ -114,6 +118,37 @@ function CrudFormUpdateUser(props){
             [props.name]: formValue,
           }});
         };
+        const componentProps = props.select ? {
+          select: true,
+          onChange: handleSubmit,
+          classes: { root: classes.inputBase },
+          InputProps: {
+            disableUnderline: true,
+            classes: { root: classes.inputBase },
+          },
+          SelectProps: {
+            native: true,
+            ref: inputRef,
+            classes: { icon: classes.selectIcon },
+            MenuProps: { className: classes.menu },
+          }
+        } : {
+          onChange: changeFormValue,
+          disabled: !editing,
+          ref: inputRef,
+          classes: { root: classes.inputBase, input: classes.formInput },
+          endAdornment: editing ? (
+            <InputAdornment position='end'>
+              <IconButton
+                onClick={handleSubmit}
+                disabled={loading || !editing || props.value === formValue}
+                className={classes.saveIcon}
+              >
+                {loading ? <CircularProgress size={24} /> : <SaveIcon />}
+              </IconButton>
+            </InputAdornment>
+          ) : null,
+        }
         return (
           <React.Fragment>
             <ListItem className={`${classes.CrudFormUpdateUser_root}${props.className ? ' '+props.className : ''}`}>
@@ -121,39 +156,10 @@ function CrudFormUpdateUser(props){
               <ListItemText primary={(
                 <form className={props.select ? '' : classes.form} onSubmit={(e)=>{
                   e.preventDefault();
-                  if (props.value === formValue) return false;
+                  if (validInput()) return false;
                   handleSubmit();
                 }}>
-                  <InputComponent
-                    select={props.select}
-                    value={formValue}
-                    onChange={props.select? handleSubmit : changeFormValue}
-                    disabled={!props.select && !editing}
-                    ref={props.select ? null : inputRef}
-                    classes={{
-                      root: classes.inputBase,
-                      input: !props.select ? classes.formInput : '',
-                    }}
-                    InputProps={props.select ? {
-                      disableUnderline: true,
-                      className: classes.formInput,
-                    } : null}
-                    SelectProps={props.select ? {
-                      native: true,
-                      ref: inputRef,
-                    } : null}
-                    endAdornment={!props.select && editing ? (
-                      <InputAdornment position='end'>
-                        <IconButton
-                          onClick={handleSubmit}
-                          disabled={loading || !editing || props.value === formValue}
-                          className={classes.saveIcon}
-                        >
-                          {loading ? <CircularProgress size={24} /> : <SaveIcon />}
-                        </IconButton>
-                      </InputAdornment>
-                    ) : null}
-                  >
+                  <InputComponent value={formValue} {...componentProps}>
                     {props.select && props.options.map(op => (
                       <option key={op.value} value={op.value}>
                         {op.label}
