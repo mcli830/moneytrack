@@ -1,5 +1,26 @@
 import gql from 'graphql-tag'
 
+export const UPDATE_USER_MUTATION = gql`
+  mutation UpdateUser(
+    $id: ID!,
+    $name: String
+    $email: String
+    $currency: Currency
+  ) {
+    updateUser(
+      id: $id
+      name: $name
+      email: $email
+      currency: $currency
+    ) {
+      id
+      name
+      email
+      currency
+    }
+  }
+`
+
 export const ADD_TRANSACTION_MUTATION = gql`
   mutation AddTransaction(
     $creatorId: ID!

@@ -9,6 +9,7 @@ import EmailIcon from '@material-ui/icons/Email'
 import KeyIcon from '@material-ui/icons/VpnKey'
 import EditIcon from '@material-ui/icons/Edit'
 import AccountItem from './AccountItem'
+import CrudFormUpdateUser from '../../crud/CrudFormUpdateUser'
 import TextIcon from '../../system/TextIcon'
 import { makeStyles } from '@material-ui/styles'
 import { useTheme } from '@material-ui/core/styles'
@@ -81,37 +82,24 @@ function AccountView(props) {
             onlyValue
             value={props.user.transactions.length} />
           <Header text='Manage Account' />
-          <AccountItem
-            text={props.user.name}
-            subtext='Name'
-            withIcon
+          <CrudFormUpdateUser
+            user={props.user}
+            name={'name'}
             icon={<FaceIcon/>}
-            includeAction
-            actionIcon={<EditIcon/>}
-            onAction={()=>console.log('Edit name')} />
-          <AccountItem
-            text={props.user.email}
-            subtext='Email'
-            withIcon
+            value={props.user.name}
+          />
+          <CrudFormUpdateUser
+            user={props.user}
+            name={'email'}
             icon={<EmailIcon/>}
-            includeAction
-            actionIcon={<EditIcon/>}
-            onAction={()=>console.log('Edit email')} />
-          <AccountItem
-            text={props.user.currency}
-            subtext='Currency'
-            withIcon
+            value={props.user.email}
+          />
+          <CrudFormUpdateUser
+            user={props.user}
+            name={'currency'}
             icon={<TextIcon icon={CURRENCY[props.user.currency]} />}
-            includeAction
-            actionIcon={<EditIcon/>}
-            onAction={()=>console.log('Edit currency')} />
-          <AccountItem
-            text='Change Password'
-            withIcon
-            icon={<KeyIcon/>}
-            includeAction
-            actionIcon={<EditIcon/>}
-            onAction={()=>console.log('Change password')} />
+            value={props.user.currency}
+          />
           <LogoutButton />
           <Header text='Danger Zone' />
           <DeleteButton red text='Delete all transactions' handler={()=>console.log('delete transactions')} />
