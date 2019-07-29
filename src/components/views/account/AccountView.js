@@ -9,7 +9,6 @@ import EmailIcon from '@material-ui/icons/Email'
 import TextIcon from '../../system/TextIcon'
 import AccountItem from './AccountItem'
 import CrudFormUpdateUser from '../../crud/CrudFormUpdateUser'
-import DangerZone from '../../crud/CrudAccountDangerZone'
 import { makeStyles } from '@material-ui/styles'
 import { useTheme } from '@material-ui/core/styles'
 import { CURRENCY } from '../../../data/resolvers'
@@ -93,8 +92,6 @@ function AccountView(props) {
             value={props.user.currency}
           />
           <LogoutButton />
-          <Header text='Danger Zone' />
-          <DangerZone />
         </List>
       </Container>
     </Slide>

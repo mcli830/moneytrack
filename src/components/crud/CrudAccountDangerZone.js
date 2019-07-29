@@ -4,6 +4,7 @@ import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import { useTheme } from '@material-ui/core/styles'
 import { makeStyles } from '@material-ui/styles'
+import { DELETE_TRANSACTION_MUTATION, DELETE_USER_MUTATION } from '../../graphql/mutations'
 
 const useStyle = makeStyles(theme => ({
   DangerZone_root: {
@@ -31,10 +32,12 @@ function DangerZone(props){
   const classes = useStyle(useTheme());
 
   return (
-    <div className={classes.DangerZone_root}>
-      <DeleteButton text='Delete all transactions' handler={()=>console.log('delete transactions')} />
-      <DeleteButton text='Delete Account' handler={()=>console.log('delete account')} />
-    </div>
+    <Mutation>
+      <div className={classes.DangerZone_root}>
+        <DeleteButton text='Delete all transactions' handler={()=>console.log('delete transactions')} />
+        <DeleteButton text='Delete Account' handler={()=>console.log('delete account')} />
+      </div>
+    </Mutation>
   );
 
   // render helpers
