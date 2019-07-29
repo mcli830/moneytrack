@@ -119,7 +119,7 @@ function TransactionsList(props){
                 </ListItemAvatar>
                 <ListItemText primary={t.description} secondary={t.memo} />
                 <ListItemSecondaryAction className={classes.listItemSecondary}>
-                  <Typography component='span'>{t.symbol}{t.amount}</Typography>
+                  <Typography component='span'>{t.symbol}{t.amountDisplay}</Typography>
                   <Typography component='span' className={classes.currency}>{t.currency}</Typography>
                 </ListItemSecondaryAction>
               </ListItem>

@@ -1,24 +1,24 @@
 import React from 'react'
 import AccountView from './AccountView'
+import { CURRENCY, resolveCurrencyValue } from '../../../data/resolvers'
 
 function Account(props) {
 
   return (
     <AccountView
       user={props.data.user}
-      stats={analyzeData(props.data.user.transactions)}
+      stats={analyzeData(props.data.user.transactions, props.data.user.currency)}
       logout={props.logout}
       slide={props.slide}
     />
   )
 }
 
-
 // external helper
 function getMonthId(d){
   return d.getUTCFullYear()*100 + d.getUTCMonth();
 }
-function analyzeData(data){
+function analyzeData(data, currency){
   const dataset = {};
   data.forEach(t => {
     const monthId = getMonthId(new Date(t.date));
@@ -28,7 +28,8 @@ function analyzeData(data){
     dataset[monthId] += t.amount;
   });
 
-  const total = data.reduce((sum,t) => sum + t.amount, 0);
+  const resolvedTotal = resolveCurrencyValue(data.reduce((sum,t) => sum + t.amount, 0), CURRENCY[currency].decimal)
+  const total = parseFloat(resolvedTotal).toFixed(2);
   const monthly = parseFloat((total / Object.keys(dataset).length).toString()).toFixed(2);
   const weekly = parseFloat(monthly * 0.25).toFixed(2);
 

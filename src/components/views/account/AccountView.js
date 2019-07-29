@@ -57,15 +57,15 @@ function AccountView(props) {
           <AccountItem
             text='Total Expenses'
             onlyValue
-            value={CURRENCY[props.user.currency] + props.stats.total} />
+            value={CURRENCY[props.user.currency].symbol + props.stats.total} />
           <AccountItem
             text='Average monthly expenses'
             onlyValue
-            value={CURRENCY[props.user.currency] + props.stats.monthly} />
+            value={CURRENCY[props.user.currency].symbol + props.stats.monthly} />
           <AccountItem
             text='Average weekly expenses'
             onlyValue
-            value={CURRENCY[props.user.currency] + props.stats.weekly} />
+            value={CURRENCY[props.user.currency].symbol + props.stats.weekly} />
           <AccountItem
             text='Number of Transactions'
             onlyValue
@@ -86,9 +86,9 @@ function AccountView(props) {
           <CrudFormUpdateUser
             user={props.user}
             select
-            options={Object.entries(CURRENCY).map(([abbr, sym])=>({value: abbr, label: `${abbr} (${sym})` }))}
+            options={Object.entries(CURRENCY).map(([abbr, attr])=>({value: abbr, label: `${abbr} (${attr.symbol})` }))}
             name={'currency'}
-            icon={<TextIcon icon={CURRENCY[props.user.currency]} />}
+            icon={<TextIcon icon={CURRENCY[props.user.currency].symbol} />}
             value={props.user.currency}
           />
           <LogoutButton />

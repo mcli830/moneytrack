@@ -11,7 +11,7 @@ import CrudButtonUpdateTransaction from '../../crud/CrudButtonUpdateTransaction'
 import CrudButtonDeleteTransaction from '../../crud/CrudButtonDeleteTransaction'
 import { makeStyles } from '@material-ui/styles'
 import { withTheme } from '@material-ui/core/styles'
-import { CATEGORY } from '../../../data/resolvers'
+import { CURRENCY, resolveCurrencyValue, CATEGORY } from '../../../data/resolvers'
 
 const useStyles = makeStyles(theme => ({
   modal: {
@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
 function newState() {
   return {
     category: '',
-    amount: 0,
+    amount: '',
     date: new Date(new Date().toDateString()),
     description: '',
     memo: ''
@@ -67,7 +67,14 @@ function TransactionModal(props){
   // state validation
   const valid = {
     category: () => Object.keys(CATEGORY).includes(state.category),
-    amount: () => state.amount > 0,
+    amount: () => {
+      const val = state.amount;
+      if (val.length < 1) return false;
+      if (/[^0-9.]/g.test(val)) return false;
+      if (val.split('').filter(c => c === '.').length > 1) return false;
+      const di = state.amount.indexOf('.');
+      return di < 0 ? true : val.length - di <= 3;
+    },
     description: () => state.description !== '',
     memo: () => state.memo !== '',
   }
@@ -184,6 +191,7 @@ function TransactionModal(props){
     const result = {
       ...t,
       date: new Date(t.date),
+      amount: resolveCurrencyValue(t.amount, CURRENCY[props.data.user.currency].decimal)
     }
     return result;
   }

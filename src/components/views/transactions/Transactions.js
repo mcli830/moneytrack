@@ -4,7 +4,7 @@ import Async from 'react-async'
 import TransactionsView from './TransactionsView'
 import Loader from '../../system/Loader'
 import Error from '../../system/Error'
-import { CURRENCY, CATEGORY } from '../../../data/resolvers'
+import { CURRENCY, resolveCurrencyValue, CATEGORY } from '../../../data/resolvers'
 import { MONTH } from '../../../data/enums'
 
 function Transactions(props) {
@@ -61,11 +61,15 @@ function getStartingView(data){
 
 function formatData(data){
   const dataset = {}
+  const currencyAttr = CURRENCY[data.user.currency];
   data.user.transactions.forEach(t => {
     const tDate = new Date(t.date);
+    const amountDisplay = resolveCurrencyValue(t.amount, currencyAttr.decimal);
     // get each transaction node data ready for render
     const current = {
       ...t,
+      amount: currencyAttr.decimal > 0 ? parseFloat(amountDisplay) : parseInt(amountDisplay, 10),
+      amountDisplay,
       date: tDate,
       dateString: `${MONTH[tDate.getUTCMonth()]} ${tDate.getUTCDate()}`,
       // monthId = (year)(month) e.g. 201907 = July 2019
@@ -73,7 +77,7 @@ function formatData(data){
       // dateId = [1-31] i.e. the date number
       dateId: tDate.getUTCDate(),
       currency: data.user.currency,
-      symbol: CURRENCY[data.user.currency],
+      symbol: currencyAttr.symbol,
       category: CATEGORY[t.category],
     };
     // create month set if not existing
@@ -122,12 +126,10 @@ function formatData(data){
   // return dataset as array with inner groups as arrays
   return Object.keys(dataset).map(monthId => {
     // convert group data object into array with totals and sorted inversely by date id
-    const groupData = Object.keys(dataset[monthId].groups).map(dateId => {
-      return {
-        ...dataset[monthId].groups[dateId],
-        total: dataset[monthId].groups[dateId].transactions.reduce((a,b)=>a+b.amount,0),
-      };
-    }).sort((a,b)=>b.id-a.id);
+    const groupData = Object.keys(dataset[monthId].groups).map(dateId => ({
+      ...dataset[monthId].groups[dateId],
+      total: parseFloat(dataset[monthId].groups[dateId].transactions.reduce((a,b)=>a+b.amount,0).toString()).toFixed(currencyAttr.decimal),
+    })).sort((a,b)=>b.id-a.id);
     return {
       ...dataset[monthId],
       groups: groupData

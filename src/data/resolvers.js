@@ -15,12 +15,113 @@ import indigo from '@material-ui/core/colors/indigo'
 import lightGreen from '@material-ui/core/colors/lightGreen'
 import grey from '@material-ui/core/colors/grey'
 
+export const resolveCurrencyValue = function(amt, dec){
+  var n = typeof amt === 'string' ? parseInt(amt, 10) : amt;
+  if (dec < 1) return n.toString();
+  return parseFloat(n*Math.pow(10,dec*-1).toString()).toFixed(dec);
+}
+
 export const CURRENCY = {
-  'USD': '$',
-  'EUR': '€',
-  'JPY': '¥',
-  'GBP': '£',
-  'AUD': '$',
+  "USD": {
+    abbr: 'USD',
+    symbol: '$',
+    decimal: 2,
+  },
+  "EUR": {
+    abbr: 'EUR',
+    symbol: '€',
+    decimal: 2,
+  },
+  "JPY": {
+    abbr: 'JPY',
+    symbol: '¥',
+    decimal: 0,
+  },
+  "GBP": {
+    abbr: 'GBP',
+    symbol: '£',
+    decimal: 2,
+  },
+  "AUD": {
+    abbr: 'AUD',
+    symbol: '$',
+    decimal: 2,
+  },
+  "CAD": {
+    abbr: 'CAD',
+    symbol: '$',
+    decimal: 2,
+  },
+  "CHF": {
+    abbr: 'CHF',
+    symbol: 'Fr.',
+    decimal: 2,
+  },
+  "CNH": {
+    abbr: 'CNH',
+    symbol: '¥',
+    decimal: 0,
+  },
+  "SEK": {
+    abbr: 'SEK',
+    symbol: 'kr',
+    decimal: 2,
+  },
+  "NZD": {
+    abbr: 'NZD',
+    symbol: '$',
+    decimal: 2,
+  },
+  "MXN": {
+    abbr: 'MXN',
+    symbol: '$',
+    decimal: 2,
+  },
+  "SGD": {
+    abbr: 'SGD',
+    symbol: 'S$',
+    decimal: 2,
+  },
+  "HKD": {
+    abbr: 'HKD',
+    symbol: 'HK$',
+    decimal: 2,
+  },
+  "NOK": {
+    abbr: 'NOK',
+    symbol: 'kr',
+    decimal: 2,
+  },
+  "KRW": {
+    abbr: 'KRW',
+    symbol: '₩',
+    decimal: 0,
+  },
+  "TRY": {
+    abbr: 'TRY',
+    symbol: '₺',
+    decimal: 2,
+  },
+  "RUB": {
+    abbr: 'RUB',
+    symbol: '₽',
+    decimal: 2,
+  },
+  "INR": {
+    abbr: 'INR',
+    symbol: '₹',
+    decimal: 2,
+  },
+  "BRL": {
+    abbr: 'BRL',
+    symbol: 'R$',
+    decimal: 2,
+  },
+  "ZAR": {
+    abbr: 'ZAR',
+    symbol: 'R',
+    decimal: 2,
+  },
 }
 
 export const CATEGORY = {
