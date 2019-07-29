@@ -76,6 +76,7 @@ function CrudFormUpdateUser(props){
   }
   function editModeOff(){
     setEditing(false);
+    inputRef.current.children[0].blur();
   }
   function changeFormValue(e){
     setFormValue(e.target.value);
@@ -106,7 +107,8 @@ function CrudFormUpdateUser(props){
       }}
     >
       {(updateUser, {data, error, loading})=>{
-        const handleSubmit = () => {
+        const handleSubmit = (e) => {
+          if (props.select) setFormValue(e.currentTarget.value);
           updateUser({variables: {
             id: props.user.id,
             [props.name]: formValue,
@@ -125,18 +127,20 @@ function CrudFormUpdateUser(props){
                   <InputComponent
                     select={props.select}
                     value={formValue}
-                    onChange={changeFormValue}
+                    onChange={props.select? handleSubmit : changeFormValue}
                     disabled={!props.select && !editing}
                     ref={props.select ? null : inputRef}
                     classes={{
                       root: classes.inputBase,
-                      input: classes.formInput,
+                      input: !props.select ? classes.formInput : '',
                     }}
                     InputProps={props.select ? {
                       disableUnderline: true,
+                      className: classes.formInput,
                     } : null}
                     SelectProps={props.select ? {
                       native: true,
+                      ref: inputRef,
                     } : null}
                     endAdornment={!props.select && editing ? (
                       <InputAdornment position='end'>
