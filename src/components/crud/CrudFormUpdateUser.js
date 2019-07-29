@@ -9,6 +9,7 @@ import SaveIcon from '@material-ui/icons/Save'
 import CancelIcon from '@material-ui/icons/Cancel'
 import Divider from '@material-ui/core/Divider'
 import FormControl from '@material-ui/core/FormControl'
+import TextField from '@material-ui/core/TextField'
 import InputBase from '@material-ui/core/InputBase'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import CircularProgress from '@material-ui/core/CircularProgress'
@@ -45,9 +46,16 @@ const useStyles = makeStyles(theme => ({
   },
   inputBase: {
     width: '100%',
+    '&::before': {
+      display: 'none',
+    }
   },
   formInput: {
     color: theme.palette.text.primary,
+    border: 'none',
+  },
+  menu: {
+    padding: theme.spacing(1),
   },
   loading: {
     pointerEvents: 'none',
@@ -77,7 +85,9 @@ function CrudFormUpdateUser(props){
     if (editing) {
       inputRef.current.children[0].focus();
     }
-  }, [editing])
+  }, [editing]);
+
+  const InputComponent = props.select ? TextField : InputBase;
 
   return (
     <Mutation
@@ -96,34 +106,39 @@ function CrudFormUpdateUser(props){
       }}
     >
       {(updateUser, {data, error, loading})=>{
-        const rootClassName = `${classes.CrudFormUpdateUser_root}${props.className ? ' '+props.className : ''}`;
         const handleSubmit = () => {
           updateUser({variables: {
             id: props.user.id,
             [props.name]: formValue,
           }});
         };
-
         return (
           <React.Fragment>
-            <ListItem className={rootClassName}>
+            <ListItem className={`${classes.CrudFormUpdateUser_root}${props.className ? ' '+props.className : ''}`}>
               <ListItemAvatar className={classes.icon}>{props.icon}</ListItemAvatar>
               <ListItemText primary={(
-                <form className={classes.form} onSubmit={(e)=>{
+                <form className={props.select ? '' : classes.form} onSubmit={(e)=>{
                   e.preventDefault();
                   if (props.value === formValue) return false;
                   handleSubmit();
                 }}>
-                  <InputBase
+                  <InputComponent
+                    select={props.select}
                     value={formValue}
                     onChange={changeFormValue}
-                    disabled={!editing}
-                    ref={inputRef}
+                    disabled={!props.select && !editing}
+                    ref={props.select ? null : inputRef}
                     classes={{
                       root: classes.inputBase,
                       input: classes.formInput,
                     }}
-                    endAdornment={editing ? (
+                    InputProps={props.select ? {
+                      disableUnderline: true,
+                    } : null}
+                    SelectProps={props.select ? {
+                      native: true,
+                    } : null}
+                    endAdornment={!props.select && editing ? (
                       <InputAdornment position='end'>
                         <IconButton
                           onClick={handleSubmit}
@@ -134,14 +149,22 @@ function CrudFormUpdateUser(props){
                         </IconButton>
                       </InputAdornment>
                     ) : null}
-                  />
+                  >
+                    {props.select && props.options.map(op => (
+                      <option key={op.value} value={op.value}>
+                        {op.label}
+                      </option>
+                    ))}
+                  </InputComponent>
                 </form>
               )} />
-              <ListItemSecondaryAction>
-                <IconButton onClick={editing ? editModeOff : editModeOn} className={classes.actionIcon}>
-                  {editing ? <CancelIcon /> : <EditIcon />}
-                </IconButton>
-              </ListItemSecondaryAction>
+              {!props.select && (
+                <ListItemSecondaryAction>
+                  <IconButton onClick={editing ? editModeOff : editModeOn} className={classes.actionIcon}>
+                    {editing ? <CancelIcon /> : <EditIcon />}
+                  </IconButton>
+                </ListItemSecondaryAction>
+              )}
             </ListItem>
             <Divider light />
           </React.Fragment>

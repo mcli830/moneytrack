@@ -96,6 +96,8 @@ function AccountView(props) {
           />
           <CrudFormUpdateUser
             user={props.user}
+            select
+            options={Object.entries(CURRENCY).map(([abbr, sym])=>({value: abbr, label: `${abbr} (${sym})` }))}
             name={'currency'}
             icon={<TextIcon icon={CURRENCY[props.user.currency]} />}
             value={props.user.currency}
