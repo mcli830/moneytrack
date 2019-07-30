@@ -108,7 +108,7 @@ function AccountView(props) {
   function LogoutButton(){
     return (
       <div className={classes.listItemCentered + ' ' + classes.padded}>
-        <Button onClick={props.handleLogout} variant='outlined' className={classes.logoutButton}>
+        <Button onClick={props.logout} variant='outlined' className={classes.logoutButton}>
           Logout
         </Button>
       </div>
