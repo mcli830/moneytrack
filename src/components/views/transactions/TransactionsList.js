@@ -8,6 +8,7 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import Icon from '@material-ui/core/Icon'
 import ButtonBase from '@material-ui/core/ButtonBase'
+import Divider from '@material-ui/core/Divider'
 import EmptyList from './EmptyList'
 import { makeStyles } from '@material-ui/styles'
 import { withTheme } from '@material-ui/core/styles'
@@ -124,6 +125,7 @@ function TransactionsList(props){
                 </ListItemSecondaryAction>
               </ListItem>
             </ButtonBase>
+            <Divider light />
           </li>
         ))}
       </ul>

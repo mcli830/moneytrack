@@ -68,6 +68,7 @@ function SwipeableViews(props) {
     },
     viewContainer: {
       flex: '1 1 auto',
+      minHeight: 'calc(100vh - 161px)',
       position: 'relative',
       overflowX: 'hidden',
       overflowY: 'scroll',
@@ -103,7 +104,7 @@ function SwipeableViews(props) {
         onSwiping={handleSwiping}
         onSwiped={handleSwiped}
         style={styles.viewContainer}
-        >
+      >
         {props.children.map((renderChild, index) => {
           switch(index){
             case view:

@@ -31,33 +31,35 @@ function TransactionsView(props) {
     maxHeight: '100%',
   }
 
-  const ListViews = () => (
-    <SwipeableViews
-      containerStyle={containerStyle}
-      startingView={props.lastPage}
-      headerComponent={(addProps) => (
-        <TransactionsHead
-          {...addProps}
-          months={props.data.map(d => d.name)}
-          setPage={props.setPage}
-        />
-      )}
-      onSwiped={(view)=>props.setPage(view)}
-    >
-      {props.data.map((monthSet, i) => {
-        return (addProps) => {
-          return (
-            <div {...addProps} key={monthSet.id}>
-              <TransactionsList
-                data={monthSet.groups}
-                updateTransactionModal={props.updateTransactionModal}
-              />
-            </div>
-          );
-        }
-      })}
-    </SwipeableViews>
-  );
+  function _renderListViews() {
+    return (
+      <SwipeableViews
+        containerStyle={containerStyle}
+        startingView={props.lastPage}
+        headerComponent={(addProps) => (
+          <TransactionsHead
+            {...addProps}
+            months={props.data.map(d => d.name)}
+            setPage={props.setPage}
+            />
+        )}
+        onSwiped={(view)=>props.setPage(view)}
+        >
+        {props.data.map((monthSet, i) => {
+          return (addProps) => {
+            return (
+              <div {...addProps} key={monthSet.id}>
+                <TransactionsList
+                  data={monthSet.groups}
+                  updateTransactionModal={props.updateTransactionModal}
+                  />
+              </div>
+            );
+          }
+        })}
+      </SwipeableViews>
+    );
+  }
 
   return (
     <div className={classes.root}>
@@ -65,7 +67,7 @@ function TransactionsView(props) {
         {
           props.data.length < 1
           ? <EmptyList />
-          : <ListViews />
+          : _renderListViews()
         }
       </div>
     </div>

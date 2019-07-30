@@ -15,6 +15,7 @@ function AppController(props) {
   const styles = {
     view: {
       flex: '1 1 auto',
+      minHeight: 'calc(100vh - 161px)',
       display: 'flex',
       flexDirection: 'column',
       position: 'relative',
