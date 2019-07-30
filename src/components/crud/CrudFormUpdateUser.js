@@ -7,16 +7,19 @@ import IconButton from '@material-ui/core/IconButton'
 import EditIcon from '@material-ui/icons/Edit'
 import SaveIcon from '@material-ui/icons/Save'
 import CancelIcon from '@material-ui/icons/Cancel'
+import TextIcon from '../system/TextIcon'
 import Divider from '@material-ui/core/Divider'
 import TextField from '@material-ui/core/TextField'
 import InputBase from '@material-ui/core/InputBase'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { withApollo, Mutation } from 'react-apollo'
-import { useTheme } from '@material-ui/core/styles'
+import withAlerts from '../system/withAlerts'
+import { withTheme } from '@material-ui/core/styles'
 import { makeStyles } from '@material-ui/styles'
 import { UPDATE_USER_MUTATION } from '../../graphql/mutations'
 import { GET_USER_DATA } from '../../graphql/queries'
+import { CURRENCY } from '../../data/resolvers'
 
 const useStyles = makeStyles(theme => ({
   CrudFormUpdateUser_root: {
@@ -67,11 +70,12 @@ const useStyles = makeStyles(theme => ({
 }))
 
 function CrudFormUpdateUser(props){
-  const classes = useStyles(useTheme());
+  const classes = useStyles(props.theme);
 
   const inputRef = React.useRef();
   const [editing, setEditing] = React.useState(false);
   const [formValue, setFormValue] = React.useState(props.value);
+  const [icon, setIcon] = React.useState(props.icon)
   // handlers
   function editModeOn(){
     setEditing(true);
@@ -103,19 +107,23 @@ function CrudFormUpdateUser(props){
           data: {
             User: {
               ...props.user,
-              ...data.updateUser.user,
+              ...data.updateUser,
             }
           }
         });
+        if (props.select) {
+          setFormValue(data.updateUser[props.name]);
+          setIcon(CURRENCY[data.updateUser[props.name]].icon);
+        }
         editModeOff();
+        props.alerts.notification('Account information updated!', 'primary')
       }}
     >
       {(updateUser, {data, error, loading})=>{
         const handleSubmit = (e) => {
-          if (props.select) setFormValue(e.currentTarget.value);
           updateUser({variables: {
             id: props.user.id,
-            [props.name]: formValue,
+            [props.name]: props.select ? e.currentTarget.value : formValue,
           }});
         };
         const componentProps = props.select ? {
@@ -152,7 +160,9 @@ function CrudFormUpdateUser(props){
         return (
           <React.Fragment>
             <ListItem className={`${classes.CrudFormUpdateUser_root}${props.className ? ' '+props.className : ''}`}>
-              <ListItemAvatar className={classes.icon}>{props.icon}</ListItemAvatar>
+              <ListItemAvatar className={classes.icon}>
+                {props.textIcon ? <TextIcon icon={icon} /> : props.icon}
+              </ListItemAvatar>
               <ListItemText primary={(
                 <form className={props.select ? '' : classes.form} onSubmit={(e)=>{
                   e.preventDefault();
@@ -184,4 +194,4 @@ function CrudFormUpdateUser(props){
   );
 }
 
-export default withApollo(CrudFormUpdateUser);
+export default withApollo(withAlerts(withTheme(CrudFormUpdateUser)));

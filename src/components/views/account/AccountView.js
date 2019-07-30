@@ -6,7 +6,6 @@ import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import FaceIcon from '@material-ui/icons/Face'
 import EmailIcon from '@material-ui/icons/Email'
-import TextIcon from '../../system/TextIcon'
 import AccountItem from './AccountItem'
 import CrudFormUpdateUser from '../../crud/CrudFormUpdateUser'
 import { makeStyles } from '@material-ui/styles'
@@ -86,9 +85,10 @@ function AccountView(props) {
           <CrudFormUpdateUser
             user={props.user}
             select
-            options={Object.entries(CURRENCY).map(([abbr, attr])=>({value: abbr, label: `${abbr} (${attr.symbol})` }))}
+            options={Object.values(CURRENCY).map(attr=>({value: attr.abbr, label: `${attr.name} (${attr.symbol})` }))}
             name={'currency'}
-            icon={<TextIcon icon={CURRENCY[props.user.currency].symbol} />}
+            textIcon
+            icon={CURRENCY[props.user.currency].icon}
             value={props.user.currency}
           />
           <LogoutButton />
