@@ -9,6 +9,7 @@ import TransactionModalContent from './TransactionModalContent'
 import CrudButtonCreateTransaction from '../../crud/CrudButtonCreateTransaction'
 import CrudButtonUpdateTransaction from '../../crud/CrudButtonUpdateTransaction'
 import CrudButtonDeleteTransaction from '../../crud/CrudButtonDeleteTransaction'
+import withAlerts from '../../system/withAlerts'
 import { makeStyles } from '@material-ui/styles'
 import { withTheme } from '@material-ui/core/styles'
 import { CURRENCY, resolveCurrencyValue, CATEGORY } from '../../../data/resolvers'
@@ -164,6 +165,7 @@ function TransactionModal(props){
             closeModal={closeModal}
             valid={valid}
             crudColor={getCrudColor()}
+            alerts={props.alerts}
           />
         );
       case 'update':
@@ -174,6 +176,7 @@ function TransactionModal(props){
             closeModal={closeModal}
             valid={valid}
             crudColor={getCrudColor()}
+            alerts={props.alerts}
           />
         );
       default:
@@ -186,6 +189,7 @@ function TransactionModal(props){
       <CrudButtonDeleteTransaction
         transactionId={props.currentId}
         closeModal={closeModal}
+        alerts={props.alerts}
       />
     );
   }
@@ -229,4 +233,4 @@ TransactionModal.defaultProps = {
   data: {},
 }
 
-export default withTheme(TransactionModal);
+export default withTheme(withAlerts(TransactionModal));

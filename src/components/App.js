@@ -106,7 +106,7 @@ class App extends React.Component {
           <CssBaseline />
           <Query query={LOGGED_IN_USER}>
             {({ data, loading, error}) => {
-              if (loading) return <Loader message='Authenticating...' />;
+              if (loading) return <Loader message='Initiating...' />;
               if (error) return <ErrorPage message={error.message} />
               if (data.loggedInUser && data.loggedInUser.id !== null){
                 return this._renderApp(data.loggedInUser.id);

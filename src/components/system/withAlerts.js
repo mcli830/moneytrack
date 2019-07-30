@@ -1,25 +1,45 @@
 import React from 'react'
 import Snackbar from '@material-ui/core/Snackbar'
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
+import IconButton from '@material-ui/core/IconButton'
+import CloseIcon from '@material-ui/icons/Close'
 import { withStyles } from '@material-ui/core/styles'
+import amber from '@material-ui/core/colors/amber'
+import green from '@material-ui/core/colors/green'
+import blue from '@material-ui/core/colors/blue'
+import red from '@material-ui/core/colors/red'
+import yellow from '@material-ui/core/colors/yellow'
 
 const style = theme => ({
+  base: {
+    fontFamily: theme.typography.fontFamily,
+    fontWeight: 600,
+  },
   primary: {
     color: theme.palette.primary.light,
-    fontWeight: 'bold',
   },
   secondary: {
-    color: theme.palette.secondary.light,
-    fontWeight: 'bold',
+    color: theme.palette.secondary.main,
+  },
+  tertiary: {
+    color: amber[500],
+  },
+  success: {
+    color: green[500],
+  },
+  blue: {
+    color: blue[500],
+  },
+  warn: {
+    color: yellow[500],
   },
   error: {
-    color: theme.palette.error.light,
-    fontWeight: 'bold',
+    color: red[400],
   },
   grey: {
     color: theme.palette.grey[500],
-    fontWeight: 'bold',
+  },
+  white: {
+    color: theme.palette.common.white,
   }
 });
 
@@ -93,13 +113,13 @@ export default function withAlerts(WrappedComponent){
             onClose={this.handleClose}
             onExited={this.handleExited}
             className={classes[msgColor]}
-            message={<span className={classes[msgColor]}>{alert.message}</span>}
+            message={<span className={classes.base + ' ' + classes[msgColor]}>{alert.message}</span>}
             action={(
               <IconButton
                 key='close'
                 color='inherit'
                 onClick={alert.icon ? null : this.handleClose}
-                className={alert.icon ? classes[msgColor] : classes.grey}
+                className={classes.base + (alert.icon ? ' '+classes[msgColor] : ' '+classes.grey)}
               >
                 {alert.icon ? alert.icon : <CloseIcon />}
               </IconButton>

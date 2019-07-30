@@ -39,6 +39,10 @@ function CrudButtonUpdateTransaction(props){
           }
         });
         props.closeModal();
+        props.alerts.notification({
+          message: 'Transaction updated.',
+          color: 'primary',
+        })
       }}
     >
       {(updateTransaction, {data, error, loading})=>(

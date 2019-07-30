@@ -24,6 +24,7 @@ function SwipeableViews(props) {
       return setScrolling(true);
     }
     if (!scrolling) {
+      e.event.preventDefault();
       setSwiping(true);
       setPos(
         ((e.deltaX < 0 && view === 0) || (e.deltaX > 0 && view === viewCount-1))
@@ -42,15 +43,23 @@ function SwipeableViews(props) {
       setScrolling(false);
     }
     var nextView = view;
-    const rect = centerRef.current.getBoundingClientRect();
-    if (Math.abs(pos) > rect.width*0.5){
-      if (pos > 0) {
+    if (e.velocity > 2 && view > 0 && view < viewCount-1) {
+      if (e.deltaX > 0) {
         nextView = view+1;
       } else {
         nextView = view-1;
       }
-      setView(nextView);
+    } else {
+      const rect = centerRef.current.getBoundingClientRect();
+      if (Math.abs(pos) > rect.width*0.5){
+        if (pos > 0) {
+          nextView = view+1;
+        } else {
+          nextView = view-1;
+        }
+      }
     }
+    if (nextView !== view) setView(nextView);
     setPos(0);
     if (props.onSwiped) props.onSwiped(nextView);
   }

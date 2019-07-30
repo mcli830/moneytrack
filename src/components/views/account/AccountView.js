@@ -112,7 +112,11 @@ function AccountView(props) {
       <div className={classes.listItemCentered + ' ' + classes.padded}>
         <Button
           onClick={()=>{
-            props.alerts.notification({message: 'Logging out...', color: 'primary', icon: <CircularProgress size={16} />})
+            props.alerts.notification({
+              message: 'Logging out...',
+              color: 'primary',
+              icon: <CircularProgress size={16} />
+            });
             props.logout();
           }}
           variant='outlined'

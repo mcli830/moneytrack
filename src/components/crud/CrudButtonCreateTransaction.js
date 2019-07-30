@@ -34,6 +34,10 @@ function CrudButtonCreateTransaction(props){
           }
         })
         props.closeModal();
+        props.alerts.notification({
+          message: `Transaction added!`,
+          color: 'success',
+        })
       }}
     >
       {(addTransaction, {data, error, loading}) => (

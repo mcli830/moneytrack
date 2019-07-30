@@ -79,10 +79,10 @@ function CrudFormUpdateUser(props){
   // handlers
   function editModeOn(){
     setEditing(true);
-    setFormValue(props.value);
   }
-  function editModeOff(){
+  function editModeOff(cancel = true){
     setEditing(false);
+    if (cancel) setFormValue(props.value);
     inputRef.current.children[0].blur();
   }
   function changeFormValue(e){
@@ -115,7 +115,7 @@ function CrudFormUpdateUser(props){
           setFormValue(data.updateUser[props.name]);
           setIcon(CURRENCY[data.updateUser[props.name]].icon);
         }
-        editModeOff();
+        editModeOff(false);
         props.alerts.notification({
           message: 'Account information updated.',
           color: 'primary',

@@ -43,6 +43,10 @@ function CrudButtonDeleteTransaction(props){
           }
         });
         props.closeModal();
+        props.alerts.notification({
+          message: 'Transaction deleted.',
+          color: 'secondary',
+        })
       }}
     >
       {(deleteTransaction, {data, error, loading})=>(
