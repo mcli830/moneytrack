@@ -14,14 +14,6 @@ const useStyles = makeStyles(theme => {
       position: 'relative',
       overflow: 'hidden',
     },
-    rootOverlay: {
-      position: 'absolute',
-      zIndex: 2,
-      pointerEvents: 'none',
-      height: '100%',
-      width: '100%',
-      background: `linear-gradient(90deg, ${headerColor}, transparent 30%, transparent 70%, ${headerColor})`
-    },
     column: {
       position: 'absolute',
       zIndex: 1,
@@ -32,7 +24,7 @@ const useStyles = makeStyles(theme => {
       justifyContent: 'center',
       alignItems: 'center',
       userSelect: 'none',
-      opacity: 0.5,
+      opacity: 0.3,
       cursor: 'pointer',
       '&:hover': {
         opacity: 1,
@@ -75,7 +67,6 @@ export default (props) => {
             return null;
         }
       })}
-      <div className={classes.rootOverlay} />
     </div>
   );
 
