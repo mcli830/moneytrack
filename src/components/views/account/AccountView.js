@@ -8,6 +8,8 @@ import FaceIcon from '@material-ui/icons/Face'
 import EmailIcon from '@material-ui/icons/Email'
 import AccountItem from './AccountItem'
 import CrudFormUpdateUser from '../../crud/CrudFormUpdateUser'
+import withAlerts from '../../system/withAlerts'
+import CircularProgress from '@material-ui/core/CircularProgress'
 import { makeStyles } from '@material-ui/styles'
 import { useTheme } from '@material-ui/core/styles'
 import { CURRENCY } from '../../../data/resolvers'
@@ -108,7 +110,14 @@ function AccountView(props) {
   function LogoutButton(){
     return (
       <div className={classes.listItemCentered + ' ' + classes.padded}>
-        <Button onClick={props.logout} variant='outlined' className={classes.logoutButton}>
+        <Button
+          onClick={()=>{
+            props.alerts.notification({message: 'Logging out...', color: 'primary', icon: <CircularProgress size={16} />})
+            props.logout();
+          }}
+          variant='outlined'
+          className={classes.logoutButton}
+        >
           Logout
         </Button>
       </div>
@@ -116,4 +125,4 @@ function AccountView(props) {
   }
 }
 
-export default AccountView;
+export default withAlerts(AccountView);

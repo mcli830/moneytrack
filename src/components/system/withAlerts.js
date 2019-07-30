@@ -33,10 +33,11 @@ export default function withAlerts(WrappedComponent){
       open: false,
     }
 
-    notification = (message, color)  => {
+    notification = ({message, color, icon})  => {
       this.queue.push({
         message,
         color,
+        icon,
         key: new Date().getTime(),
       });
 
@@ -97,10 +98,10 @@ export default function withAlerts(WrappedComponent){
               <IconButton
                 key='close'
                 color='inherit'
-                onClick={this.handleClose}
-                className={classes.grey}
+                onClick={alert.icon ? null : this.handleClose}
+                className={alert.icon ? classes[msgColor] : classes.grey}
               >
-                <CloseIcon />
+                {alert.icon ? alert.icon : <CloseIcon />}
               </IconButton>
             )}
           />

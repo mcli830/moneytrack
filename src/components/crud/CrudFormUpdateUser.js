@@ -116,10 +116,17 @@ function CrudFormUpdateUser(props){
           setIcon(CURRENCY[data.updateUser[props.name]].icon);
         }
         editModeOff();
-        props.alerts.notification('Account information updated!', 'primary')
+        props.alerts.notification({
+          message: 'Account information updated.',
+          color: 'primary',
+        })
       }}
     >
       {(updateUser, {data, error, loading})=>{
+        if (error) props.alerts.notification({
+          message: 'Server error: '+error.message,
+          color: 'error',
+        })
         const handleSubmit = (e) => {
           updateUser({variables: {
             id: props.user.id,

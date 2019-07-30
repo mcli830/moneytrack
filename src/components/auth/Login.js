@@ -1,12 +1,13 @@
 import React from 'react'
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
-
 import Paper from '@material-ui/core/Paper'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
+import CircularProgress from '@material-ui/core/CircularProgress'
+import withAlerts from '../system/withAlerts'
 
 function OutlinedTextField(props){
   return (
@@ -67,28 +68,57 @@ class Login extends React.Component {
 
   handleLoginSubmit = async (e) =>{
     e.preventDefault();
+    this.props.alerts.notification({
+      message: 'Logging in...',
+      color: 'primary',
+      icon: <CircularProgress size={16} />,
+    });
     const {email, password} = this.state.forms.login;
     try {
       const response = await this.props.authenticateUserMutation({variables: {email, password}});
       localStorage.setItem('graphcoolToken', response.data.authenticateUser.token);
-      window.location.reload();
+      this.props.alerts.notification({
+        message: 'Login success!',
+        color: 'primary'
+      });
+      setTimeout(()=>window.location.reload(), 500);
     } catch (err) {
       console.error(err);
+      this.props.alerts.notification({
+        message: `Login failed. ${err.message}`,
+        color: 'error',
+      })
     }
   }
 
   handleSignupSubmit = async (e) => {
     e.preventDefault();
+    this.props.alerts.notification({
+      message: 'Signing up...',
+      color: 'secondary',
+      icon: <CircularProgress size={16} />,
+    });
     if (this.state.forms.signup.password !== this.state.forms.signup.password_confirm){
-      return console.log("passwords don't match");
+      return this.props.alerts.notification({
+        message: `Passwords don't match. Please enter your password twice.`,
+        color: 'error',
+      });
     }
     const {email, username, name, password} = this.state.forms.signup;
     try {
       const response = await this.props.signupUserMutation({variables: {email, password, username, name}});
       localStorage.setItem('graphcoolToken', response.data.signupUser.token);
-      window.location.reload();
+      this.props.alerts.notification({
+        message: 'Signup complete!',
+        color: 'secondary',
+      });
+      setTimeout(()=>window.location.reload(), 500);
     } catch(err){
       console.error(err);
+      this.props.alerts.notification({
+        message: `Signup failed. ${err.message}`,
+        color: 'error',
+      })
     }
   }
 
@@ -250,4 +280,4 @@ const SIGNUP_USER_MUTATION = gql`
 export default compose(
   graphql(AUTHENTICATE_USER_MUTATION, {name: 'authenticateUserMutation'}),
   graphql(SIGNUP_USER_MUTATION, {name: 'signupUserMutation'})
-)(Login);
+)(withAlerts(Login));
