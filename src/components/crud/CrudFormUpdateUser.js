@@ -80,15 +80,18 @@ function CrudFormUpdateUser(props){
   function editModeOn(){
     setEditing(true);
   }
-  function editModeOff(cancel = true){
+  function editModeOff(){
     setEditing(false);
-    if (cancel) setFormValue(props.value);
+    setFormValue(props.client.readQuery({
+      query: GET_USER_DATA,
+      variables: { id: props.user.id },
+    }).User[props.name]);
     inputRef.current.children[0].blur();
   }
   function changeFormValue(e){
     setFormValue(e.target.value);
   }
-  const validInput = () => props.value === formValue;
+  const validInput = () => formValue.length > 0 && formValue !== getUserFromCache({id: props.user.id})[props.name];
 
   React.useEffect(() => {
     if (editing) {
@@ -115,23 +118,37 @@ function CrudFormUpdateUser(props){
           setFormValue(data.updateUser[props.name]);
           setIcon(CURRENCY[data.updateUser[props.name]].icon);
         }
-        editModeOff(false);
-        props.alerts.notification({
-          message: 'Account information updated.',
-          color: 'primary',
-        })
+        editModeOff();
+        if (data.updateUser.isOptimistic){
+          props.alerts.notification({
+            message: 'Account information updated.',
+            color: 'primary',
+          });
+        }
       }}
     >
       {(updateUser, {data, error, loading})=>{
         if (error) props.alerts.notification({
           message: 'Server error: '+error.message,
           color: 'error',
-        })
+        });
         const handleSubmit = (e) => {
-          updateUser({variables: {
-            id: props.user.id,
-            [props.name]: props.select ? e.currentTarget.value : formValue,
-          }});
+          const propVal = props.select ? e.currentTarget.value : formValue;
+          updateUser({
+            variables: {
+              id: props.user.id,
+              [props.name]: propVal,
+            },
+            optimisticResponse: {
+              __typename: "Mutation",
+              updateUser: {
+                __typename: "User",
+                ...props.user,
+                [props.name]: propVal,
+                isOptimistic: true,
+              }
+            }
+          });
         };
         const componentProps = props.select ? {
           select: true,
@@ -156,7 +173,7 @@ function CrudFormUpdateUser(props){
             <InputAdornment position='end'>
               <IconButton
                 onClick={handleSubmit}
-                disabled={loading || !editing || props.value === formValue}
+                disabled={loading || !editing || !validInput()}
                 className={classes.saveIcon}
               >
                 {loading ? <CircularProgress size={24} /> : <SaveIcon />}
@@ -173,7 +190,7 @@ function CrudFormUpdateUser(props){
               <ListItemText primary={(
                 <form className={props.select ? '' : classes.form} onSubmit={(e)=>{
                   e.preventDefault();
-                  if (validInput()) return false;
+                  if (!validInput()) return false;
                   handleSubmit();
                 }}>
                   <InputComponent value={formValue} {...componentProps}>
@@ -199,6 +216,14 @@ function CrudFormUpdateUser(props){
       }}
     </Mutation>
   );
+
+  // data helper
+  function getUserFromCache(variables){
+    return props.client.readQuery({
+      query: GET_USER_DATA,
+      variables,
+    }).User;
+  }
 }
 
 export default withApollo(withAlerts(withTheme(CrudFormUpdateUser)));
