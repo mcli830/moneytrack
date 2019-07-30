@@ -43,7 +43,7 @@ export default (props) => {
         <DatePicker
           id='date'
           value={props.date.value}
-          onChange={props.date.hanlder}
+          onChange={props.date.handler}
           className={classes.field}
           InputProps={{
             disableUnderline: true,
