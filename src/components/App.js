@@ -9,27 +9,20 @@ import Loader from './system/Loader'
 import ErrorPage from './system/Error'
 import { createMuiTheme } from '@material-ui/core/styles'
 import { ThemeProvider } from '@material-ui/styles'
-import blue from '@material-ui/core/colors/blue'
-import green from '@material-ui/core/colors/green'
-import orange from '@material-ui/core/colors/orange'
+// import blue from '@material-ui/core/colors/blue'
+// import green from '@material-ui/core/colors/green'
+// import orange from '@material-ui/core/colors/orange'
 import '../index.css';
 import { LOGGED_IN_USER } from '../graphql/queries'
 
-const augmentColor = createMuiTheme().palette.augmentColor;
-const makePalette = (muiColor, contrastText = '#fff') => ({
-  ...augmentColor(muiColor),
-  contrastText,
-})
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: blue[700],
-      light: blue[500],
-      dark: blue[900],
-      contrastText: '#fff'
+      main: '#00587d',
     },
-    secondary: makePalette(green),
-    tertiary: makePalette(orange),
+    secondary: {
+      main: '#f76638',
+    },
   }
 });
 
