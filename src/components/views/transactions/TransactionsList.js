@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
   subheader: {
     backgroundColor: theme.palette.background.default,
     fontSize: theme.typography.subtitle2.fontSize,
-    padding: theme.spacing(0.25,3,0,3),
+    padding: theme.spacing(0.25,2,0,2),
   },
   listItemWrapper: {
     width: '100%',
@@ -42,9 +42,6 @@ const useStyles = makeStyles(theme => ({
   listItem: {
     width: '100%',
     backgroundColor: theme.palette.background.paper,
-  },
-  listItemAvatar: {
-    marginLeft: theme.spacing(1),
   },
   listItemIconWrapper: {
     borderRadius: '50%',
@@ -59,7 +56,7 @@ const useStyles = makeStyles(theme => ({
     color: '#fff',
   },
   listItemSecondary: {
-    right: theme.spacing(3),
+    right: theme.spacing(2),
   },
   iconEmpty: {
     height: theme.typography.h4.fontSize,
@@ -109,7 +106,7 @@ function TransactionsList(props){
               onClick={()=>props.updateTransactionModal(t.id)}
               className={classes.listItemWrapper}
             >
-              <ListItem alignItems='center' classes={{container: classes.listItem}}>
+              <ListItem dense alignItems='center' classes={{container: classes.listItem}}>
                 <ListItemAvatar className={classes.listItemAvatar}>
                   {t.category
                     ? <div style={{backgroundColor: t.category.mui.color}} className={classes.listItemIconWrapper}>
