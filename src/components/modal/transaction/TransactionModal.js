@@ -21,7 +21,7 @@ function newState() {
       amount: '',
       date: new Date(new Date().toDateString()),
       description: '',
-      memo: ''
+      note: ''
     },
     popover: null
   };
@@ -32,12 +32,14 @@ class TransactionModal extends React.Component {
   // data state
   state = newState();
   popoverAnchorRef = React.createRef();
+  submitButtonRef = React.createRef();
   // data actions
   changeCategory = category => this.setState({...this.state, data: { ...this.state.data, category }});
   changeDate = date => this.setState({...this.state, data: {...this.state.data, date }});
   changeAmount = e => this.setState({...this.state, data: {...this.state.data, amount: e.target.value }});
   changeDescription = e => this.setState({...this.state, data: {...this.state.data, description: e.target.value }});
-  changeMemo = e => this.setState({...this.state, data: {...this.state.data, memo: e.target.value }});
+  changeNote = e => this.setState({...this.state, data: {...this.state.data, note: e.target.value }});
+  setPopoverAnchor = anchor => this.setState({popover: anchor});
   // state validation
   valid = {
     category: () => Object.keys(CATEGORY).includes(this.state.data.category),
@@ -50,7 +52,7 @@ class TransactionModal extends React.Component {
       return di < 0 ? true : val.length - di <= 3;
     },
     description: () => this.state.data.description !== '',
-    memo: () => this.state.data.memo !== '',
+    note: () => this.state.data.note !== '',
   }
   // erase data and close modal
   closeModal = () => {
@@ -58,7 +60,12 @@ class TransactionModal extends React.Component {
     this.props.handleClose();
   }
 
-  // internal helpers
+  // key listener
+  handleKeyDown = e => {
+    if (e.which == 13 || e.keyCode === 13) {
+      this.submitButtonRef.current.click();
+    }
+  }
 
   // get individual transaction data for modal if crud=update
   getTransactionData = () => {
@@ -97,6 +104,7 @@ class TransactionModal extends React.Component {
             valid={this.valid}
             crudColor={this.getCrudColor()}
             alerts={this.props.alerts}
+            buttonRef={this.submitButtonRef}
           />
         );
       case 'update':
@@ -108,6 +116,7 @@ class TransactionModal extends React.Component {
             valid={this.valid}
             crudColor={this.getCrudColor()}
             alerts={this.props.alerts}
+            buttonRef={this.submitButtonRef}
           />
         );
       default:
@@ -165,7 +174,7 @@ class TransactionModal extends React.Component {
         hideBackdrop={smallDevice}
       >
         <Slide direction='up' in={this.props.open}>
-          <Container maxWidth='sm' style={styles.container}>
+          <Container maxWidth='sm' style={styles.container} onKeyDown={this.handleKeyDown}>
             <TransactionModalHeader
               crud={this.props.crud}
               crudColor={this.getCrudColor()}
@@ -184,7 +193,7 @@ class TransactionModal extends React.Component {
               popover={{
                 anchorRef: this.popoverAnchorRef,
                 anchorEl: this.state.popover,
-                setAnchorEl: (val) => this.setState({popover: val}),
+                setAnchorEl: this.setPopoverAnchor,
               }}
               deleteButton={this.renderDeleteButton()}
             />
@@ -200,10 +209,10 @@ class TransactionModal extends React.Component {
                 handler: this.changeDescription,
                 valid: this.valid.description,
               }}
-              memo={{
-                value: this.state.data.memo,
-                handler: this.changeMemo,
-                valid: this.valid.memo,
+              note={{
+                value: this.state.data.note,
+                handler: this.changeNote,
+                valid: this.valid.note,
               }}
             />
             {this.renderActionButton()}

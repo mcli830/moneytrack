@@ -20,7 +20,7 @@ export const GET_USER_DATA = gql`
         description
         date
         amount
-        memo
+        note
       }
     }
   }

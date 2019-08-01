@@ -43,19 +43,20 @@ function CrudButtonCreateTransaction(props){
       {(addTransaction, {data, error, loading}) => (
         <Button
           id='gql-add-transaction'
+          ref={props.buttonRef}
           variant='contained'
           size='large'
           color={props.crudColor}
           style={styles.button}
-          disabled={loading || !(valid.amount() && valid.description())}
+          disabled={loading || !(valid.category() && valid.amount())}
           onClick={()=>addTransaction({
             variables: {
               creatorId: props.creatorId,
               category: createData.category,
               date: createData.date,
-              description: createData.description,
+              description: valid.description() ? createData.description : displayText(createData.category),
               amount: createData.amount,
-              memo: createData.memo,
+              note: createData.note,
             }
           })}
         >
@@ -66,14 +67,17 @@ function CrudButtonCreateTransaction(props){
               ? 'Choose a category'
               : !valid.amount()
                 ? 'Add an amount'
-                : !valid.description()
-                  ? 'Add a description'
-                  : 'Save transaction'
+                : 'Save transaction'
           }
         </Button>
       )}
     </Mutation>
   )
+}
+
+// external helpers
+function displayText(str){
+  return str.replace(/([A-Z])/g, ' $1').replace(/\sand\s/ig, ' & ').trim();
 }
 
 CrudButtonCreateTransaction.propTypes = {

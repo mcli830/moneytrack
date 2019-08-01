@@ -67,7 +67,7 @@ export default (props) => {
         multiline
         InputProps={{
           className: classes.fieldInput,
-          placeholder: 'Write a description...',
+          placeholder: 'Add a title...',
           disableUnderline: true,
           startAdornment: (
             <InputAdornment
@@ -80,21 +80,21 @@ export default (props) => {
         }}
       />
       <TextField
-        id='memo'
+        id='note'
         className={classes.field}
-        value={props.memo.value}
-        onChange={props.memo.handler}
+        value={props.note.value}
+        onChange={props.note.handler}
         multiline
         InputProps={{
           className: classes.fieldInput,
-          placeholder: 'Add a memo...',
+          placeholder: 'Add a note...',
           disableUnderline: true,
           startAdornment: (
             <InputAdornment
               position='start'
               className={classes.fieldAdornment}
             >
-              <Icon color={props.memo.valid() ? props.crudColor : 'disabled'}>create</Icon>
+              <Icon color={props.note.valid() ? props.crudColor : 'disabled'}>create</Icon>
             </InputAdornment>
           )
         }}

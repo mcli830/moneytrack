@@ -224,8 +224,8 @@ function TransactionModalHeader(props) {
           {rowProps.entries.map(([category, { mui }], i) => {
             const label = displayText(category);
             const clickHandler = e => {
-              closeCategoryMenu();
               props.category.handler(category);
+              closeCategoryMenu();
             }
             return (
               <Grid item xs={3} key={i} className={classes.gridItem}>

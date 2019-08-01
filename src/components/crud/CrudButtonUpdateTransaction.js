@@ -48,11 +48,12 @@ function CrudButtonUpdateTransaction(props){
       {(updateTransaction, {data, error, loading})=>(
         <Button
           id='gql-update-transaction'
+          ref={props.buttonRef}
           variant='contained'
           size='large'
           color={props.crudColor}
           style={styles.button}
-          disabled={loading || !(valid.amount() && valid.description())}
+          disabled={loading || !(valid.category() && valid.amount())}
           onClick={()=>updateTransaction({
             variables: {
               id: transactionId,
@@ -60,7 +61,7 @@ function CrudButtonUpdateTransaction(props){
               date: updateData.date,
               description: updateData.description,
               amount: updateData.amount,
-              memo: updateData.memo,
+              note: updateData.note,
             }
           })}
         >
@@ -71,9 +72,7 @@ function CrudButtonUpdateTransaction(props){
               ? 'Choose a category'
               : !valid.amount()
                 ? 'Add an amount'
-                : !valid.description()
-                  ? 'Add a description'
-                  : 'Save changes'
+                : 'Save changes'
           }
         </Button>
       )}

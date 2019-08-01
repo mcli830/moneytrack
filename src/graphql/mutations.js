@@ -42,7 +42,7 @@ export const ADD_TRANSACTION_MUTATION = gql`
     $description: String!
     $amount: Int!
     $date: DateTime!
-    $memo: String
+    $note: String
   ) {
     createTransaction(
       creatorId: $creatorId
@@ -50,14 +50,14 @@ export const ADD_TRANSACTION_MUTATION = gql`
       description: $description
       amount: $amount
       date: $date
-      memo: $memo
+      note: $note
     ) {
       id
       date
       category
       amount
       description
-      memo
+      note
       creator {
         id
         name
@@ -72,7 +72,7 @@ export const UPDATE_TRANSACTION_MUTATION = gql`
     $description: String!
     $amount: Int!
     $date: DateTime!
-    $memo: String
+    $note: String
   ) {
     updateTransaction(
       id: $id
@@ -80,14 +80,14 @@ export const UPDATE_TRANSACTION_MUTATION = gql`
       description: $description
       amount: $amount
       date: $date
-      memo: $memo
+      note: $note
     ) {
       id
       date
       category
       amount
       description
-      memo
+      note
       creator {
         id
         name

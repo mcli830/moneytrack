@@ -21,7 +21,7 @@ type Transaction @model {
   date: DateTime!
   amount: Int!
   description: String!
-  memo: String
+  note: String
   category: Category
   creator: User! @relation(name: "UserTransactions")
   createdAt: DateTime!
