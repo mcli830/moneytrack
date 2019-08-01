@@ -33,8 +33,9 @@ const useStyles = makeStyles(theme => ({
   },
   subheader: {
     backgroundColor: theme.palette.background.default,
+    color: theme.palette.grey[500],
     fontSize: theme.typography.subtitle2.fontSize,
-    padding: theme.spacing(0.25,2,0,2),
+    padding: theme.spacing(0.5,2,0,2),
   },
   listItemWrapper: {
     width: '100%',
@@ -64,9 +65,11 @@ const useStyles = makeStyles(theme => ({
     borderRadius: '50%',
     border: `2px dotted ${theme.palette.grey[200]}`
   },
+  currencyNum: {
+    fontSize: 14,
+  },
   currency: {
     color: theme.palette.text.disabled,
-    fontSize: theme.typography.subtitle2.fontSize,
     marginLeft: theme.spacing(0.5)
   },
   option: {
@@ -97,8 +100,8 @@ function TransactionsList(props){
     <li key={group.id}>
       <ul className={classes.ul}>
           <ListSubheader className={[classes.subheader, classes.flexRow].join(' ')}>
-            <Typography variant='subtitle1'>{group.dateString}</Typography>
-            <Typography variant='subtitle1'>{group.symbol + group.total}</Typography>
+            <Typography variant='overline'>{group.dateString}</Typography>
+            <Typography variant='overline'>{group.symbol + group.total}</Typography>
         </ListSubheader>
         {group.transactions.map((t,i) => (
           <li key={i}>
@@ -117,8 +120,12 @@ function TransactionsList(props){
                 </ListItemAvatar>
                 <ListItemText primary={t.description} secondary={t.note} />
                 <ListItemSecondaryAction className={classes.listItemSecondary}>
-                  <Typography component='span'>{t.symbol}{t.amountDisplay}</Typography>
-                  <Typography component='span' className={classes.currency}>{t.currency}</Typography>
+                  <Typography variant='subtitle1' component='span' className={classes.currencyNum}>
+                    {t.symbol}{t.amountDisplay}
+                  </Typography>
+                  <Typography variant='caption' component='span' className={classes.currency}>
+                    {t.currency}
+                  </Typography>
                 </ListItemSecondaryAction>
               </ListItem>
             </ButtonBase>

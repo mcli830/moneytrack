@@ -64,7 +64,7 @@ function formatData(data){
   const currencyAttr = CURRENCY[data.user.currency];
   data.user.transactions.forEach(t => {
     const tDate = new Date(t.date);
-    const amountDisplay = resolveCurrencyValue(t.amount, currencyAttr.decimal);
+    const amountDisplay = removeZeroCents(resolveCurrencyValue(t.amount, currencyAttr.decimal));
     // get each transaction node data ready for render
     const current = {
       ...t,
@@ -135,6 +135,10 @@ function formatData(data){
       groups: groupData
     }
   });
+}
+
+function removeZeroCents(numStr){
+  return /\d+\.00/.test(numStr) ? numStr.slice(0,numStr.indexOf('.')) : numStr;
 }
 
 export default withApollo(Transactions);

@@ -62,7 +62,7 @@ class TransactionModal extends React.Component {
 
   // key listener
   handleKeyDown = e => {
-    if (e.which == 13 || e.keyCode === 13) {
+    if (e.which === 13 || e.keyCode === 13) {
       this.submitButtonRef.current.click();
     }
   }
@@ -141,7 +141,7 @@ class TransactionModal extends React.Component {
       } else {
         setTimeout(()=>{
           if (!this.valid.category()) this.setState({popover: this.popoverAnchorRef.current});
-        }, 300)
+        }, 500)
       }
     }
   }
@@ -172,6 +172,7 @@ class TransactionModal extends React.Component {
         style={styles.modal}
         disableAutoFocus
         hideBackdrop={smallDevice}
+        keepMounted
       >
         <Slide direction='up' in={this.props.open}>
           <Container maxWidth='sm' style={styles.container} onKeyDown={this.handleKeyDown}>
