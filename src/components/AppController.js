@@ -5,8 +5,8 @@ import DataProvider from './data/DataProvider'
 import UserHeader from './UserHeader'
 import Account from './views/account/Account'
 import Transactions from './views/transactions/Transactions'
+import Timeline from './views/timeline/Timeline'
 // import Friends from './views/Friends'
-// import Timeline from './views/Timeline'
 import ComingSoon from './system/ComingSoon'
 import NavBottom from './NavBottom'
 import TransactionModal from './modal/transaction/TransactionModal'
@@ -54,20 +54,17 @@ function AppController(props) {
       <Container style={styles.view} maxWidth='sm'>
         <Switch>
           <Route path='/transactions' render={() => (
-            <DataProvider>
-              <Transactions
-                lastPage={props.locals.lastPage}
-                setPage={p=>props.setLocals({lastPage: p})}
-                updateTransactionModal={id=>props.handlers.openTransactionModal('update', {id})}
-              />
-            </DataProvider>
+            <Transactions
+              data={props.data}
+              lastPage={props.locals.lastPage}
+              setPage={p=>props.setLocals({lastPage: p})}
+              updateTransactionModal={id=>props.handlers.openTransactionModal('update', {id})}
+            />
           )} />
           <Route path='/friends' component={ComingSoon} />
-          <Route path='/timeline' component={ComingSoon} />
+          <Route path='/timeline' render={()=> <Timeline data={props.data} /> } />
           <Route path='/account' render={routeProps=>(
-            <DataProvider>
-              <Account slide={accountSlide} logout={props.logout} />
-            </DataProvider>
+            <Account slide={accountSlide} user={props.data.user} logout={props.logout} />
           )} />
           <Route path='/' render={()=><Redirect to='/transactions' />} />
         </Switch>

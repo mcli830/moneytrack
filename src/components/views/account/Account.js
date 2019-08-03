@@ -6,8 +6,8 @@ function Account(props) {
 
   return (
     <AccountView
-      user={props.data.user}
-      stats={analyzeData(props.data.user.transactions, props.data.user.currency)}
+      user={props.user}
+      stats={analyzeData(props.user.transactions, props.user.currency)}
       logout={props.logout}
       slide={props.slide}
     />

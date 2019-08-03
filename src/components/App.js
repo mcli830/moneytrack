@@ -1,8 +1,10 @@
 import React from 'react'
 import { Query, withApollo } from 'react-apollo'
+import Async from 'react-async'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Login from './auth/Login'
 import FetchUserData from './data/FetchUserData'
+import prepareTransactionsData from './data/prepareTransactionsData'
 import AppController from './AppController'
 import AppHeader from './AppHeader'
 import Loader from './system/Loader'
@@ -13,7 +15,7 @@ import { ThemeProvider } from '@material-ui/styles'
 // import green from '@material-ui/core/colors/green'
 // import orange from '@material-ui/core/colors/orange'
 import '../index.css';
-import { LOGGED_IN_USER } from '../graphql/queries'
+import { LOGGED_IN_USER, GET_USER_DATA } from '../graphql/queries'
 
 const theme = createMuiTheme({
   palette: {
@@ -83,18 +85,46 @@ class App extends React.Component {
   }
 
   _renderApp = id => {
+
+    const asyncPromiseFn = () => new Promise((resolve, reject) => {
+      // get user data from apollo cache
+      const { loggedInUser } = this.props.client.readQuery({
+        query: LOGGED_IN_USER
+      })
+      const { User } = this.props.client.readQuery({
+        query: GET_USER_DATA,
+        variables: { id: loggedInUser.id }
+      });
+
+      resolve({
+        user: User,
+        enhanced: prepareTransactionsData(User),
+      });
+    })
+
     return (
       <FetchUserData variables={{ id }}>
-        <AppController
-          state={this.state}
-          openTransactionModal={this.openTransactionModal}
-          handlers={{
-            openTransactionModal: this.openTransactionModal,
-          }}
-          locals={this.locals}
-          setLocals={this.setLocals}
-          logout={this._logout}
-        />
+        <Async promiseFn={asyncPromiseFn}>
+          <Async.Loading>
+            <Loader message='Loading...' />
+          </Async.Loading>
+          <Async.Rejected>
+            {error => <ErrorPage message={error.message} />}
+          </Async.Rejected>
+          <Async.Resolved>
+            {data => (
+              <AppController
+                state={this.state}
+                data={data}
+                openTransactionModal={this.openTransactionModal}
+                handlers={{ openTransactionModal: this.openTransactionModal }}
+                locals={this.locals}
+                setLocals={this.setLocals}
+                logout={this._logout}
+              />
+            )}
+          </Async.Resolved>
+        </Async>
       </FetchUserData>
     )
   }

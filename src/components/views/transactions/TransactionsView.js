@@ -39,13 +39,13 @@ function TransactionsView(props) {
         headerComponent={(addProps) => (
           <TransactionsHead
             {...addProps}
-            months={props.data.map(d => d.name)}
+            months={props.data.enhanced.transactions.map(d => d.name)}
             setPage={props.setPage}
             />
         )}
         onSwiped={(view)=>props.setPage(view)}
         >
-        {props.data.map((monthSet, i) => {
+        {props.data.enhanced.transactions.map((monthSet, i) => {
           return (addProps) => {
             return (
               <div {...addProps} key={monthSet.id}>
@@ -65,7 +65,7 @@ function TransactionsView(props) {
     <div className={classes.root}>
       <div className={classes.views}>
         {
-          props.data.length < 1
+          props.data.enhanced.transactions.length < 1
           ? <EmptyList />
           : _renderListViews()
         }
