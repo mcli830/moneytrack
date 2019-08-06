@@ -14,7 +14,6 @@ import InputBase from '@material-ui/core/InputBase'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { withApollo, Mutation } from 'react-apollo'
-import withAlerts from '../system/withAlerts'
 import { withTheme } from '@material-ui/core/styles'
 import { makeStyles } from '@material-ui/styles'
 import { UPDATE_USER_MUTATION } from '../../graphql/mutations'
@@ -226,4 +225,4 @@ function CrudFormUpdateUser(props){
   }
 }
 
-export default withApollo(withAlerts(withTheme(CrudFormUpdateUser)));
+export default withApollo(withTheme(CrudFormUpdateUser));

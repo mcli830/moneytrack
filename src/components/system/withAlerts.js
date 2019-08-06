@@ -96,12 +96,14 @@ export default function withAlerts(WrappedComponent){
 
       return (
         <React.Fragment>
-          <WrappedComponent
-            alerts={{
-              notification: this.notification,
-            }}
-            {...this.props}
-          />
+          <ControlledUpdate>
+              <WrappedComponent
+                alerts={{
+                  notification: this.notification,
+                }}
+                {...this.props}
+              />
+            </ControlledUpdate>
           <Snackbar
             key={alert.key}
             anchorOrigin={{
@@ -127,6 +129,16 @@ export default function withAlerts(WrappedComponent){
           />
         </React.Fragment>
       )
+    }
+  }
+
+  class ControlledUpdate extends React.Component {
+    shouldComponentUpdate(){
+      // prevent the rest of the app from updating when alerts are used
+      return false;
+    }
+    render(){
+      return this.props.children;
     }
   }
 

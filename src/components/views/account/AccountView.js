@@ -8,7 +8,6 @@ import FaceIcon from '@material-ui/icons/Face'
 import EmailIcon from '@material-ui/icons/Email'
 import AccountItem from './AccountItem'
 import CrudFormUpdateUser from '../../crud/CrudFormUpdateUser'
-import withAlerts from '../../system/withAlerts'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { makeStyles } from '@material-ui/styles'
 import { useTheme } from '@material-ui/core/styles'
@@ -77,12 +76,14 @@ function AccountView(props) {
             name={'name'}
             icon={<FaceIcon/>}
             value={props.user.name}
+            alerts={props.alerts}
           />
           <CrudFormUpdateUser
             user={props.user}
             name={'email'}
             icon={<EmailIcon/>}
             value={props.user.email}
+            alerts={props.alerts}
           />
           <CrudFormUpdateUser
             user={props.user}
@@ -92,6 +93,7 @@ function AccountView(props) {
             textIcon
             icon={CURRENCY[props.user.currency].icon}
             value={props.user.currency}
+            alerts={props.alerts}
           />
           <LogoutButton />
         </List>
@@ -129,4 +131,4 @@ function AccountView(props) {
   }
 }
 
-export default withAlerts(AccountView);
+export default AccountView;

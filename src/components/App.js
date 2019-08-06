@@ -9,6 +9,7 @@ import AppController from './AppController'
 import AppHeader from './AppHeader'
 import Loader from './system/Loader'
 import ErrorPage from './system/Error'
+import withAlerts from './system/withAlerts'
 import { createMuiTheme } from '@material-ui/core/styles'
 import { ThemeProvider } from '@material-ui/styles'
 // import blue from '@material-ui/core/colors/blue'
@@ -36,7 +37,6 @@ class App extends React.Component {
         transaction: {
           isOpen: false,
           crud: '',
-          data: {}
         }
       }
     }
@@ -121,6 +121,7 @@ class App extends React.Component {
                 locals={this.locals}
                 setLocals={this.setLocals}
                 logout={this._logout}
+                alerts={this.props.alerts}
               />
             )}
           </Async.Resolved>
@@ -150,7 +151,7 @@ class App extends React.Component {
   }
 }
 
-export default withApollo(App);
+export default withApollo(withAlerts(App));
 
 // export default graphql(LOGGED_IN_USER_QUERY, {
 //   name: 'loggedInUserQuery',

@@ -10,6 +10,7 @@ function Account(props) {
       stats={analyzeData(props.user.transactions, props.user.currency)}
       logout={props.logout}
       slide={props.slide}
+      alerts={props.alerts}
     />
   )
 }
