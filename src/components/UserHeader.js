@@ -54,10 +54,12 @@ function UserHeader(props) {
     });
     return setTimeout(()=>{
       navFunc();
-      props.setAccountSlide({
-        in: true,
-        timeout: 300,
-      });
+      setTimeout(()=>{
+        props.setAccountSlide({
+          in: true,
+          timeout: 300,
+        });
+      }, 200)
     }, exitTime)
   }
   // render

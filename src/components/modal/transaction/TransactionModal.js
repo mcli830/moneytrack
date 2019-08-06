@@ -34,7 +34,11 @@ function TransactionModal(props) {
   const popoverAnchorRef = React.useRef();
   const submitButtonRef = React.useRef();
   // data actions
-  const changeCategory = category => setState({...state, data: { ...state.data, category }});
+  const changeCategory = category => setState({
+    ...state,
+    data: { ...state.data, category },
+    popover: null,
+  });
   const changeDate = date => setState({...state, data: {...state.data, date }});
   const changeAmount = e => setState({...state, data: {...state.data, amount: e.target.value }});
   const changeDescription = e => setState({...state, data: {...state.data, description: e.target.value }});
