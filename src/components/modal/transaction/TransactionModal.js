@@ -75,7 +75,6 @@ function TransactionModal(props) {
       date: new Date(t.date),
       amount: resolveCurrencyValue(t.amount, CURRENCY[props.data.user.currency].decimal)
     }
-    console.log(result)
     return result;
   }
   // get color of modal depending on crud action

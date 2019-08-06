@@ -1,8 +1,9 @@
 import React from 'react'
-import { Query, withApollo } from 'react-apollo'
+import { withApollo } from 'react-apollo'
 import Async from 'react-async'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Login from './auth/Login'
+import Authenticator from './data/Authenticator'
 import FetchUserData from './data/FetchUserData'
 import prepareTransactionsData from './data/prepareTransactionsData'
 import AppController from './AppController'
@@ -134,16 +135,10 @@ class App extends React.Component {
       <ThemeProvider theme={theme}>
         <div className="App">
           <CssBaseline />
-          <Query query={LOGGED_IN_USER}>
-            {({ data, loading, error}) => {
-              if (loading) return <Loader message='Initiating...' />;
-              if (error) return <ErrorPage message={error.message} />
-              if (data.loggedInUser && data.loggedInUser.id !== null){
-                return this._renderApp(data.loggedInUser.id);
-              }
-              return this._renderLogin();
-            }}
-          </Query>
+          <Authenticator
+            onLoggedIn={this._renderApp}
+            onLoggedOff={this._renderLogin}
+          />
         </div>
       </ThemeProvider>
     );
