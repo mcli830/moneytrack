@@ -1,8 +1,8 @@
 import React from 'react'
 import MonthViews from '../MonthViews'
-import TransactionsList from './TransactionsList'
+import TimelineFigure from './TimelineFigure'
 
-function TransactionsView(props) {
+function TimelineView(props){
 
   return (
     <MonthViews
@@ -10,10 +10,11 @@ function TransactionsView(props) {
       lastPage={props.lastPage}
       setPage={props.setPage}
       headers={props.data.enhanced.transactions.map(d => d.name)}
+      subset={set => set.groups}
     >
-      <TransactionsList updateTransactionModal={props.updateTransactionModal} />
+      <TimelineFigure />
     </MonthViews>
   );
 }
 
-export default TransactionsView;
+export default TimelineView;

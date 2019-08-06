@@ -9,7 +9,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import Icon from '@material-ui/core/Icon'
 import ButtonBase from '@material-ui/core/ButtonBase'
 import Divider from '@material-ui/core/Divider'
-import EmptyList from './EmptyList'
+import EmptyList from '../EmptyList'
 import { makeStyles } from '@material-ui/styles'
 import { withTheme } from '@material-ui/core/styles'
 
@@ -96,52 +96,48 @@ const useStyles = makeStyles(theme => ({
 function TransactionsList(props){
   const classes = useStyles(props.theme);
 
-  const renderList = () => props.data.map(group => (
-    <li key={group.id}>
-      <ul className={classes.ul}>
+  const renderList = () => props.data.groups.map(group => (
+      <li key={group.id}>
+        <ul className={classes.ul}>
           <ListSubheader className={[classes.subheader, classes.flexRow].join(' ')}>
             <Typography variant='overline'>{group.dateString}</Typography>
             <Typography variant='overline'>{group.symbol + group.total}</Typography>
-        </ListSubheader>
-        {group.transactions.map((t,i) => (
-          <li key={i}>
-            <ButtonBase
-              onClick={()=>props.updateTransactionModal(t.id)}
-              className={classes.listItemWrapper}
-            >
-              <ListItem dense alignItems='center' classes={{container: classes.listItem}}>
-                <ListItemAvatar className={classes.listItemAvatar}>
-                  {t.category
-                    ? <div style={{backgroundColor: t.category.mui.color}} className={classes.listItemIconWrapper}>
+          </ListSubheader>
+          {group.transactions.map((t,i) => (
+            <li key={i}>
+              <ButtonBase
+                onClick={()=>props.updateTransactionModal(t.id)}
+                className={classes.listItemWrapper}
+                >
+                <ListItem dense alignItems='center' classes={{container: classes.listItem}}>
+                  <ListItemAvatar className={classes.listItemAvatar}>
+                    {t.category ? (
+                      <div style={{backgroundColor: t.category.mui.color}} className={classes.listItemIconWrapper}>
                         <Icon className={classes.listItemIcon}>{t.category.mui.icon}</Icon>
                       </div>
-                    : <div className={classes.iconEmpty} />
-                  }
-                </ListItemAvatar>
-                <ListItemText primary={t.description} secondary={t.note} />
-                <ListItemSecondaryAction className={classes.listItemSecondary}>
-                  <Typography variant='subtitle1' component='span' className={classes.currencyNum}>
-                    {t.symbol}{t.amountDisplay}
-                  </Typography>
-                  <Typography variant='caption' component='span' className={classes.currency}>
-                    {t.currency}
-                  </Typography>
-                </ListItemSecondaryAction>
-              </ListItem>
-            </ButtonBase>
-            <Divider light />
-          </li>
-        ))}
-      </ul>
-    </li>
+                    ) : <div className={classes.iconEmpty} />}
+                  </ListItemAvatar>
+                  <ListItemText primary={t.description} secondary={t.note} />
+                  <ListItemSecondaryAction className={classes.listItemSecondary}>
+                    <Typography variant='subtitle1' component='span' className={classes.currencyNum}>
+                      {t.symbol}{t.amountDisplay}
+                    </Typography>
+                    <Typography variant='caption' component='span' className={classes.currency}>
+                      {t.currency}
+                    </Typography>
+                  </ListItemSecondaryAction>
+                </ListItem>
+              </ButtonBase>
+              <Divider light />
+            </li>
+          ))}
+        </ul>
+      </li>
   ));
 
   return (
     <List className={classes.list}>
-      {props.data.length < 1
-        ? <EmptyList />
-        : renderList()
-      }
+      {props.data.length < 1 ? <EmptyList /> : renderList()}
     </List>
   );
 }

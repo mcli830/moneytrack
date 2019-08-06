@@ -1,5 +1,4 @@
 import React from 'react'
-import { withApollo } from 'react-apollo'
 import TransactionsView from './TransactionsView'
 
 function Transactions(props) {
@@ -16,4 +15,4 @@ function Transactions(props) {
   );
 }
 
-export default withApollo(Transactions);
+export default Transactions;

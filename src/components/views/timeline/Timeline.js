@@ -1,11 +1,16 @@
 import React from 'react'
+import TimelineView from './TimelineView'
 
 function Timeline(props){
-  console.log(props)
+
+  const lastPage = props.lastPage !== null ? props.lastPage : props.data.enhanced.initialView;
+
   return (
-    <div>
-      <h1>Timeline</h1>
-    </div>
+    <TimelineView
+      data={props.data}
+      lastPage={lastPage}
+      setPage={props.setPage}
+    />
   )
 }
 

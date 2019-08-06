@@ -60,7 +60,13 @@ function AppController(props) {
             />
           )} />
           <Route path='/friends' component={ComingSoon} />
-          <Route path='/timeline' render={()=> <Timeline data={props.data} /> } />
+          <Route path='/timeline' render={()=> (
+            <Timeline
+              data={props.data}
+              lastPage={props.locals.lastPage}
+              setPage={p=>props.setLocals({lastPage: p})}
+            />
+          )} />
           <Route path='/account' render={routeProps=>(
             <Account slide={accountSlide} user={props.data.user} logout={props.logout} alerts={props.alerts} />
           )} />
