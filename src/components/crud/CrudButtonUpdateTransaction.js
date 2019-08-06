@@ -38,11 +38,11 @@ function CrudButtonUpdateTransaction(props){
             }
           }
         });
-        props.closeModal();
         props.alerts.notification({
           message: 'Transaction updated.',
           color: 'primary',
         })
+        props.closeModal();
       }}
     >
       {(updateTransaction, {data, error, loading})=>(

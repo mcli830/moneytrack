@@ -60,7 +60,6 @@ function TransactionModal(props) {
   // erase data and close modal
   const closeModal = () => {
     props.handleClose();
-    setState(newState());
   }
 
   // key listener
