@@ -223,14 +223,10 @@ function TransactionModalHeader(props) {
         <Grid container item xs={12} spacing={rowProps.spacing}>
           {rowProps.entries.map(([category, { mui }], i) => {
             const label = displayText(category);
-            const clickHandler = e => {
-              props.category.handler(category);
-              closeCategoryMenu();
-            }
             return (
               <Grid item xs={3} key={i} className={classes.gridItem}>
                 <Button
-                  onClick={clickHandler}
+                  onClick={()=>props.category.handler(category)}
                   classes={{label: classes.categoryMenuButton}}
                 >
                   <Icon size='large' style={{color: mui.color}}>{mui.icon}</Icon>

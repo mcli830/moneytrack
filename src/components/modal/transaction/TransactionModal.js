@@ -34,12 +34,16 @@ class TransactionModal extends React.Component {
   popoverAnchorRef = React.createRef();
   submitButtonRef = React.createRef();
   // data actions
-  changeCategory = category => this.setState({...this.state, data: { ...this.state.data, category }});
-  changeDate = date => this.setState({...this.state, data: {...this.state.data, date }});
-  changeAmount = e => this.setState({...this.state, data: {...this.state.data, amount: e.target.value }});
-  changeDescription = e => this.setState({...this.state, data: {...this.state.data, description: e.target.value }});
-  changeNote = e => this.setState({...this.state, data: {...this.state.data, note: e.target.value }});
-  setPopoverAnchor = anchor => this.setState({popover: anchor});
+  const changeCategory = category => setState({
+    ...state,
+    data: { ...state.data, category },
+    popover: null,
+  });
+  const changeDate = date => setState({...state, data: {...state.data, date }});
+  const changeAmount = e => setState({...state, data: {...state.data, amount: e.target.value }});
+  const changeDescription = e => setState({...state, data: {...state.data, description: e.target.value }});
+  const changeNote = e => setState({...state, data: {...state.data, note: e.target.value }});
+  const setPopoverAnchor = anchor => setState({...state, popover: anchor});
   // state validation
   valid = {
     category: () => Object.keys(CATEGORY).includes(this.state.data.category),
