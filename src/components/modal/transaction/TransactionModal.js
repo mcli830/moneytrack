@@ -28,95 +28,95 @@ function newState() {
 }
 
 // Component
-function TransactionModal(props) {
+class TransactionModal extends React.Component {
   // data state
-  const [state, setState] = React.useState(newState());
-  const popoverAnchorRef = React.useRef();
-  const submitButtonRef = React.useRef();
+  state = newState();
+  popoverAnchorRef = React.createRef();
+  submitButtonRef = React.createRef();
   // data actions
-  const changeCategory = category => setState({...state, data: { ...state.data, category }});
-  const changeDate = date => setState({...state, data: {...state.data, date }});
-  const changeAmount = e => setState({...state, data: {...state.data, amount: e.target.value }});
-  const changeDescription = e => setState({...state, data: {...state.data, description: e.target.value }});
-  const changeNote = e => setState({...state, data: {...state.data, note: e.target.value }});
-  const setPopoverAnchor = anchor => setState({...state, popover: anchor});
+  changeCategory = category => this.setState({...this.state, data: { ...this.state.data, category }});
+  changeDate = date => this.setState({...this.state, data: {...this.state.data, date }});
+  changeAmount = e => this.setState({...this.state, data: {...this.state.data, amount: e.target.value }});
+  changeDescription = e => this.setState({...this.state, data: {...this.state.data, description: e.target.value }});
+  changeNote = e => this.setState({...this.state, data: {...this.state.data, note: e.target.value }});
+  setPopoverAnchor = anchor => this.setState({popover: anchor});
   // state validation
-  const valid = {
-    category: () => Object.keys(CATEGORY).includes(state.data.category),
+  valid = {
+    category: () => Object.keys(CATEGORY).includes(this.state.data.category),
     amount: () => {
-      const val = state.data.amount;
+      const val = this.state.data.amount;
       if (val.length < 1) return false;
       if (/[^0-9.]/g.test(val)) return false;
       if (val.split('').filter(c => c === '.').length > 1) return false;
-      const di = state.data.amount.indexOf('.');
+      const di = this.state.data.amount.indexOf('.');
       return di < 0 ? true : val.length - di <= 3;
     },
-    description: () => state.data.description !== '',
-    note: () => state.data.note !== '',
+    description: () => this.state.data.description !== '',
+    note: () => this.state.data.note !== '',
   }
   // erase data and close modal
-  const closeModal = () => {
-    props.handleClose();
-    setState(newState());
+  closeModal = () => {
+    this.setState(newState());
+    this.props.handleClose();
   }
 
   // key listener
-  const handleKeyDown = e => {
+  handleKeyDown = e => {
     if (e.which === 13 || e.keyCode === 13) {
-      submitButtonRef.current.click();
+      this.submitButtonRef.current.click();
     }
   }
 
   // get individual transaction data for modal if crud=update
-  const getTransactionData = () => {
-    const t = props.data.user.transactions.find(t => t.id === props.currentId);
+  getTransactionData = () => {
+    const t = this.props.data.user.transactions.find(t => t.id === this.props.currentId);
     const result = {
       ...t,
       date: new Date(t.date),
-      amount: resolveCurrencyValue(t.amount, CURRENCY[props.data.user.currency].decimal)
+      amount: resolveCurrencyValue(t.amount, CURRENCY[this.props.data.user.currency].decimal)
     }
     return result;
   }
   // get color of modal depending on crud action
-  const getCrudColor = () => {
-    return props.crud === 'update' ? 'primary' : 'secondary'
+  getCrudColor = () => {
+    return this.props.crud === 'update' ? 'primary' : 'secondary'
   }
 
   // validate amount from string to number
-  const validateAmount = (amt) => {
+  validateAmount = (amt) => {
     var v = typeof amt === 'number' ? amt.toString() : amt;
-    return parseInt(v*Math.pow(10,CURRENCY[props.data.user.currency].decimal), 10);
+    return parseInt(v*Math.pow(10,CURRENCY[this.props.data.user.currency].decimal), 10);
   }
 
   // internal renderers
-  const renderActionButton = () => {
+  renderActionButton = () => {
     const modalData = {
-      ...state.data,
-      amount: validateAmount(state.data.amount),
+      ...this.state.data,
+      amount: this.validateAmount(this.state.data.amount),
     }
-    switch(props.crud){
+    switch(this.props.crud){
       case 'create':
         return (
           <CrudButtonCreateTransaction
-            creatorId={props.data.user.id}
+            creatorId={this.props.data.user.id}
             createData={modalData}
-            closeModal={closeModal}
-            valid={valid}
-            crudColor={getCrudColor()}
-            alerts={props.alerts}
-            buttonRef={submitButtonRef}
+            closeModal={this.closeModal}
+            valid={this.valid}
+            crudColor={this.getCrudColor()}
+            alerts={this.props.alerts}
+            buttonRef={this.submitButtonRef}
           />
         );
       case 'update':
         return (
           <CrudButtonUpdateTransaction
-            transactionId={props.currentId}
+            transactionId={this.props.currentId}
             updateData={modalData}
-            closeModal={closeModal}
-            valid={valid}
-            crudColor={getCrudColor()}
-            alerts={props.alerts}
-            buttonRef={submitButtonRef}
+            closeModal={this.closeModal}
+            valid={this.valid}
+            crudColor={this.getCrudColor()}
+            alerts={this.props.alerts}
+            buttonRef={this.submitButtonRef}
           />
         );
       default:
@@ -124,101 +124,104 @@ function TransactionModal(props) {
     }
   }
   // render delete button
-  const renderDeleteButton = () => {
+  renderDeleteButton = () => {
     return (
       <CrudButtonDeleteTransaction
-        transactionId={props.currentId}
-        closeModal={closeModal}
-        alerts={props.alerts}
+        transactionId={this.props.currentId}
+        closeModal={this.closeModal}
+        alerts={this.props.alerts}
       />
     );
   }
 
-  // render
-  const smallDevice = window.innerWidth <= 600  ;
-  const styles = {
-    modal: {
-      display: 'flex',
-      alignItems: 'center',
-    },
-    container: {
-      backgroundColor: '#fff',
-      padding: 0,
-      display: 'flex',
-      flexDirection: 'column',
-      height: smallDevice ? '100%' : 'auto',
-      minHeight: smallDevice ? 'none' : '60%',
-      maxHeight: smallDevice ? '100%' : `90%`,
-    },
+  componentDidUpdate(prevProps, prevState){
+    if (!prevProps.open && this.props.open) {
+      if (this.props.crud === 'update'){
+        this.setState({ data: this.getTransactionData() })
+      } else {
+        setTimeout(()=>{
+          if (!this.valid.category()) this.setState({popover: this.popoverAnchorRef.current});
+        }, 500)
+      }
+    }
   }
 
-  return (
-    <Modal
-      open={props.open}
-      onClose={closeModal}
-      style={styles.modal}
-      disableAutoFocus
-      hideBackdrop={smallDevice}
-      closeAfterTransition
-      onRendered={()=>{
-        if (props.open){
-          if (props.crud === 'update'){
-            setState({ ...state, data: getTransactionData() })
-          } else {
-            setTimeout(()=>{
-              if (!valid.category()) setState({...state, popover: popoverAnchorRef.current});
-            }, 500)
-          }
-        }
-      }}
-    >
-      <Slide direction='up' in={props.open}>
-        <Container maxWidth='sm' style={styles.container} onKeyDown={handleKeyDown}>
-          <TransactionModalHeader
-            crud={props.crud}
-            crudColor={getCrudColor()}
-            closeModal={closeModal}
-            category={{
-              value: state.data.category,
-              handler: changeCategory,
-              valid: valid.category,
-            }}
-            amount={{
-              value: state.data.amount,
-              handler: changeAmount,
-              valid: valid.amount,
-            }}
-            currency={props.data.user.currency}
-            popover={{
-              anchorRef: popoverAnchorRef,
-              anchorEl: state.popover,
-              setAnchorEl: setPopoverAnchor,
-            }}
-            deleteButton={renderDeleteButton()}
-          />
-          <TransactionModalContent
-            crud={props.crud}
-            crudColor={getCrudColor()}
-            date={{
-              value: state.data.date,
-              handler: changeDate,
-            }}
-            description={{
-              value: state.data.description,
-              handler: changeDescription,
-              valid: valid.description,
-            }}
-            note={{
-              value: state.data.note,
-              handler: changeNote,
-              valid: valid.note,
-            }}
-          />
-          {renderActionButton()}
-        </Container>
-      </Slide>
-    </Modal>
-  );
+  // render
+  render (){
+    const smallDevice = window.innerWidth <= 600  ;
+    const styles = {
+      modal: {
+        display: 'flex',
+        alignItems: 'center',
+      },
+      container: {
+        backgroundColor: '#fff',
+        padding: 0,
+        display: 'flex',
+        flexDirection: 'column',
+        height: smallDevice ? '100%' : 'auto',
+        minHeight: smallDevice ? 'none' : '60%',
+        maxHeight: smallDevice ? '100%' : `90%`,
+      },
+    }
+
+    return (
+      <Modal
+        open={this.props.open}
+        onClose={this.closeModal}
+        style={styles.modal}
+        disableAutoFocus
+        hideBackdrop={smallDevice}
+        keepMounted
+      >
+        <Slide direction='up' in={this.props.open}>
+          <Container maxWidth='sm' style={styles.container} onKeyDown={this.handleKeyDown}>
+            <TransactionModalHeader
+              crud={this.props.crud}
+              crudColor={this.getCrudColor()}
+              closeModal={this.closeModal}
+              category={{
+                value: this.state.data.category,
+                handler: this.changeCategory,
+                valid: this.valid.category,
+              }}
+              amount={{
+                value: this.state.data.amount,
+                handler: this.changeAmount,
+                valid: this.valid.amount,
+              }}
+              currency={this.props.data.user.currency}
+              popover={{
+                anchorRef: this.popoverAnchorRef,
+                anchorEl: this.state.popover,
+                setAnchorEl: this.setPopoverAnchor,
+              }}
+              deleteButton={this.renderDeleteButton()}
+            />
+            <TransactionModalContent
+              crud={this.props.crud}
+              crudColor={this.getCrudColor()}
+              date={{
+                value: this.state.data.date,
+                handler: this.changeDate,
+              }}
+              description={{
+                value: this.state.data.description,
+                handler: this.changeDescription,
+                valid: this.valid.description,
+              }}
+              note={{
+                value: this.state.data.note,
+                handler: this.changeNote,
+                valid: this.valid.note,
+              }}
+            />
+            {this.renderActionButton()}
+          </Container>
+        </Slide>
+      </Modal>
+    );
+  }
 }
 
 TransactionModal.propTypes = {
@@ -227,7 +230,7 @@ TransactionModal.propTypes = {
   crud: PropTypes.string,
   data: (props, propName) => {
     if (props['crud'] === 'update' && (props[propName] === undefined || typeof(props[propName]) != 'object')){
-      return new Error('Update operations require initial data to be provided via data props.')
+      return new Error('Update operations require initial data to be provided via data this.props.')
     }
   },
 }

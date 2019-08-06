@@ -1,6 +1,7 @@
 import React from 'react'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
 import Container from '@material-ui/core/Container'
+import DataProvider from './data/DataProvider'
 import UserHeader from './UserHeader'
 import Account from './views/account/Account'
 import Transactions from './views/transactions/Transactions'
@@ -40,11 +41,12 @@ function AppController(props) {
   // render helpers
   function renderHeader(){
     return (
-      <UserHeader
-        data={props.data}
-        openTransactionModal={()=>props.handlers.openTransactionModal('create')}
-        setAccountSlide={setAccountSlide}
-      />
+      <DataProvider>
+        <UserHeader
+          openTransactionModal={()=>props.handlers.openTransactionModal('create')}
+          setAccountSlide={setAccountSlide}
+        />
+      </DataProvider>
     );
   }
   function renderView(){
@@ -86,13 +88,14 @@ function AppController(props) {
   }
   function renderTransactionModal(){
     return (
-      <TransactionModal
-        data={props.data}
-        open={props.state.modals.transaction.isOpen}
-        crud={props.state.modals.transaction.crud}
-        currentId={props.state.modals.transaction.currentId}
-        handleClose={()=>props.handlers.openTransactionModal('')}
-      />
+      <DataProvider>
+        <TransactionModal
+          open={props.state.modals.transaction.isOpen}
+          crud={props.state.modals.transaction.crud}
+          currentId={props.state.modals.transaction.currentId}
+          handleClose={()=>props.handlers.openTransactionModal('')}
+        />
+      </DataProvider>
     );
   }
 }
