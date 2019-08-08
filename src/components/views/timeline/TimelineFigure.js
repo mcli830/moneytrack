@@ -18,6 +18,10 @@ const style = theme => ({
     width: '100%',
     userSelect: 'none',
   },
+  tickX: {
+    fontSize: theme.spacing(2),
+    color: theme.palette.text.secondary,
+  },
   tick_noline: {
     '& line': {
       display: 'none',
@@ -38,7 +42,7 @@ const style = theme => ({
     fill: theme.palette.grey[200],
   },
   barOverlay: {
-    fill: 'rgba(0,0,0,0.02)',
+    fill: 'transparent',
   }
 });
 
@@ -58,6 +62,13 @@ class TimelineFigure extends React.Component {
   height = 400;
   padding = 40;
   barPadding = 3;
+  // getters
+  get bars() {
+    return Array.from(this.ref.current.querySelectorAll(`.${this.props.classes.bar}`));
+  }
+  get overlays() {
+    return Array.from(this.ref.current.querySelectorAll(`.${this.props.classes.barOverlay}`));
+  }
 
   // lifecycle
   componentDidMount(){
@@ -75,22 +86,50 @@ class TimelineFigure extends React.Component {
   }
   // handlers
   handleTouchStart(e){
-    this.timer = setTimeout(this.handleTouchHold, this.holdDuration)
+    console.log('start')
+    const coords = getTouchCoords(e);
+    this.timer = setTimeout(()=>this.handleTouchHold(coords), this.holdDuration)
   }
   handleTouchMove(e){
+    console.log('move')
     if (this.timer) clearTimeout(this.timer);
+    if (!this.props.swipeable) this.selectBar(getTouchCoords(e));
   }
   handleTouchEnd(e){
+    console.log('end')
     if (this.timer) clearTimeout(this.timer);
     if (!this.props.swipeable) this.props.setSwipeable(true);
+    this.deselectBars();
   }
-  handleTouchHold(e){
+  handleTouchHold(coords){
+    console.log('hold')
     this.props.setSwipeable(false);
+    this.selectBar(coords);
   }
   handleContextMenu(e){
     e.preventDefault();
     e.stopPropagation();
     return false;
+  }
+  selectBar(coords){
+    const {x, y} = coords;
+    this.overlays.forEach(overlay => {
+      const rect = overlay.getBoundingClientRect();
+      const bar = this.bars.find(b => b.dataset.id == overlay.dataset.id)
+      if (
+        x >= rect.x && x < rect.x+rect.width
+        && y >= rect.y && y < rect.y+rect.height
+      ) {
+        bar.classList.remove(this.props.classes.barInactive);
+      } else {
+        bar.classList.add(this.props.classes.barInactive);
+      }
+    })
+  }
+  deselectBars(){
+    this.bars.forEach(b => {
+      b.classList.remove(this.props.classes.barInactive);
+    })
   }
 
   // render d3
@@ -117,7 +156,7 @@ class TimelineFigure extends React.Component {
     const xAxis = d3.axisBottom()
                     .scale(xScale)
                     .tickValues(xTicks)
-                    .tickPadding(4)
+                    .tickPadding(12)
                     .tickSize(0)
                     .tickFormat((d,i)=>{
                       const v = Math.floor(d).toString();
@@ -136,7 +175,7 @@ class TimelineFigure extends React.Component {
     // draw axes
     const xAxisNode = svg.append('g')
        .attr('id', 'x-axis-'+this.props.data.id)
-       .attr('transform', `translate(0,${this.height-this.padding})`)
+       .attr('transform', `translate(0,${this.height-this.padding+2})`)
        .call(xAxis);
     // const yAxisNode = svg.append('g')
     //    .attr('id', 'y-axis-'+this.props.data.id)
@@ -146,7 +185,7 @@ class TimelineFigure extends React.Component {
     // apply staggered display style to date ticks
     xAxisNode.selectAll('.tick')
       .style('font-size', '16px')
-      .attr('class', (d,i) => (i===0 || (d+2)%3 !== 0) ? this.props.classes.tick_notext : '')
+      .attr('class', (d,i) => (i===0 || (d+2)%3 !== 0) ? this.props.classes.tick_notext : this.props.classes.tickX)
     // yAxisNode.selectAll('.tick')
     //   .style('font-size', '16px')
 
@@ -167,27 +206,12 @@ class TimelineFigure extends React.Component {
       .attr('y', d => yScale(parseFloat(d.total)))
       .attr('height', d => yScale(0) - yScale(parseFloat(d.total)))
       .attr('width', barWidth)
+      .attr('data-id', d => d.id)
 
     // user interaction bar overlays
     const barOverlay = {
       height: yScale(0)-yScale(yMax)+this.padding,
       width: xScale(1)-this.padding,
-      onEnter: (e) => {
-        if (!this.props.swipeable && parseFloat(e.total) > 0){
-          barGroups.selectAll(`.${this.props.classes.bar}`)
-            .attr('class', (d,i)=>{
-            return [
-              this.props.classes.bar,
-              e.id === d.id ? '' : this.props.classes.barInactive
-            ].join(' ')})
-        }
-      },
-      onExit: (e) => {
-        if (!this.props.swipeable){
-          barGroups.selectAll(`.${this.props.classes.bar}`)
-            .attr('class', this.props.classes.bar)
-        }
-      }
     }
     barGroups.append('rect')
       .attr('class', this.props.classes.barOverlay)
@@ -196,8 +220,6 @@ class TimelineFigure extends React.Component {
       .attr('height', barOverlay.height)
       .attr('width', barOverlay.width)
       .attr('data-id', d => d.id)
-      .on('touchstart touchmove mouseenter mouseover', barOverlay.onEnter)
-      .on('touchend touchcancel mouseleave', barOverlay.onExit)
 
     // barGroups.append('text')
     //   .attr('x', (d,i) => xScale(d.id)+this.barPadding-barGroupHalfWidth)
@@ -249,6 +271,9 @@ function getDaysInMonth(id){
   const d = new Date(parseInt(y, 10), parseInt(m, 10)+1);
   d.setDate(d.getDate()-1);
   return d.getUTCDate();
+}
+function getTouchCoords(e){
+  return {x: e.touches[0].clientX, y: e.touches[0].clientY}
 }
 
 export default withStyles(style)(TimelineFigure);
