@@ -15,6 +15,7 @@ const style = theme => ({
   },
   svg: {
     width: '100%',
+    userSelect: 'none',
   },
   tick_noline: {
     '& line': {
@@ -42,7 +43,7 @@ class TimelineFigure extends React.Component {
   // svg config
   width = 600;
   height = 400;
-  padding = 32;
+  padding = 40;
   barPadding = 3;
 
   componentDidMount(){
@@ -72,14 +73,14 @@ class TimelineFigure extends React.Component {
     const yMax = d3.max(this.props.data.groups, d => parseFloat(d.total));
     // scales
     const xScale = d3.scaleLinear()
-                     .domain([xMin, xMax])
+                     .domain([xMin, xMax+1])
                      .range([this.padding, this.width-this.padding]);
     const yScale = d3.scaleLinear()
                      .domain([yMin, yMax])
                      .range([this.height-this.padding, this.padding]);
     // axes
     const xTicks = Array.from(Array(xMax+1).keys())
-                        .map(i => i>0 ? [i - 0.5, i] : [i])
+                        .map(i => i>0 ? [i, i+0.5] : [i])
                         .reduce((a,b)=>a.concat(b), []);
                         console.log(xTicks)
     const xAxis = d3.axisBottom()
@@ -88,31 +89,35 @@ class TimelineFigure extends React.Component {
                     .tickPadding(4)
                     .tickSize(0)
                     .tickFormat((d,i)=>{
-                      const v = Math.floor(d+0.5).toString();
+                      const v = Math.floor(d).toString();
                       return v.length < 2 ? '0'+v : v;
                     });
-    const yAxis = d3.axisLeft(yScale);
+    const yAxis = d3.axisLeft()
+                    .scale(yScale)
+                    .tickValues([
+                      Math.floor(yMax*0.25),
+                      Math.floor(yMax*0.5),
+                      Math.floor(yMax*0.75),
+                      Math.floor(yMax),
+                    ])
+                    .tickSize(0)
 
     // draw axes
     const xAxisNode = svg.append('g')
        .attr('id', 'x-axis-'+this.props.data.id)
        .attr('transform', `translate(0,${this.height-this.padding})`)
        .call(xAxis);
-    const yAxisNode = svg.append('g')
-       .attr('id', 'y-axis-'+this.props.data.id)
-       .attr('transform', `translate(${this.padding})`)
-       .call(yAxis);
+    // const yAxisNode = svg.append('g')
+    //    .attr('id', 'y-axis-'+this.props.data.id)
+    //    .attr('transform', `translate(${this.padding})`)
+    //    .call(yAxis);
+
     // apply staggered display style to date ticks
     xAxisNode.selectAll('.tick')
-      .attr('class', (d,i) => i%2 === 0 ? this.props.classes.tick_notext : this.props.classes.tick_noline)
-
-    svg.append('text')
-      .attr('x', this.width*0.5)
-      .attr('y', 116)
-      .text(xMax.toString() + ' ' + yMax.toString())
-      .attr('font-size', 100)
-      .attr('font-family', 'sans-serif')
-      .attr('fill', 'rgba(0,0,0,0.1)')
+      .style('font-size', '16px')
+      .attr('class', (d,i) => (i===0 || (d+2)%3 !== 0) ? this.props.classes.tick_notext : '')
+    // yAxisNode.selectAll('.tick')
+    //   .style('font-size', '16px')
 
     const barGroups = svg.selectAll(`.${this.props.classes.bar_group}`)
       .data(this.props.data.groups)
@@ -120,12 +125,21 @@ class TimelineFigure extends React.Component {
       .append('g')
       .attr('class', this.props.classes.bar_group)
 
+    const barWidth = (xScale(1)-this.padding)-(this.barPadding*2);
+    const barGroupHalfWidth = xScale(0.5) - this.padding;
+
     barGroups.append('rect')
       .attr('class', this.props.classes.bar)
-      .attr('x', (d,i) => xScale(d.id )+this.barPadding)
+      .attr('x', (d,i) => xScale(d.id)+this.barPadding-(barGroupHalfWidth))
       .attr('y', d => yScale(parseFloat(d.total)))
       .attr('height', d => yScale(0) - yScale(parseFloat(d.total)))
-      .attr('width', (xScale(1) - this.padding)-this.barPadding*2)
+      .attr('width', barWidth)
+
+    // barGroups.append('text')
+    //   .attr('x', (d,i) => xScale(d.id)+this.barPadding-barGroupHalfWidth)
+    //   .attr('y', d => yScale(parseFloat(d.total)))
+    //   .text(d=> d.total >= yMax ? d.id : '')
+    //   .style('font-size', '16px')
   }
 
   render(){
