@@ -6,13 +6,18 @@ function TimelineView(props){
 
   return (
     <MonthViews
+      disableTouch={!props.swipeable}
       data={props.data.enhanced.transactions}
       lastPage={props.lastPage}
       setPage={props.setPage}
       headers={props.data.enhanced.transactions.map(d => d.name)}
       subset={set => set.groups}
     >
-      <TimelineFigure />
+      <TimelineFigure
+        user={props.data.user}
+        swipeable={props.swipeable}
+        setSwipeable={props.setSwipeable}
+      />
     </MonthViews>
   );
 }

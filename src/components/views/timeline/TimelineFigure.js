@@ -3,6 +3,7 @@ import * as d3 from 'd3'
 import EmptyList from '../EmptyList'
 import { withStyles } from '@material-ui/styles'
 import * as _isEqual from 'lodash.isequal'
+import { CURRENCY, resolveCurrencyValue } from '../../../data/resolvers'
 
 const style = theme => ({
   TimelineFigure_root: {
@@ -31,37 +32,68 @@ const style = theme => ({
 
   },
   bar: {
-    fill: theme.palette.primary.main,
-    '&:hover': {
-      fill: theme.palette.secondary.main,
-    }
+    fill: theme.palette.secondary.main,
+  },
+  barInactive: {
+    fill: theme.palette.grey[200],
+  },
+  barOverlay: {
+    fill: 'rgba(0,0,0,0.02)',
   }
 });
 
 class TimelineFigure extends React.Component {
-  ref = React.createRef();
+  constructor(props){
+    super(props);
+    this.handleTouchStart = this.handleTouchStart.bind(this);
+    this.handleTouchMove = this.handleTouchMove.bind(this);
+    this.handleTouchEnd = this.handleTouchEnd.bind(this);
+    this.handleTouchHold = this.handleTouchHold.bind(this);
+  }
+  // touch events config
+  holdDuration = 500;
   // svg config
+  ref = React.createRef();
   width = 600;
   height = 400;
   padding = 40;
   barPadding = 3;
 
+  // lifecycle
   componentDidMount(){
     if (this._dataIsValid()) this.renderFigure();
   }
-
   shouldComponentUpdate(nextProps){
     return !_isEqual(this.props.data, nextProps.data);
   }
-
   componentDidUpdate(){
     if (this._dataIsValid()) this.renderFigure();
   }
-
+  // data validation
   _dataIsValid(){
     return this.props.data.groups.length > 0;
   }
+  // handlers
+  handleTouchStart(e){
+    this.timer = setTimeout(this.handleTouchHold, this.holdDuration)
+  }
+  handleTouchMove(e){
+    if (this.timer) clearTimeout(this.timer);
+  }
+  handleTouchEnd(e){
+    if (this.timer) clearTimeout(this.timer);
+    if (!this.props.swipeable) this.props.setSwipeable(true);
+  }
+  handleTouchHold(e){
+    this.props.setSwipeable(false);
+  }
+  handleContextMenu(e){
+    e.preventDefault();
+    e.stopPropagation();
+    return false;
+  }
 
+  // render d3
   renderFigure() {
     const svg = d3.select(this.ref.current);
     svg.selectAll('*').remove();
@@ -82,7 +114,6 @@ class TimelineFigure extends React.Component {
     const xTicks = Array.from(Array(xMax+1).keys())
                         .map(i => i>0 ? [i, i+0.5] : [i])
                         .reduce((a,b)=>a.concat(b), []);
-                        console.log(xTicks)
     const xAxis = d3.axisBottom()
                     .scale(xScale)
                     .tickValues(xTicks)
@@ -119,8 +150,9 @@ class TimelineFigure extends React.Component {
     // yAxisNode.selectAll('.tick')
     //   .style('font-size', '16px')
 
+    const groupData = this._fillEmptyIndices(xMax)
     const barGroups = svg.selectAll(`.${this.props.classes.bar_group}`)
-      .data(this.props.data.groups)
+      .data(groupData)
       .enter()
       .append('g')
       .attr('class', this.props.classes.bar_group)
@@ -128,12 +160,44 @@ class TimelineFigure extends React.Component {
     const barWidth = (xScale(1)-this.padding)-(this.barPadding*2);
     const barGroupHalfWidth = xScale(0.5) - this.padding;
 
+    // data bars
     barGroups.append('rect')
       .attr('class', this.props.classes.bar)
-      .attr('x', (d,i) => xScale(d.id)+this.barPadding-(barGroupHalfWidth))
+      .attr('x', (d,i) => xScale(d.id)+this.barPadding-barGroupHalfWidth)
       .attr('y', d => yScale(parseFloat(d.total)))
       .attr('height', d => yScale(0) - yScale(parseFloat(d.total)))
       .attr('width', barWidth)
+
+    // user interaction bar overlays
+    const barOverlay = {
+      height: yScale(0)-yScale(yMax)+this.padding,
+      width: xScale(1)-this.padding,
+      onEnter: (e) => {
+        if (!this.props.swipeable && parseFloat(e.total) > 0){
+          barGroups.selectAll(`.${this.props.classes.bar}`)
+            .attr('class', (d,i)=>{
+            return [
+              this.props.classes.bar,
+              e.id === d.id ? '' : this.props.classes.barInactive
+            ].join(' ')})
+        }
+      },
+      onExit: (e) => {
+        if (!this.props.swipeable){
+          barGroups.selectAll(`.${this.props.classes.bar}`)
+            .attr('class', this.props.classes.bar)
+        }
+      }
+    }
+    barGroups.append('rect')
+      .attr('class', this.props.classes.barOverlay)
+      .attr('x', (d,i) => xScale(d.id)-barGroupHalfWidth)
+      .attr('y', yScale(yMax))
+      .attr('height', barOverlay.height)
+      .attr('width', barOverlay.width)
+      .attr('data-id', d => d.id)
+      .on('touchstart touchmove mouseenter mouseover', barOverlay.onEnter)
+      .on('touchend touchcancel mouseleave', barOverlay.onExit)
 
     // barGroups.append('text')
     //   .attr('x', (d,i) => xScale(d.id)+this.barPadding-barGroupHalfWidth)
@@ -151,10 +215,28 @@ class TimelineFigure extends React.Component {
             viewBox={`0 0 ${this.width} ${this.height}`}
             preserveAspectRatio='xMidYMid meet'
             className={this.props.classes.svg}
+            onTouchStart={this.handleTouchStart}
+            onTouchMove={this.handleTouchMove}
+            onTouchEnd={this.handleTouchEnd}
+            onTouchCancel={this.handleTouchEnd}
+            onContextMenu={this.handleContextMenu}
           />
         ) : <EmptyList /> }
       </div>
     );
+  }
+
+  // internal helper
+  _fillEmptyIndices(last){
+    const data = this.props.data.groups.slice();
+    for(let i=1; i<=last; i++){
+      if (data.find(d => d.id===i)) continue;
+      data.push({
+        id: i,
+        total: resolveCurrencyValue(0, CURRENCY[this.props.user.currency].decimal),
+      });
+    }
+    return data;
   }
 }
 

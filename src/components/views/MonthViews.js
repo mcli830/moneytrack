@@ -38,6 +38,7 @@ function MonthViews(props) {
           ? <EmptyList />
         : (
             <SwipeableViews
+              disableTouch={props.disableTouch}
               containerStyle={containerStyle}
               startingView={props.lastPage}
               headerComponent={props.headers ? (addProps) => (
