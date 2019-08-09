@@ -1,9 +1,9 @@
 import React from 'react'
 import MonthViews from '../MonthViews'
-import TimelineSummary from './TimelineSummary'
-import TimelineFigure from './TimelineFigure'
+import SummaryHighlights from './SummaryHighlights'
+import SummaryFigure from './SummaryFigure'
 
-function TimelineView(props){
+function SummaryView(props){
   const styles = {
     root: {
       width: '100%',
@@ -16,11 +16,11 @@ function TimelineView(props){
 
   return (
     <div style={styles.root}>
-      <TimelineSummary
+      <SummaryHighlights
         user={props.user}
         data={props.data}
       />
-      <TimelineFigure
+      <SummaryFigure
         user={props.user}
         data={props.data}
         swipeable={props.swipeable}
@@ -30,4 +30,4 @@ function TimelineView(props){
   );
 }
 
-export default TimelineView;
+export default SummaryView;

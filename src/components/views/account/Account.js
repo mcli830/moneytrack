@@ -17,7 +17,7 @@ function Account(props) {
 
 // external helper
 function getMonthId(d){
-  return d.getUTCFullYear()*100 + d.getUTCMonth();
+  return d.getFullYear()*100 + d.getMonth();
 }
 function analyzeData(data, currency){
   const dataset = {};

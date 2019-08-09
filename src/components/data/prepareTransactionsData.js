@@ -2,15 +2,15 @@ import { CURRENCY, resolveCurrencyValue, CATEGORY } from '../../data/resolvers'
 import { MONTH } from '../../data/enums'
 
 function getMonthName(date){
-  return `${MONTH[date.getUTCMonth()]} ${date.getUTCFullYear()}`;
+  return `${MONTH[date.getMonth()]} ${date.getFullYear()}`;
 }
 function getMonthId(date){
-  return date.getUTCFullYear()*100 + date.getUTCMonth();
+  return date.getFullYear()*100 + date.getMonth();
 }
 function getInitialView(data){
   if (!data) return null;
   const today = new Date();
-  const currentMonthId = today.getUTCFullYear()*100 + today.getUTCMonth();
+  const currentMonthId = today.getFullYear()*100 + today.getMonth();
   return data.findIndex(month => currentMonthId === month.id);
 }
 function removeZeroCents(numStr){
@@ -29,11 +29,11 @@ export default function prepareTransactionsData(data){
       amount: currencyAttr.decimal > 0 ? parseFloat(amountDisplay) : parseInt(amountDisplay, 10),
       amountDisplay,
       date: tDate,
-      dateString: `${MONTH[tDate.getUTCMonth()]} ${tDate.getUTCDate()}`,
+      dateString: `${MONTH[tDate.getMonth()]} ${tDate.getDate()}`,
       // monthId = (year)(month) e.g. 201907 = July 2019
       monthId: getMonthId(tDate),
       // dateId = [1-31] i.e. the date number
-      dateId: tDate.getUTCDate(),
+      dateId: tDate.getDate(),
       currency: data.currency,
       symbol: currencyAttr.symbol,
       category: CATEGORY[t.category],
@@ -65,11 +65,11 @@ export default function prepareTransactionsData(data){
   const earliestMonthId = Math.min.apply(Math, Object.keys(dataset)).toString();
   const earliestMonth = new Date(earliestMonthId.slice(0,4), earliestMonthId.slice(4));
   const today = new Date();
-  const currentMonth = new Date(today.getUTCFullYear(), today.getUTCMonth());
+  const currentMonth = new Date(today.getFullYear(), today.getMonth());
   // loop to fill empty months
-  for (let y = earliestMonth.getUTCFullYear(); y <= currentMonth.getUTCFullYear(); y++){
-    let startingMonth = y === earliestMonth.getUTCFullYear() ? earliestMonth.getUTCMonth() : 0;
-    let endingMonth = y === currentMonth.getUTCFullYear() ? currentMonth.getUTCMonth() : 11;
+  for (let y = earliestMonth.getFullYear(); y <= currentMonth.getFullYear(); y++){
+    let startingMonth = y === earliestMonth.getFullYear() ? earliestMonth.getMonth() : 0;
+    let endingMonth = y === currentMonth.getFullYear() ? currentMonth.getMonth() : 11;
     for (let m = startingMonth; m <= endingMonth ; m++){
       const workingId = y*100 + m;
       if (!dataset[workingId]) {

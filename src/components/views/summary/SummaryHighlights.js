@@ -8,17 +8,17 @@ import { useTheme } from '@material-ui/core/styles'
 const useStyles = makeStyles(theme => {
   const greyBorder = `1px solid ${theme.palette.grey[200]}`;
   return {
-    summary: {
+    highlights: {
       width: '100%',
       padding: theme.spacing(2),
     },
-    summaryPaper: {
+    highlightsPaper: {
       display: 'flex',
       flexDirection: 'row',
       width: '100%',
       overflow: 'hidden',
     },
-    summaryItem: {
+    highlightsItem: {
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
@@ -29,13 +29,13 @@ const useStyles = makeStyles(theme => {
         borderRight: greyBorder
       },
     },
-    summaryValue: {
+    highlightsValue: {
       margin: theme.spacing(1, 0, 0.5),
     },
   }
 });
 
-function TimelineSummary(props){
+function SummaryHighlights(props){
   const classes = useStyles(useTheme());
 
   const [currency, setCurrency] = React.useState(getCurrency());
@@ -55,18 +55,18 @@ function TimelineSummary(props){
   }
 
   return (
-    <div className={classes.summary}>
-      <Paper className={classes.summaryPaper}>
-        <span className={classes.summaryItem}>
-          <Typography variant='h5' className={classes.summaryValue}>
+    <div className={classes.highlights}>
+      <Paper className={classes.highlightsPaper}>
+        <span className={classes.highlightsItem}>
+          <Typography variant='h5' className={classes.highlightsValue}>
             {resolveCurrency(getMonthTotal())}
           </Typography>
           <Typography variant='caption' color='textSecondary'>
             Month Total
           </Typography>
         </span>
-        <span className={classes.summaryItem}>
-          <Typography variant='h5' className={classes.summaryValue}>
+        <span className={classes.highlightsItem}>
+          <Typography variant='h5' className={classes.highlightsValue}>
             {resolveCurrency(getPeakSpending())}
           </Typography>
           <Typography variant='caption' color='textSecondary'>
@@ -89,4 +89,4 @@ function TimelineSummary(props){
   }
 }
 
-export default TimelineSummary;
+export default SummaryHighlights;

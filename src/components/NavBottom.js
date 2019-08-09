@@ -13,7 +13,7 @@ function NavBottom(props) {
       <BottomNavigation value={route} showLabels>
         {renderAction('friends', <FriendsIcon />)}
         {renderAction('transactions', <ListIcon />)}
-        {renderAction('timeline', <TimelineIcon />)}
+        {renderAction('summary', <TimelineIcon />)}
       </BottomNavigation>
     </div>
   );

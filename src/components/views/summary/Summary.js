@@ -1,8 +1,8 @@
 import React from 'react'
 import MonthViews from '../MonthViews'
-import TimelineView from './TimelineView'
+import SummaryView from './SummaryView'
 
-function Timeline(props){
+function Summary(props){
 
   const lastPage = props.lastPage !== null ? props.lastPage : props.data.enhanced.initialView;
 
@@ -17,7 +17,7 @@ function Timeline(props){
       headers={props.data.enhanced.transactions.map(d => d.name)}
       subset={set => set.groups}
     >
-      <TimelineView
+      <SummaryView
         user={props.data.user}
         swipeable={swipeable}
         setSwipeable={setSwipeable}
@@ -26,4 +26,4 @@ function Timeline(props){
   )
 }
 
-export default Timeline;
+export default Summary;

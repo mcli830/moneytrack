@@ -4,7 +4,7 @@ import Container from '@material-ui/core/Container'
 import UserHeader from './UserHeader'
 import Account from './views/account/Account'
 import Transactions from './views/transactions/Transactions'
-import Timeline from './views/timeline/Timeline'
+import Summary from './views/summary/Summary'
 // import Friends from './views/Friends'
 import ComingSoon from './system/ComingSoon'
 import NavBottom from './NavBottom'
@@ -60,8 +60,8 @@ function AppController(props) {
             />
           )} />
           <Route path='/friends' component={ComingSoon} />
-          <Route path='/timeline' render={()=> (
-            <Timeline
+          <Route path='/summary' render={()=> (
+            <Summary
               data={props.data}
               lastPage={props.locals.lastPage}
               setPage={p=>props.setLocals({lastPage: p})}
@@ -80,7 +80,7 @@ function AppController(props) {
       <Route path='/' render={routeProps => {
         switch(routeProps.location.pathname){
           case '/transactions':
-          case '/timeline':
+          case '/summary':
           case '/friends':
             return <NavBottom />;
           case '/account':
