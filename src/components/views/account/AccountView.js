@@ -73,6 +73,7 @@ function AccountView(props) {
           <Header text='Manage Account' />
           <CrudFormUpdateUser
             user={props.user}
+            setUser={props.setUser}
             name={'name'}
             icon={<FaceIcon/>}
             value={props.user.name}
@@ -80,6 +81,7 @@ function AccountView(props) {
           />
           <CrudFormUpdateUser
             user={props.user}
+            setUser={props.setUser}
             name={'email'}
             icon={<EmailIcon/>}
             value={props.user.email}
@@ -87,6 +89,7 @@ function AccountView(props) {
           />
           <CrudFormUpdateUser
             user={props.user}
+            setUser={props.setUser}
             select
             options={Object.values(CURRENCY).map(attr=>({value: attr.abbr, label: `${attr.name} (${attr.symbol})` }))}
             name={'currency'}

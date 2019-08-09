@@ -104,14 +104,13 @@ function CrudFormUpdateUser(props){
     <Mutation
       mutation={UPDATE_USER_MUTATION}
       update={(cache, { data })=>{
-        cache.writeQuery({
+        const updatedUser = {
+          ...props.user,
+          ...data.updateUser,
+        }
+        props.client.writeQuery({
           query: GET_USER_DATA,
-          data: {
-            User: {
-              ...props.user,
-              ...data.updateUser,
-            }
-          }
+          data: { User: updatedUser }
         });
         if (props.select) {
           setFormValue(data.updateUser[props.name]);
@@ -119,6 +118,7 @@ function CrudFormUpdateUser(props){
         }
         editModeOff();
         if (data.updateUser.isOptimistic){
+          props.setUser(updatedUser);
           props.alerts.notification({
             message: 'Account information updated.',
             color: 'primary',
@@ -146,7 +146,13 @@ function CrudFormUpdateUser(props){
                 [props.name]: propVal,
                 isOptimistic: true,
               }
-            }
+            },
+            refetchQueries: [
+              {
+                query: GET_USER_DATA,
+                variables: { id: props.user.id }
+              }
+            ]
           });
         };
         const componentProps = props.select ? {

@@ -4,10 +4,13 @@ import { CURRENCY, resolveCurrencyValue } from '../../../data/resolvers'
 
 function Account(props) {
 
+  const [user, setUser] = React.useState(props.user);
+
   return (
     <AccountView
-      user={props.user}
-      stats={analyzeData(props.user.transactions, props.user.currency)}
+      user={user}
+      setUser={setUser}
+      stats={analyzeData(user.transactions, user.currency)}
       logout={props.logout}
       slide={props.slide}
       alerts={props.alerts}
