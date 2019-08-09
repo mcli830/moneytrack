@@ -1,24 +1,32 @@
 import React from 'react'
 import MonthViews from '../MonthViews'
+import TimelineSummary from './TimelineSummary'
 import TimelineFigure from './TimelineFigure'
 
 function TimelineView(props){
+  const styles = {
+    root: {
+      width: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'flex-start',
+      alignItems: 'center',
+    }
+  }
 
   return (
-    <MonthViews
-      disableTouch={!props.swipeable}
-      data={props.data.enhanced.transactions}
-      lastPage={props.lastPage}
-      setPage={props.setPage}
-      headers={props.data.enhanced.transactions.map(d => d.name)}
-      subset={set => set.groups}
-    >
+    <div style={styles.root}>
+      <TimelineSummary
+        user={props.user}
+        data={props.data}
+      />
       <TimelineFigure
-        user={props.data.user}
+        user={props.user}
+        data={props.data}
         swipeable={props.swipeable}
         setSwipeable={props.setSwipeable}
       />
-    </MonthViews>
+    </div>
   );
 }
 

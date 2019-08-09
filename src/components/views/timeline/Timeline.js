@@ -1,4 +1,5 @@
 import React from 'react'
+import MonthViews from '../MonthViews'
 import TimelineView from './TimelineView'
 
 function Timeline(props){
@@ -8,13 +9,20 @@ function Timeline(props){
   const [swipeable, setSwipeable] = React.useState(true);
 
   return (
-    <TimelineView
-      data={props.data}
+    <MonthViews
+      disableTouch={!swipeable}
+      data={props.data.enhanced.transactions}
       lastPage={lastPage}
       setPage={props.setPage}
-      swipeable={swipeable}
-      setSwipeable={setSwipeable}
-    />
+      headers={props.data.enhanced.transactions.map(d => d.name)}
+      subset={set => set.groups}
+    >
+      <TimelineView
+        user={props.data.user}
+        swipeable={swipeable}
+        setSwipeable={setSwipeable}
+      />
+    </MonthViews>
   )
 }
 

@@ -20,30 +20,6 @@ const style = theme => {
       alignItems: 'center',
       overflowX: 'hidden',
     },
-    summary: {
-      width: '100%',
-      padding: theme.spacing(2),
-    },
-    summaryPaper: {
-      display: 'flex',
-      flexDirection: 'row',
-      width: '100%',
-      overflow: 'hidden',
-    },
-    summaryItem: {
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center',
-      height: theme.spacing(12),
-      width: '50%',
-      '&:first-child': {
-        borderRight: greyBorder
-      },
-    },
-    summaryValue: {
-      margin: theme.spacing(1, 0, 0.5),
-    },
     svg: {
       width: '100%',
       userSelect: 'none',
@@ -90,7 +66,7 @@ class TimelineFigure extends React.Component {
     this.handleTouchHold = this.handleTouchHold.bind(this);
   }
   // touch events config
-  holdDuration = 500;
+  holdDuration = 300;
   // svg config
   ref = React.createRef();
   width = 600;
@@ -106,18 +82,6 @@ class TimelineFigure extends React.Component {
   }
   get overlays() {
     return Array.from(this.ref.current.querySelectorAll(`.${this.props.classes.barOverlay}`));
-  }
-  get currency(){
-    return CURRENCY[this.props.user.currency];
-  }
-  get monthTotal(){
-    return this.props.data.groups
-      .map(g => g.transactions)
-      .reduce((a,b) => a.concat(b), [])
-      .reduce((a,b) => a + parseFloat(b.amount), 0);
-  }
-  get peakSpending(){
-    return d3.max(this.props.data.groups, d => parseFloat(d.total));
   }
   // lifecycle
   componentDidMount(){
@@ -161,10 +125,7 @@ class TimelineFigure extends React.Component {
     this.overlays.forEach(overlay => {
       const rect = overlay.getBoundingClientRect();
       const bar = this.bars.find(b => b.dataset.id === overlay.dataset.id)
-      if (
-        x >= rect.x && x < rect.x+rect.width
-        && y >= rect.y && y < rect.y+rect.height
-      ) {
+      if ( x >= rect.x && x < rect.x+rect.width ) {
         bar.classList.remove(this.props.classes.barInactive);
       } else {
         bar.classList.add(this.props.classes.barInactive);
@@ -186,7 +147,7 @@ class TimelineFigure extends React.Component {
     const xMax = getDaysInMonth(this.props.data.id);
     // total expenses amounts per day
     const yMin = 0;
-    const yMax = this.peakSpending;
+    const yMax = d3.max(this.props.data.groups, d => parseFloat(d.total));
     // scales
     const xScale = d3.scaleLinear()
                      .domain([xMin, xMax+1])
@@ -277,26 +238,6 @@ class TimelineFigure extends React.Component {
     const { classes } = this.props;
     return (
       <div className={classes.TimelineFigure_root}>
-        <div className={classes.summary}>
-          <Paper className={classes.summaryPaper}>
-            <span className={classes.summaryItem}>
-              <Typography variant='h5' className={classes.summaryValue}>
-                {this._resolveCurrency(this.monthTotal)}
-              </Typography>
-              <Typography variant='caption' color='textSecondary'>
-                Month Total
-              </Typography>
-            </span>
-            <span className={classes.summaryItem}>
-              <Typography variant='h5' className={classes.summaryValue}>
-                {this._resolveCurrency(this.peakSpending)}
-              </Typography>
-              <Typography variant='caption' color='textSecondary'>
-                Peak Spending
-              </Typography>
-            </span>
-          </Paper>
-        </div>
         {this._dataIsValid() ? (
           <svg
             ref={this.ref}
@@ -325,15 +266,6 @@ class TimelineFigure extends React.Component {
       });
     }
     return data;
-  }
-  _resolveCurrency(n, symbol = false){
-    const str = n.toFixed(this.currency.decimal);
-    const i = str.indexOf('.');
-    return this.currency.symbol + (
-      i > -1 && str.slice(i+1) === '00'
-      ? str.slice(0,i)
-      : str
-    );
   }
 }
 
