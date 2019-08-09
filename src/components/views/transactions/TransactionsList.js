@@ -103,6 +103,7 @@ function TransactionsList(props){
             <Typography variant='overline'>{group.dateString}</Typography>
             <Typography variant='overline'>{group.symbol + group.total}</Typography>
           </ListSubheader>
+          {divider()}
           {group.transactions.map((t,i) => (
             <li key={i}>
               <ButtonBase
@@ -128,12 +129,16 @@ function TransactionsList(props){
                   </ListItemSecondaryAction>
                 </ListItem>
               </ButtonBase>
-              <Divider light />
+              {divider()}
             </li>
           ))}
         </ul>
       </li>
   ));
+
+  function divider() {
+    return <Divider style={{backgroundColor: 'rgba(0,0,0,0.04)'}} />
+  }
 
   return (
     <List className={classes.list}>

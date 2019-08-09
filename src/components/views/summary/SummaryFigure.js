@@ -1,8 +1,6 @@
 import React from 'react'
 import * as d3 from 'd3'
 import EmptyList from '../EmptyList'
-import Paper from '@material-ui/core/Paper'
-import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/styles'
 import * as _isEqual from 'lodash.isequal'
 import { CURRENCY, resolveCurrencyValue } from '../../../data/resolvers'
@@ -170,7 +168,7 @@ class SummaryFigure extends React.Component {
     return false;
   }
   selectBar(coords){
-    const {x, y} = coords;
+    const {x} = coords;
     const svgRect = this.svg.getBoundingClientRect();
     const bounds = {
       min: svgRect.left + this.padding,

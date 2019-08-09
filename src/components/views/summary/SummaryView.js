@@ -1,5 +1,4 @@
 import React from 'react'
-import MonthViews from '../MonthViews'
 import SummaryHighlights from './SummaryHighlights'
 import SummaryFigure from './SummaryFigure'
 
