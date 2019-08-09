@@ -18,7 +18,7 @@ import grey from '@material-ui/core/colors/grey'
 export const resolveCurrencyValue = function(amt, dec){
   var n = typeof amt === 'string' ? parseInt(amt, 10) : amt;
   if (dec < 1) return n.toString();
-  return parseFloat(n*Math.pow(10,dec*-1).toString()).toFixed(dec);
+  return parseFloat(n*Math.pow(10,dec*-1)).toFixed(dec);
 }
 
 export const CURRENCY = {
