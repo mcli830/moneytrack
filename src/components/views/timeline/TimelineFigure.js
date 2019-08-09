@@ -1,50 +1,81 @@
 import React from 'react'
 import * as d3 from 'd3'
 import EmptyList from '../EmptyList'
+import Paper from '@material-ui/core/Paper'
 import { withStyles } from '@material-ui/styles'
 import * as _isEqual from 'lodash.isequal'
 import { CURRENCY, resolveCurrencyValue } from '../../../data/resolvers'
 
-const style = theme => ({
-  TimelineFigure_root: {
-    width: '100%',
-    height: '100%',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    overflowX: 'hidden',
-  },
-  svg: {
-    width: '100%',
-    userSelect: 'none',
-  },
-  tickX: {
-    fontSize: theme.spacing(2),
-    color: theme.palette.text.secondary,
-  },
-  tick_noline: {
-    '& line': {
-      display: 'none',
-    },
-  },
-  tick_notext: {
-    '& text': {
-      display: 'none',
-    },
-  },
-  bar_group: {
 
-  },
-  bar: {
-    fill: theme.palette.secondary.main,
-  },
-  barInactive: {
-    fill: theme.palette.grey[200],
-  },
-  barOverlay: {
-    fill: 'transparent',
+const style = theme => {
+  const greyBorder = `1px solid ${theme.palette.grey[200]}`
+  return {
+    TimelineFigure_root: {
+      width: '100%',
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'flex-start',
+      alignItems: 'center',
+      overflowX: 'hidden',
+    },
+    summary: {
+      width: '100%',
+      padding: theme.spacing(4),
+    },
+    summaryPaper: {
+      display: 'flex',
+      flexDirection: 'row',
+      width: '100%',
+      overflow: 'hidden',
+    },
+    summaryItem: {
+      display: 'flex',
+      flexDirection: 'center',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: theme.spacing(12),
+      width: '50%',
+      '&:first-child': {
+        borderRight: greyBorder
+      }
+    },
+    svg: {
+      width: '100%',
+      userSelect: 'none',
+      backgroundColor: theme.palette.background.paper,
+      borderTop: greyBorder,
+      borderBottom: greyBorder,
+      padding: theme.spacing(2,0),
+    },
+    tickX: {
+      fontSize: theme.spacing(2),
+      color: theme.palette.text.secondary,
+    },
+    tick_noline: {
+      '& line': {
+        display: 'none',
+      },
+    },
+    tick_notext: {
+      '& text': {
+        display: 'none',
+      },
+    },
+    bar_group: {
+
+    },
+    bar: {
+      fill: theme.palette.secondary.main,
+    },
+    barInactive: {
+      fill: theme.palette.grey[200],
+    },
+    barOverlay: {
+      fill: 'transparent',
+    }
   }
-});
+};
 
 class TimelineFigure extends React.Component {
   constructor(props){
@@ -229,14 +260,23 @@ class TimelineFigure extends React.Component {
   }
 
   render(){
+    const { classes } = this.props
     return (
-      <div className={this.props.classes.TimelineFigure_root}>
+      <div className={classes.TimelineFigure_root}>
+        <div className={classes.summary}>
+          <Paper className={classes.summaryPaper}>
+            <span className={classes.summaryItem}>
+            </span>
+            <span className={classes.summaryItem}>
+            </span>
+          </Paper>
+        </div>
         {this._dataIsValid() ? (
           <svg
             ref={this.ref}
             viewBox={`0 0 ${this.width} ${this.height}`}
             preserveAspectRatio='xMidYMid meet'
-            className={this.props.classes.svg}
+            className={classes.svg}
             onTouchStart={this.handleTouchStart}
             onTouchMove={this.handleTouchMove}
             onTouchEnd={this.handleTouchEnd}
