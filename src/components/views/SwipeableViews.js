@@ -24,7 +24,6 @@ function SwipeableViews(props) {
       return setScrolling(true);
     }
     if (!scrolling) {
-      e.event.preventDefault();
       setSwiping(true);
       setPos(
         ((e.deltaX < 0 && view === 0) || (e.deltaX > 0 && view === viewCount-1))
