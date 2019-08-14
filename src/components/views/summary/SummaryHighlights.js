@@ -37,15 +37,12 @@ const useStyles = makeStyles(theme => {
 
 function SummaryHighlights(props){
   const classes = useStyles(useTheme());
-
-  const [currency, setCurrency] = React.useState(getCurrency());
-
   // getters
   function getCurrency(){
     return CURRENCY[props.user.currency];
   }
   function getPeakSpending(){
-    return props.data.groups.map(g => g.total).reduce((a,b) => a > b ? a : b);
+    return props.data.groups.map(g => g.total).reduce((a,b) => parseFloat(a) > parseFloat(b) ? a : b);
   }
 
   return (
@@ -73,6 +70,7 @@ function SummaryHighlights(props){
 
   // internal helpers
   function resolveCurrency(n, symbol = false){
+    const currency = getCurrency();
     const str = typeof n === 'string' ? n : n.toFixed(currency.decimal);
     const i = str.indexOf('.');
     return currency.symbol + (
