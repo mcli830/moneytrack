@@ -1,3 +1,4 @@
+import React from 'react'
 import { CURRENCY, resolveCurrencyValue, CATEGORY } from '../../data/resolvers'
 import { MONTH } from '../../data/enums'
 
@@ -86,11 +87,13 @@ export default function prepareTransactionsData(data){
     // convert group data object into array with totals and sorted inversely by date id
     const groupData = Object.keys(dataset[monthId].groups).map(dateId => ({
       ...dataset[monthId].groups[dateId],
-      total: parseFloat(dataset[monthId].groups[dateId].transactions.reduce((a,b)=>a+b.amount,0).toString()).toFixed(currencyAttr.decimal),
+      total: dataset[monthId].groups[dateId].transactions.reduce((a,b)=>a+b.amount,0).toFixed(currencyAttr.decimal),
     })).sort((a,b)=>b.id-a.id);
     return {
       ...dataset[monthId],
-      groups: groupData
+      groups: groupData,
+      total: groupData.map(g => g.transactions).reduce((a,b) => a.concat(b), []).reduce((a,b) => a + parseFloat(b.amount), 0).toFixed(currencyAttr.decimal),
+      ref: React.createRef(),
     }
   });
   return {

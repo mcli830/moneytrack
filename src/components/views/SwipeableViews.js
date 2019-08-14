@@ -11,7 +11,6 @@ function SwipeableViews(props) {
     trackTouch: !disableTouch,
   };
 
-  const centerRef = React.useRef();
   const viewCount = props.children.length;
   const [view, setView] = React.useState(props.startingView);
   const [swiping, setSwiping] = React.useState(false);
@@ -49,7 +48,7 @@ function SwipeableViews(props) {
         nextView = view-1;
       }
     } else {
-      const rect = centerRef.current.getBoundingClientRect();
+      const rect = props.pageRefs[view].current.getBoundingClientRect();
       if (Math.abs(pos) > rect.width*0.5){
         if (pos > 0) {
           nextView = view+1;
@@ -113,21 +112,26 @@ function SwipeableViews(props) {
         onSwiped={handleSwiped}
         style={styles.viewContainer}
       >
-        {props.children.map((renderChild, index) => {
+        {props.children.map((child, index) => {
           switch(index){
             case view:
-              return renderChild({
-                ref: centerRef,
-                style: Object.assign({}, styles.view, styles.center),
-              });
+              return (
+                <div key={index} ref={props.pageRefs[index]} style={Object.assign({}, styles.view, styles.center)}>
+                  {child}
+                </div>
+              );
             case view-1:
-              return renderChild({
-                style: Object.assign({}, styles.view, styles.left),
-              });
+              return (
+                <div key={index} ref={props.pageRefs[index]} style={Object.assign({}, styles.view, styles.left)}>
+                  {child}
+                </div>
+              );
             case view+1:
-              return renderChild({
-                style: Object.assign({}, styles.view, styles.right),
-              })
+              return (
+                <div key={index} ref={props.pageRefs[index]} style={Object.assign({}, styles.view, styles.right)}>
+                  {child}
+                </div>
+              );
             default:
               return null;
           }
@@ -138,7 +142,7 @@ function SwipeableViews(props) {
 }
 
 SwipeableViews.propTypes = {
-  children: PropTypes.arrayOf(PropTypes.func),
+  children: PropTypes.arrayOf(PropTypes.element),
   headerComponent: PropTypes.func,
   useParentState: PropTypes.bool,
   delta: PropTypes.number,

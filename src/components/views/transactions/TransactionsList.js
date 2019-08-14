@@ -142,7 +142,7 @@ function TransactionsList(props){
 
   return (
     <List className={classes.list}>
-      {props.data.length < 1 ? <EmptyList /> : renderList()}
+      {props.empty ? <EmptyList /> : renderList()}
     </List>
   );
 }

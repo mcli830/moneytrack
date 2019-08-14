@@ -31,6 +31,9 @@ export default props => {
       marginTop: '1em'
     }
   }
+
+  console.error(props.message);
+
   return (
     <div style={styles.root}>
       <AppHeader />

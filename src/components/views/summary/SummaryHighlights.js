@@ -44,12 +44,6 @@ function SummaryHighlights(props){
   function getCurrency(){
     return CURRENCY[props.user.currency];
   }
-  function getMonthTotal(){
-    return props.data.groups
-      .map(g => g.transactions)
-      .reduce((a,b) => a.concat(b), [])
-      .reduce((a,b) => a + parseFloat(b.amount), 0);
-  }
   function getPeakSpending(){
     return props.data.groups.map(g => g.total).reduce((a,b) => a > b ? a : b);
   }
@@ -59,7 +53,7 @@ function SummaryHighlights(props){
       <Paper className={classes.highlightsPaper}>
         <span className={classes.highlightsItem}>
           <Typography variant='h5' className={classes.highlightsValue}>
-            {resolveCurrency(getMonthTotal())}
+            {resolveCurrency(props.data.total)}
           </Typography>
           <Typography variant='caption' color='textSecondary'>
             Month Total

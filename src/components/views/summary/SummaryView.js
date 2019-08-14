@@ -1,4 +1,5 @@
 import React from 'react'
+import EmptyList from '../EmptyList'
 import SummaryHighlights from './SummaryHighlights'
 import SummaryFigure from './SummaryFigure'
 
@@ -13,7 +14,7 @@ function SummaryView(props){
     }
   }
 
-  return (
+  return props.empty ? <EmptyList /> : (
     <div style={styles.root}>
       <SummaryHighlights
         user={props.user}

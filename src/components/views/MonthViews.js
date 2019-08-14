@@ -41,6 +41,7 @@ function MonthViews(props) {
               disableTouch={props.disableTouch}
               containerStyle={containerStyle}
               startingView={props.lastPage}
+              pageRefs={props.data.map(page => page.ref)}
               headerComponent={props.headers ? (addProps) => (
                 <SwipeableHeader
                   {...addProps}
@@ -50,13 +51,11 @@ function MonthViews(props) {
               ) : null}
               onSwiped={(view)=>props.setPage(view)}
             >
-              {props.data.map((set, i) => {
-                return (addProps) => (
-                  <div {...addProps} key={set.id || i}>
-                    {React.cloneElement(props.children, { data: set })}
-                  </div>
-                );
-              })}
+              {props.data.map((set, i) => React.cloneElement(props.children, {
+                key: set.id,
+                data: set,
+                empty: parseFloat(set.total) <= 0,
+              }))}
             </SwipeableViews>
           )
         }
