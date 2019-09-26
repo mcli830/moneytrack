@@ -18,7 +18,7 @@ function AppHeader(props) {
   return (
     <div className="Header">
       <Typography variant="h4" className={classes.appHeader}>
-        MoneyTrack
+        MoneyTracks
       </Typography>
     </div>
   );
